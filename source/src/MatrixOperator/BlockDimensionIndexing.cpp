@@ -46,7 +46,7 @@ namespace slam {
     // Section: getBlockSizes
     // -----------------------------------------------------------------------------
     
-    unsigned int BlockDimensionIndexing::getNumBlocks() const {
+    unsigned int BlockDimensionIndexing::getNumBlocksEntries() const {
         return blockSizes_.size();
     }
 
@@ -74,4 +74,4 @@ namespace slam {
         return totalScalarSize_;
     }
 
-}
+} // namespace slam

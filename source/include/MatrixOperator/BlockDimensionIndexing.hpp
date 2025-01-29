@@ -47,11 +47,11 @@ namespace slam {
 
             // -----------------------------------------------------------------------------
             /**
-             * @brief Returns the total number of blocks.
+             * @brief Returns the total number of blocks entries.
              * 
              * @return The number of blocks in the matrix.
              */
-            unsigned int getNumBlocks() const;
+            unsigned int getNumBlocksEntries() const;
 
             // -----------------------------------------------------------------------------
             /**
@@ -100,4 +100,5 @@ namespace slam {
              */
             unsigned int totalScalarSize_;
     };
-}
+    
+} // namespace slam
