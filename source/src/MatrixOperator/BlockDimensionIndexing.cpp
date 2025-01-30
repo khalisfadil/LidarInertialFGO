@@ -11,13 +11,13 @@ namespace slam {
     // -----------------------------------------------------------------------------
     // Section: BlockDimensionIndexing
     // -----------------------------------------------------------------------------
-    
+
     BlockDimensionIndexing::BlockDimensionIndexing(const std::vector<unsigned int>& blockSizes)
     : blockSizes_(blockSizes), totalScalarSize_(0) {
 
         // Check input validity
         if (blockSizes_.empty()) {
-            throw std::invalid_argument("Tried to initialize a block matrix with no size.");
+            throw std::invalid_argument("[ERROR] Tried to initialize a block matrix with no size.");
         }
 
         // Initialize cumulative block sizes
@@ -25,7 +25,7 @@ namespace slam {
         for (const auto& blockSize : blockSizes_) {
             // Check each block size is valid
             if (blockSize == 0) {
-                throw std::invalid_argument("Tried to initialize a block row size of 0.");
+                throw std::invalid_argument("[ERROR] Tried to initialize a block row size of 0.");
             }
 
             // Add cumulative size

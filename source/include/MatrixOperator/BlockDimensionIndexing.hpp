@@ -98,7 +98,7 @@ namespace slam {
             /**
              * @brief Stores the total scalar size (sum of all block sizes).
              */
-            unsigned int totalScalarSize_;
+            unsigned int totalScalarSize_; //scalarDim_
     };
     
 } // namespace slam

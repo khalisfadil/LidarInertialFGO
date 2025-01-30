@@ -86,12 +86,15 @@ namespace slam {
             virtual Eigen::MatrixXd copyAt(unsigned int r, unsigned int c) const = 0;
 
         private:
+
+            // -----------------------------------------------------------------------------
             /**
              * @brief Helper function to initialize symmetric block indexing.
              * @param blockSizes Vector of block sizes.
              */
             void initializeSymmetricIndexing(const std::vector<unsigned int>& blockSizes);
 
+            // -----------------------------------------------------------------------------
             /**
              * @brief Helper function to initialize rectangular block indexing.
              * @param blockRowSizes Vector of row block sizes.
@@ -100,11 +103,13 @@ namespace slam {
             void initializeRectangularIndexing(const std::vector<unsigned int>& blockRowSizes,
                                             const std::vector<unsigned int>& blockColumnSizes);
 
+            // -----------------------------------------------------------------------------
             /**
              * @brief True if the matrix is symmetric at the scalar level.
              */
             bool symmetric_ = false;
 
+            // -----------------------------------------------------------------------------
             /**
              * @brief Handles block-wise indexing.
              */
