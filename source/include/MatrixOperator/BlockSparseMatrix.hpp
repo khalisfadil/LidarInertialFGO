@@ -44,7 +44,7 @@ class BlockSparseMatrix : public BlockMatrixBase {
          * Uses `tsl::robin_map` for efficient row indexing.
          */
         struct BlockSparseColumn {
-            tsl::robin_map<unsigned int, BlockRowEntry> rows;  ///< Faster than `std::map`
+            tsl::robin_map<unsigned int, BlockRowEntry> rows;  ///< Faster than `std::map` // tbb concurrent hash?
         };
 
         // -----------------------------------------------------------------------------

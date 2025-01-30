@@ -62,24 +62,30 @@ namespace slam {
 
     void BlockMatrix::add(unsigned int r, unsigned int c, const Eigen::MatrixXd& m) {
         // Get indexing objects
-        const BlockDimensionIndexing& blockkRowIndexing = this->getIndexing().getRowIndexing();
+        const BlockDimensionIndexing& blockRowIndexing = this->getIndexing().getRowIndexing();
         const BlockDimensionIndexing& blockColumnIndexing = this->getIndexing().getColumnIndexing();
 
         // Check bounds
-        if (r >= blockkRowIndexing.getNumBlocksEntries() || c >= blockColumnIndexing.getNumBlocksEntries()) {
-            throw std::invalid_argument("Index out of range in BlockMatrix::add()");
+        if (r >= blockRowIndexing.getNumBlocksEntries() || c >= blockColumnIndexing.getNumBlocksEntries()) {
+            throw std::invalid_argument("[ERROR] Index (" + std::to_string(r) + ", " + std::to_string(c) +
+                                        ") out of range. Row index must be less than " +
+                                        std::to_string(blockRowIndexing.getNumBlocksEntries()) + " and column index must be less than " +
+                                        std::to_string(blockColumnIndexing.getNumBlocksEntries()) + ".");
         }
 
-        // Ensure symmetry is handled properly
+        // Ensure upper-triangular portion is respected for symmetric matrices
         if (this->isScalarSymmetric() && r > c) {
-            std::cout << "[WARNING] Attempted to add to lower half of symmetric block matrix. Ignored." << std::endl;
-            return;
+            throw std::invalid_argument("[ERROR] Attempted to access lower half of an upper-symmetric block matrix at index (" +
+                                        std::to_string(r) + ", " + std::to_string(c) + ").");
         }
 
         // Check dimensions
-        if (m.rows() != static_cast<int>(blockkRowIndexing.getBlockSizeAt(r)) ||
+        if (m.rows() != static_cast<int>(blockRowIndexing.getBlockSizeAt(r)) ||
             m.cols() != static_cast<int>(blockColumnIndexing.getBlockSizeAt(c))) {
-            throw std::invalid_argument("Matrix size mismatch in BlockMatrix::add()");
+            throw std::invalid_argument("[ERROR] Matrix size mismatch at index (" + std::to_string(r) + ", " + std::to_string(c) +
+                                        "). Expected size: (" + std::to_string(blockRowIndexing.getBlockSizeAt(r)) + ", " +
+                                        std::to_string(blockColumnIndexing.getBlockSizeAt(c)) + "), but got size: (" +
+                                        std::to_string(m.rows()) + ", " + std::to_string(m.cols()) + ").");
         }
 
         // Perform addition in parallel
@@ -99,12 +105,17 @@ namespace slam {
         // Bounds check
         if (r >= this->getIndexing().getRowIndexing().getNumBlocksEntries() ||
             c >= this->getIndexing().getColumnIndexing().getNumBlocksEntries()) {
-            throw std::invalid_argument("Index out of range in BlockMatrix::at()");
+            throw std::invalid_argument("[ERROR] Index (" + std::to_string(r) + ", " + std::to_string(c) +
+                                        ") out of range. Row index must be less than " + 
+                                        std::to_string(this->getIndexing().getRowIndexing().getNumBlocksEntries()) +
+                                        " and column index must be less than " +
+                                        std::to_string(this->getIndexing().getColumnIndexing().getNumBlocksEntries()) + ".");
         }
 
-        // Handle symmetric case
+        // Ensure upper-triangular portion is respected for symmetric matrices
         if (this->isScalarSymmetric() && r > c) {
-            std::cout << "[WARNING] Attempted to access lower half of symmetric block matrix." << std::endl;
+            throw std::invalid_argument("[ERROR] Attempted to access lower half of an upper-symmetric block matrix at index (" +
+                                        std::to_string(r) + ", " + std::to_string(c) + ").");
         }
 
         return data_[r][c];
@@ -115,10 +126,16 @@ namespace slam {
     // ----------------------------------------------------------------------------
 
     Eigen::MatrixXd BlockMatrix::copyAt(unsigned int r, unsigned int c) const {
+        // Get indexing objects
+        const BlockDimensionIndexing& blockRowIndexing = this->getIndexing().getRowIndexing();
+        const BlockDimensionIndexing& blockColumnIndexing = this->getIndexing().getColumnIndexing();
+
         // Bounds check
-        if (r >= this->getIndexing().getRowIndexing().getNumBlocksEntries() ||
-            c >= this->getIndexing().getColumnIndexing().getNumBlocksEntries()) {
-            throw std::invalid_argument("Index out of range in BlockMatrix::copyAt()");
+        if (r >= blockRowIndexing.getNumBlocksEntries() || c >= blockColumnIndexing.getNumBlocksEntries()) {
+            throw std::invalid_argument("[ERROR] Index (" + std::to_string(r) + ", " + std::to_string(c) +
+                                        ") out of range in BlockMatrix. Row index must be less than " +
+                                        std::to_string(blockRowIndexing.getNumBlocksEntries()) + " and column index must be less than " +
+                                        std::to_string(blockColumnIndexing.getNumBlocksEntries()) + ".");
         }
 
         // Handle symmetric case
@@ -127,7 +144,6 @@ namespace slam {
         }
 
         return data_[r][c];  // Return normal block
-        
     }
 
 } // namespace slam
