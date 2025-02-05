@@ -10,6 +10,7 @@
 
 namespace slam {
 
+    // -----------------------------------------------------------------------------
     /**
      * @class BlockMatrixBase
      * @brief Base class for managing a block matrix structure.

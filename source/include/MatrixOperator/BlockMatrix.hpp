@@ -10,6 +10,7 @@
 
 namespace slam {
 
+    // -----------------------------------------------------------------------------
      /**
      * @class BlockMatrix
      * @brief Implements a dense block matrix for factor graph-based optimization.

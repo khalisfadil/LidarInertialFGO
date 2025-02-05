@@ -7,6 +7,7 @@
 
 namespace slam {
 
+    // -----------------------------------------------------------------------------
     /**
      * @class BlockDimensionIndexing
      * @brief Manages 1D indexing for block dimensions (rows or columns). 

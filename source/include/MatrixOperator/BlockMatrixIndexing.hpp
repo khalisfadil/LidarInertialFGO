@@ -9,6 +9,7 @@
 
 namespace slam {
 
+    // -----------------------------------------------------------------------------
     /**
      * @class BlockMatrixIndexing
      * @brief Manages block indexing for rows and columns in a block matrix.
