@@ -1,7 +1,6 @@
-#include "source/include/LGMath/se3/TransformationWithCovariance.hpp"
-
 #include <stdexcept>
 
+#include "source/include/LGMath/se3/TransformationWithCovariance.hpp"
 #include "source/include/LGMath/se3/Operations.hpp"
 #include "source/include/LGMath/so3/Operations.hpp"
 

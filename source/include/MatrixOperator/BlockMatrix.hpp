@@ -1,12 +1,12 @@
 #pragma once
 
-#include "source/include/MatrixOperator/BlockMatrixBase.hpp"
-
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range2d.h>
 #include <Eigen/Core>
 #include <vector>
 #include <iostream>
+
+#include "source/include/MatrixOperator/BlockMatrixBase.hpp"
 
 namespace slam {
     namespace blockmatrix {

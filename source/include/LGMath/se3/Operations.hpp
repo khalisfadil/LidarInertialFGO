@@ -1,7 +1,8 @@
 #pragma once
 
-#include "source/include/LGMath/so3/Operations.hpp"
 #include <Eigen/Core>
+
+#include "source/include/LGMath/so3/Operations.hpp"
 
 /// Special Euclidean (SE3) Lie Group Mathematics
 namespace slam {

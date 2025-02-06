@@ -1,10 +1,10 @@
-#include "source/include/LGMath/se3/Operations.hpp"
-
 #include <algorithm>
 #include <cassert>
 #include <cmath>
 #include <stdexcept>
 #include <Eigen/Dense>
+
+#include "source/include/LGMath/se3/Operations.hpp"
 
 namespace slam {
     namespace liemath {

@@ -1,5 +1,6 @@
-#include "source/include/LGMath/CommonMath.hpp"
 #include <cmath>
+
+#include "source/include/LGMath/CommonMath.hpp"
 
 namespace slam {
     namespace liemath {

@@ -1,7 +1,5 @@
 #pragma once
 
-#include "source/include/MatrixOperator/BlockMatrixBase.hpp"
-
 #include <tbb/concurrent_hash_map.h>
 #include <tbb/parallel_for.h>
 #include <tbb/concurrent_vector.h>
@@ -11,6 +9,8 @@
 
 #include <stdexcept>
 #include <iostream>
+
+#include "source/include/MatrixOperator/BlockMatrixBase.hpp"
 
 namespace slam {
     namespace blockmatrix {

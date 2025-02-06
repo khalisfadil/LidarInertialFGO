@@ -1,12 +1,12 @@
 #pragma once
 
-#include "source/include/MatrixOperator/BlockDimensionIndexing.hpp"
-#include "source/include/MatrixOperator/BlockMatrixIndexing.hpp"
-
 #include <stdexcept>
 #include <vector>
 #include <Eigen/Core>
 #include <Eigen/Sparse>
+
+#include "source/include/MatrixOperator/BlockDimensionIndexing.hpp"
+#include "source/include/MatrixOperator/BlockMatrixIndexing.hpp"
 
 namespace slam {
     namespace blockmatrix {
