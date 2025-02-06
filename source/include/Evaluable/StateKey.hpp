@@ -4,7 +4,7 @@
 #include <functional>
 
 namespace slam {
-    namespace eval{
+    namespace eval {
 
         // -----------------------------------------------------------------------------
         /**
@@ -20,10 +20,29 @@ namespace slam {
 
         // -----------------------------------------------------------------------------
         /**
-         * @typedef StateKeyHash
-         * @brief Hash function for StateKey.
+         * @struct StateKeyHash
+         * @brief Custom hash and equality functions for `StateKey`, compatible with TBB.
          */
-        using StateKeyHash = std::hash<unsigned int>;
+        struct StateKeyHash {
+            /**
+             * @brief Hash function for `StateKey`.
+             * @param key The state key to hash.
+             * @return Hashed value.
+             */
+            static size_t hash(const StateKey& key) {
+                return std::hash<unsigned int>{}(key);
+            }
+
+            /**
+             * @brief Equality function for `StateKey`.
+             * @param a First state key.
+             * @param b Second state key.
+             * @return `true` if keys are equal.
+             */
+            static bool equal(const StateKey& a, const StateKey& b) {
+                return a == b;
+            }
+        };
 
         // -----------------------------------------------------------------------------
         /**
@@ -34,8 +53,8 @@ namespace slam {
          */
         inline StateKey NewStateKey() {
             static std::atomic<unsigned int> id{0};
-            // No need for acq_rel if we only want a unique ID
             return id.fetch_add(1, std::memory_order_relaxed);
         }
+
     } // namespace eval
 }  // namespace slam

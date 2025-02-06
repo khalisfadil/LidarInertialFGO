@@ -1,4 +1,4 @@
-#include <include/LieGroupMath/so3/Operations.hpp>
+#include "source/include/LGMath/so3/Operations.hpp"
 
 #include <algorithm>
 #include <cassert>

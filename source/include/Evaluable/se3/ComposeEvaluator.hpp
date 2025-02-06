@@ -3,8 +3,8 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include <include/Evaluable/Evaluable.hpp>
-#include <include/LieGroupMath/LieGroupMath.hpp>
+#include "source/include/Evaluable/Evaluable.hpp"
+#include "source/include/LGMath/LieGroupMath.hpp"
 
 namespace slam {
     namespace eval {

@@ -1,7 +1,7 @@
 #pragma once
 
-#include <include/LieGroupMath/LieGroupMath.hpp>
-#include <include/Evaluable/StateVariable.hpp>
+#include "source/include/LGMath/LieGroupMath.hpp"
+#include "source/include/Evaluable/StateVariable.hpp"
 
 namespace slam {
     namespace eval {

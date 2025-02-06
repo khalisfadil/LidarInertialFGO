@@ -1,6 +1,6 @@
 #pragma once
 
-#include <include/lieGroupMath/so3/Operations.hpp>
+#include "source/include/LGMath/so3/Operations.hpp"
 #include <Eigen/Core>
 
 /// Special Euclidean (SE3) Lie Group Mathematics

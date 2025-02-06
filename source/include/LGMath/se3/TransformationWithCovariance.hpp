@@ -2,7 +2,7 @@
 
 #include <Eigen/Core>
 
-#include <include/lieGroupMath/se3/Transformation.hpp>
+#include "source/include/LGMath/se3/Transformation.hpp"
 
 namespace slam {
     namespace liemath {

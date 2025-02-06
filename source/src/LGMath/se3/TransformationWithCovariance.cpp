@@ -1,9 +1,9 @@
-#include <include/LieGroupMath/se3/TransformationWithCovariance.hpp>
+#include "source/include/LGMath/se3/TransformationWithCovariance.hpp"
 
 #include <stdexcept>
 
-#include <include/LieGroupMath/se3/Operations.hpp>
-#include <include/LieGroupMath/so3/Operations.hpp>
+#include "source/include/LGMath/se3/Operations.hpp"
+#include "source/include/LGMath/so3/Operations.hpp"
 
 namespace slam {
     namespace liemath {

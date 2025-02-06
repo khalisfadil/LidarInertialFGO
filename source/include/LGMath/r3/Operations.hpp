@@ -4,9 +4,9 @@
 #include <stdexcept>
 #include <Eigen/Dense>
 
-#include <include/lieGroupMath/r3/Types.hpp>
-#include <include/lieGroupMath/se3/Operations.hpp>
-#include <include/lieGroupMath/se3/TransformationWithCovariance.hpp>
+#include "source/include/LGMath/r3/Types.hpp"
+#include "source/include/LGMath/se3/Operations.hpp"
+#include "source/include/LGMath/se3/TransformationWithCovariance.hpp"
 
 namespace slam {
     namespace liemath {
