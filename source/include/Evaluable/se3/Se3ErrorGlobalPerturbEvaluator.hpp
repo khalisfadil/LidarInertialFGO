@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Eigen/Core>
+
 #include "source/include/LGMath/LieGroupMath.hpp"
 #include "source/include/Evaluable/Evaluable.hpp"
 
