@@ -10,7 +10,7 @@ namespace slam {
         BlockMatrixBase::BlockMatrixBase(const std::vector<unsigned int>& blockSizes, bool symmetric)
         : symmetric_(symmetric) {
             if (blockSizes.empty()) {
-                throw std::invalid_argument("[Error] Block matrix must have at least one block.");
+                throw std::invalid_argument("[BlockMatrixBase::BlockMatrixBase] Block matrix must have at least one block.");
             }
             initializeSymmetricIndexing(blockSizes);
         }
@@ -23,7 +23,7 @@ namespace slam {
                                         const std::vector<unsigned int>& blockColumnSizes)
         : symmetric_(false) {
             if (blockRowSizes.empty() || blockColumnSizes.empty()) {
-                throw std::invalid_argument("[Error] Rectangular block matrix must have row and column sizes.");
+                throw std::invalid_argument("[BlockMatrixBase::BlockMatrixBase] Rectangular block matrix must have row and column sizes.");
             }
             initializeRectangularIndexing(blockRowSizes, blockColumnSizes);
         }

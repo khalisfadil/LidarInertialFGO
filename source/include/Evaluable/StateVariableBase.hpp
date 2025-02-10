@@ -1,5 +1,6 @@
 #pragma once
 
+#include <memory>  // Ensure this is at the top
 #include <Eigen/Dense>
 #include "source/include/Evaluable/Evaluable.hpp"
 #include "source/include/Evaluable/StateKey.hpp"

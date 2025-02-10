@@ -69,7 +69,7 @@ namespace slam {
             auto& column = cols_[c].rows;
             BlockSparseColumn::row_map_t::accessor accessor;
             if (!allowInsert && !column.find(accessor, r)) {
-                throw std::invalid_argument("[ERROR] Entry does not exist.");
+                throw std::invalid_argument("[BlockSparseMatrix::rowEntryAt] Entry does not exist.");
             }
             column.insert(accessor, r);
             return accessor->second;
@@ -82,7 +82,7 @@ namespace slam {
         Eigen::MatrixXd& BlockSparseMatrix::at(unsigned int r, unsigned int c) {
             BlockSparseColumn::row_map_t::accessor accessor;
             if (!cols_[c].rows.find(accessor, r)) {
-                throw std::invalid_argument("[ERROR] Entry does not exist.");
+                throw std::invalid_argument("[BlockSparseMatrix::at] Entry does not exist.");
             }
             return accessor->second.data;
         }

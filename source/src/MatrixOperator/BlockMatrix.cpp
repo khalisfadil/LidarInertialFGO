@@ -68,7 +68,7 @@ namespace slam {
 
             // Check bounds
             if (r >= blockRowIndexing.getNumBlocksEntries() || c >= blockColumnIndexing.getNumBlocksEntries()) {
-                throw std::invalid_argument("[ERROR] Index (" + std::to_string(r) + ", " + std::to_string(c) +
+                throw std::invalid_argument("[BlockMatrix::add] Index (" + std::to_string(r) + ", " + std::to_string(c) +
                                             ") out of range. Row index must be less than " +
                                             std::to_string(blockRowIndexing.getNumBlocksEntries()) + " and column index must be less than " +
                                             std::to_string(blockColumnIndexing.getNumBlocksEntries()) + ".");
@@ -76,14 +76,14 @@ namespace slam {
 
             // Ensure upper-triangular portion is respected for symmetric matrices
             if (this->isScalarSymmetric() && r > c) {
-                throw std::invalid_argument("[ERROR] Attempted to access lower half of an upper-symmetric block matrix at index (" +
+                throw std::invalid_argument("[BlockMatrix::add] Attempted to access lower half of an upper-symmetric block matrix at index (" +
                                             std::to_string(r) + ", " + std::to_string(c) + ").");
             }
 
             // Check dimensions
             if (m.rows() != static_cast<int>(blockRowIndexing.getBlockSizeAt(r)) ||
                 m.cols() != static_cast<int>(blockColumnIndexing.getBlockSizeAt(c))) {
-                throw std::invalid_argument("[ERROR] Matrix size mismatch at index (" + std::to_string(r) + ", " + std::to_string(c) +
+                throw std::invalid_argument("[BlockMatrix::add] Matrix size mismatch at index (" + std::to_string(r) + ", " + std::to_string(c) +
                                             "). Expected size: (" + std::to_string(blockRowIndexing.getBlockSizeAt(r)) + ", " +
                                             std::to_string(blockColumnIndexing.getBlockSizeAt(c)) + "), but got size: (" +
                                             std::to_string(m.rows()) + ", " + std::to_string(m.cols()) + ").");
@@ -106,7 +106,7 @@ namespace slam {
             // Bounds check
             if (r >= this->getIndexing().getRowIndexing().getNumBlocksEntries() ||
                 c >= this->getIndexing().getColumnIndexing().getNumBlocksEntries()) {
-                throw std::invalid_argument("[ERROR] Index (" + std::to_string(r) + ", " + std::to_string(c) +
+                throw std::invalid_argument("[BlockMatrix::at] Index (" + std::to_string(r) + ", " + std::to_string(c) +
                                             ") out of range. Row index must be less than " + 
                                             std::to_string(this->getIndexing().getRowIndexing().getNumBlocksEntries()) +
                                             " and column index must be less than " +
@@ -115,7 +115,7 @@ namespace slam {
 
             // Ensure upper-triangular portion is respected for symmetric matrices
             if (this->isScalarSymmetric() && r > c) {
-                throw std::invalid_argument("[ERROR] Attempted to access lower half of an upper-symmetric block matrix at index (" +
+                throw std::invalid_argument("[BlockMatrix::at] Attempted to access lower half of an upper-symmetric block matrix at index (" +
                                             std::to_string(r) + ", " + std::to_string(c) + ").");
             }
 
@@ -133,7 +133,7 @@ namespace slam {
 
             // Bounds check
             if (r >= blockRowIndexing.getNumBlocksEntries() || c >= blockColumnIndexing.getNumBlocksEntries()) {
-                throw std::invalid_argument("[ERROR] Index (" + std::to_string(r) + ", " + std::to_string(c) +
+                throw std::invalid_argument("[BlockMatrix::copyAt] Index (" + std::to_string(r) + ", " + std::to_string(c) +
                                             ") out of range in BlockMatrix. Row index must be less than " +
                                             std::to_string(blockRowIndexing.getNumBlocksEntries()) + " and column index must be less than " +
                                             std::to_string(blockColumnIndexing.getNumBlocksEntries()) + ".");

@@ -169,4 +169,4 @@ namespace slam {
 
 // -----------------------------------------------------------------------------
 /** \brief Print transformation */
-std::ostream& operator<<(std::ostream& out, const slam::se3::Transformation& T);
+std::ostream& operator<<(std::ostream& out, const slam::liemath::se3::Transformation& T);
