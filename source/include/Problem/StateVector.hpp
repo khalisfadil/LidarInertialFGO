@@ -6,7 +6,6 @@
 #include <Eigen/Dense>
 
 #include "source/include/Evaluable/StateKeyJacobians.hpp"
-#include "source/include/Evaluable/StateKey.hpp"
 #include "source/include/Evaluable/StateVariableBase.hpp"
 
 namespace slam {
