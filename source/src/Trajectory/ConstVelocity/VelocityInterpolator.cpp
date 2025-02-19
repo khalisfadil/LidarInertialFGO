@@ -117,6 +117,76 @@ namespace slam {
                 return node;
             }
 
+            // -----------------------------------------------------------------------------
+            // backward
+            // -----------------------------------------------------------------------------
+
+            void VelocityInterpolator::backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
+                                    const slam::eval::Node<OutType>::Ptr& node,
+                                    slam::eval::StateKeyJacobians& jacs) const {
+                if (!active()) return;
+
+                // Retrieve state values
+                const auto T1 = knot1_->getPose()->value();
+                const auto w1 = knot1_->getVelocity()->value();
+                const auto T2 = knot2_->getPose()->value();
+                const auto w2 = knot2_->getVelocity()->value();
+
+                // Compute se(3) algebra of relative transformation
+                const auto xi_21 = (T2 / T1).vec();
+                const Eigen::Matrix<double, 6, 6> J_21_inv = slam::liemath::se3::vec2jacinv(xi_21);
+                
+                // Compute interpolated values efficiently
+                Eigen::Matrix<double, 12, 1> combined;
+                combined << w1, xi_21, J_21_inv * w2;
+                
+                Eigen::Matrix<double, 6, 1> xi_i1 = lambda12_ * w1 + psi11_ * xi_21 + psi12_ * J_21_inv * w2;
+                Eigen::Matrix<double, 6, 1> xi_j1 = lambda22_ * w1 + psi21_ * xi_21 + psi22_ * J_21_inv * w2;
+                
+                const Eigen::Matrix<double, 6, 6> J_i1 = slam::liemath::se3::vec2jac(xi_i1);
+                const auto w_i = J_i1 * xi_j1;
+                const auto J_prep_2 = J_i1 * (-0.5 * slam::liemath::se3::curlyhat(w_i) +
+                                                0.5 * slam::liemath::se3::curlyhat(xi_j1) * J_i1);
+                const auto J_prep_3 = -0.25 * J_i1 * slam::liemath::se3::curlyhat(xi_j1) *
+                                            slam::liemath::se3::curlyhat(xi_j1) -
+                                        0.5 * slam::liemath::se3::curlyhat(w_i);
+
+                // Compute relative transformation matrix
+                const slam::liemath::se3::Transformation T_21 = T2 * T1.inverse();
+
+                // Process Jacobians efficiently
+                std::array<std::pair<int, std::function<void()>>, 4> jacobian_updates = {
+                    std::make_pair(0, [&] {
+                        if (knot1_->getPose()->active()) {
+                            auto T1_ = std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(0));
+                            knot1_->getPose()->backward(lhs * (-J_prep_2 * T_21.adjoint()), T1_, jacs);
+                        }
+                    }),
+                    std::make_pair(2, [&] {
+                        if (knot2_->getPose()->active()) {
+                            auto T2_ = std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(2));
+                            knot2_->getPose()->backward(lhs * J_prep_2, T2_, jacs);
+                        }
+                    }),
+                    std::make_pair(1, [&] {
+                        if (knot1_->getVelocity()->active()) {
+                            auto w1_ = std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(1));
+                            knot1_->getVelocity()->backward(lhs * (J_i1 * lambda22_ + J_prep_3 * lambda12_), w1_, jacs);
+                        }
+                    }),
+                    std::make_pair(3, [&] {
+                        if (knot2_->getVelocity()->active()) {
+                            auto w2_ = std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(3));
+                            knot2_->getVelocity()->backward(lhs * (J_i1 * psi22_ * J_21_inv + J_prep_3 * psi12_ * J_21_inv), w2_, jacs);
+                        }
+                    })};
+                
+                for (const auto& update : jacobian_updates) {
+                    update.second();
+                }
+                }
+
+
         }  // namespace const_vel
     }  // namespace traj
 }  // namespace slam

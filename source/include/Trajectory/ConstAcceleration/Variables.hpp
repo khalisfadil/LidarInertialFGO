@@ -75,28 +75,28 @@ namespace slam {
              * @brief Retrieves the timestamp associated with this state variable.
              * @return Reference to the `Time` object.
              */
-            const Time& time() const;
+            const Time& getTime() const;
 
             // -----------------------------------------------------------------------------
             /**
              * @brief Retrieves the pose evaluable (SE(3) transformation).
              * @return Shared pointer to the pose evaluable.
              */
-            const slam::eval::Evaluable<PoseType>::Ptr& pose() const;
+            const slam::eval::Evaluable<PoseType>::Ptr& getPose() const;
 
             // -----------------------------------------------------------------------------
             /**
              * @brief Retrieves the velocity evaluable (se(3) twist).
              * @return Shared pointer to the velocity evaluable.
              */
-            const slam::eval::Evaluable<VelocityType>::Ptr& velocity() const;
+            const slam::eval::Evaluable<VelocityType>::Ptr& getVelocity() const;
 
             // -----------------------------------------------------------------------------
             /**
              * @brief Retrieves the acceleration evaluable (se(3) acceleration).
              * @return Shared pointer to the acceleration evaluable.
              */
-            const slam::eval::Evaluable<AccelerationType>::Ptr& acceleration() const;
+            const slam::eval::Evaluable<AccelerationType>::Ptr& getAcceleration() const;
 
         private:
             Time time_;  ///< Timestamp associated with this state.

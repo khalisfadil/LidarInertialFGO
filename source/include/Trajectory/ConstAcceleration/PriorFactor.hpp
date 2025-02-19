@@ -6,7 +6,7 @@
 #include "source/include/LGMath/LieGroupMath.hpp"
 #include "source/include/Evaluable/Evaluable.hpp"
 #include "source/include/Trajectory/ConstAcceleration/Variables.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
+
 
 namespace slam {
     namespace traj {
@@ -76,7 +76,7 @@ namespace slam {
                      * @brief Performs forward evaluation, computing the residual.
                      * @return A node containing the computed residual.
                      */
-                    eval::Node<OutType>::Ptr forward() const override;
+                    slam::eval::Node<OutType>::Ptr forward() const override;
 
                     // -----------------------------------------------------------------------------
                     /**
@@ -88,17 +88,21 @@ namespace slam {
                      */
                     void backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
                                 const eval::Node<OutType>::Ptr& node,
-                                eval::StateKeyJacobians& jacs) const override;
+                                slam::eval::StateKeyJacobians& jacs) const override;
 
                 protected:
+
+                    // -----------------------------------------------------------------------------
                     /** @brief First (earlier) knot */
                     const Variable::ConstPtr knot1_;
 
+                    // -----------------------------------------------------------------------------
                     /** @brief Second (later) knot */
                     const Variable::ConstPtr knot2_;
 
+                    // -----------------------------------------------------------------------------
                     /** @brief Transition matrix */
-                    Eigen::Matrix<double, 18, 18> Phi_;
+                    Eigen::Matrix<double, 18, 18> Phi_ = Eigen::Matrix<double, 18, 18>::Identity();
 
                     // -----------------------------------------------------------------------------
                     /**

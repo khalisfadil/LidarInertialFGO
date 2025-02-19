@@ -69,7 +69,7 @@ namespace slam {
             /**
              * @brief Retrieves the state keys affecting this function.
              */
-            void getRelatedVarKeys(eval::Evaluable<InPoseType>::KeySet& keys) const override;
+            void getRelatedVarKeys(slam::eval::Evaluable<InPoseType>::KeySet& keys) const override;
 
             // -----------------------------------------------------------------------------
             /**
@@ -93,8 +93,8 @@ namespace slam {
              * @param jacs Container for storing computed Jacobians.
              */
             void backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
-                          const eval::Node<OutType>::Ptr& node,
-                          eval::StateKeyJacobians& jacs) const override;
+                          const slam::eval::Node<OutType>::Ptr& node,
+                          slam::eval::StateKeyJacobians& jacs) const override;
 
         private:
             const Variable::ConstPtr knot1_;  ///< First trajectory knot.

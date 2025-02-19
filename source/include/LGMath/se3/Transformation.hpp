@@ -57,7 +57,7 @@ namespace slam {
                  * \param[in] xi_ab 6x1 se(3) algebra vector (translation + axis-angle rotation).
                  * \param[in] numTerms Number of terms in the series expansion (0 for analytical solution).
                  */
-                explicit Transformation(const Eigen::Ref<const Eigen::Matrix<double, 6, 1>>& xi_ab, unsigned int numTerms);
+                explicit Transformation(const Eigen::Ref<const Eigen::Matrix<double, 6, 1>>& xi_ab, unsigned int numTerms = 0);
 
                 // -----------------------------------------------------------------------------
                 /**

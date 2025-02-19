@@ -1,4 +1,5 @@
 #include "source/include/Trajectory/ConstAcceleration/VelocityExtrapolator.hpp"
+
 #include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
 
 namespace slam {
@@ -22,7 +23,7 @@ namespace slam {
                                                     const Variable::ConstPtr& knot)
                 : knot_(knot) {
                 // Compute transition matrix for the given time shift
-                const double tau = (time - knot->time()).seconds();
+                const double tau = (time - knot->getTime()).seconds();
                 Phi_ = getTran(tau);
             }
 
@@ -31,7 +32,7 @@ namespace slam {
             // -----------------------------------------------------------------------------
 
             bool VelocityExtrapolator::active() const {
-                return knot_->velocity()->active() || knot_->acceleration()->active();
+                return knot_->getVelocity()->active() || knot_->getAcceleration()->active();
             }
 
             // -----------------------------------------------------------------------------
@@ -39,8 +40,8 @@ namespace slam {
             // -----------------------------------------------------------------------------
 
             void VelocityExtrapolator::getRelatedVarKeys(eval::Evaluable<OutType>::KeySet& keys) const {
-                knot_->velocity()->getRelatedVarKeys(keys);
-                knot_->acceleration()->getRelatedVarKeys(keys);
+                knot_->getVelocity()->getRelatedVarKeys(keys);
+                knot_->getAcceleration()->getRelatedVarKeys(keys);
             }
 
             // -----------------------------------------------------------------------------
@@ -48,32 +49,26 @@ namespace slam {
             // -----------------------------------------------------------------------------
 
             auto VelocityExtrapolator::value() const -> OutType {
-                // Compute extrapolated velocity
-                const Eigen::Matrix<double, 6, 1> xi_j1 =
-                    Phi_.block<6, 6>(6, 6) * knot_->velocity()->value() +
-                    Phi_.block<6, 6>(6, 12) * knot_->acceleration()->value();
-
-                return xi_j1;  // Approximation holds as long as xi_i1 is small.
+                return Phi_.block<6, 6>(6, 6) * knot_->getVelocity()->value() +
+                    Phi_.block<6, 6>(6, 12) * knot_->getAcceleration()->value();
             }
+
 
             // -----------------------------------------------------------------------------
             // forward
             // -----------------------------------------------------------------------------
 
-            auto VelocityExtrapolator::forward() const -> eval::Node<OutType>::Ptr {
-                // Forward propagate velocity and acceleration
-                const auto w = knot_->velocity()->forward();
-                const auto dw = knot_->acceleration()->forward();
+            auto VelocityExtrapolator::forward() const -> slam::eval::Node<OutType>::Ptr {
+                const auto w = knot_->getVelocity()->forward(), dw = knot_->getAcceleration()->forward();
 
-                // Compute extrapolated velocity
-                const Eigen::Matrix<double, 6, 1> xi_j1 =
-                    Phi_.block<6, 6>(6, 6) * w->value() +
-                    Phi_.block<6, 6>(6, 12) * dw->value();
+                // Compute interpolated velocity
+                const auto node = slam::eval::Node<OutType>::MakeShared(
+                    Phi_.block<6, 6>(6, 6) * w->value() + Phi_.block<6, 6>(6, 12) * dw->value()
+                );
 
-                // Create computational node
-                const auto node = eval::Node<OutType>::MakeShared(xi_j1);
-                node->addChild(w);
-                node->addChild(dw);
+                // Explicitly specify the container type
+                std::initializer_list<slam::eval::NodeBase::Ptr> children = {w, dw};
+                for (const auto& child : children) node->addChild(child);
 
                 return node;
             }
@@ -83,25 +78,26 @@ namespace slam {
             // -----------------------------------------------------------------------------
 
             void VelocityExtrapolator::backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
-                                                const eval::Node<OutType>::Ptr& node,
-                                                eval::StateKeyJacobians& jacs) const {
+                                    const eval::Node<OutType>::Ptr& node,
+                                    eval::StateKeyJacobians& jacs) const {
                 if (!active()) return;
 
-                // Compute Jacobian for velocity term
-                if (knot_->velocity()->active()) {
-                    const auto w = std::static_pointer_cast<eval::Node<InVelType>>(node->getChild(0));
-                    Eigen::MatrixXd new_lhs = lhs * Phi_.block<6, 6>(6, 6);
-                    knot_->velocity()->backward(new_lhs, w, jacs);
-                }
+                // Precompute Phi matrix blocks
+                const auto phi_v = Phi_.block<6, 6>(6, 6);
+                const auto phi_a = Phi_.block<6, 6>(6, 12);
 
-                // Compute Jacobian for acceleration term
-                if (knot_->acceleration()->active()) {
-                    const auto dw = std::static_pointer_cast<eval::Node<InAccType>>(node->getChild(1));
-                    Eigen::MatrixXd new_lhs = lhs * Phi_.block<6, 6>(6, 12);
-                    knot_->acceleration()->backward(new_lhs, dw, jacs);
-                }
+                // Lambda-based Jacobian updates
+                std::array<std::function<void()>, 2> jacobian_updates = {
+                    [&] { if (knot_->getVelocity()->active()) 
+                            knot_->getVelocity()->backward(lhs * phi_v, 
+                                std::static_pointer_cast<eval::Node<InVelType>>(node->getChild(1)), jacs); },
+                    [&] { if (knot_->getAcceleration()->active()) 
+                            knot_->getAcceleration()->backward(lhs * phi_a, 
+                                std::static_pointer_cast<eval::Node<InAccType>>(node->getChild(2)), jacs); }
+                };
+
+                for (const auto& update : jacobian_updates) update();
             }
-
         }  // namespace const_acc
     }  // namespace traj
 }  // namespace slam

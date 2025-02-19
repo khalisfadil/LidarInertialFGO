@@ -71,7 +71,7 @@ namespace slam {
                      * @brief Forward pass to create a computational node for evaluation.
                      * @return Shared pointer to a node containing the computed velocity.
                      */
-                    eval::Node<OutType>::Ptr forward() const override;
+                    slam::eval::Node<OutType>::Ptr forward() const override;
 
                     // -----------------------------------------------------------------------------
                     /**
@@ -82,7 +82,7 @@ namespace slam {
                      */
                     void backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
                                     const eval::Node<OutType>::Ptr& node,
-                                    eval::StateKeyJacobians& jacs) const override;
+                                    slam::eval::StateKeyJacobians& jacs) const override;
 
                 protected:
                     // -----------------------------------------------------------------------------

@@ -29,7 +29,7 @@ namespace slam {
             // time
             // -----------------------------------------------------------------------------
 
-            const Time& Variable::time() const {
+            const Time& Variable::getTime() const {
                 return time_;
             }
 
@@ -37,7 +37,7 @@ namespace slam {
             // pose
             // -----------------------------------------------------------------------------
 
-            const slam::eval::Evaluable<Variable::PoseType>::Ptr& Variable::pose() const {
+            const slam::eval::Evaluable<Variable::PoseType>::Ptr& Variable::getPose() const {
                 return T_k0_;
             }
 
@@ -45,7 +45,7 @@ namespace slam {
             // velocity
             // -----------------------------------------------------------------------------
 
-            const slam::eval::Evaluable<Variable::VelocityType>::Ptr& Variable::velocity() const {
+            const slam::eval::Evaluable<Variable::VelocityType>::Ptr& Variable::getVelocity() const {
                 return w_0k_ink_;
             }
 
@@ -53,7 +53,7 @@ namespace slam {
             // acceleration
             // -----------------------------------------------------------------------------
 
-            const slam::eval::Evaluable<Variable::AccelerationType>::Ptr& Variable::acceleration() const {
+            const slam::eval::Evaluable<Variable::AccelerationType>::Ptr& Variable::getAcceleration() const {
                 return dw_0k_ink_;
             }
 
