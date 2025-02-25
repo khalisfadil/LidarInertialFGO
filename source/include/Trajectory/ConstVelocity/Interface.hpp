@@ -2,7 +2,6 @@
 
 #include <Eigen/Core>
 #include <memory>
-#include <map>
 
 #include "source/include/Problem/CostTerm/WeightLeastSqCostTerm.hpp"
 #include "source/include/Problem/Problem.hpp"
@@ -14,95 +13,86 @@
 namespace slam {
     namespace traj {
         namespace const_vel {
-            
+
             // -----------------------------------------------------------------------------
             /**
              * @class Interface
-             * @brief Implements a constant velocity trajectory model.
+             * @brief Manages SE(3) trajectory states, priors, and interpolation.
              *
-             * Provides:
-             * - **State interpolation** (pose & velocity)
-             * - **Covariance propagation**
-             * - **Prior constraints** for factor graph optimization
+             * This class maintains a trajectory representation in SE(3), allowing
+             * pose and velocity interpolation, covariance retrieval, and factor graph
+             * optimization with prior cost terms.
              */
             class Interface : public traj::Interface {
-            public:
-                using Ptr = std::shared_ptr<Interface>;
-                using ConstPtr = std::shared_ptr<const Interface>;
+                public:
+                    using Ptr = std::shared_ptr<Interface>;
+                    using ConstPtr = std::shared_ptr<const Interface>;
 
-                using PoseType = slam::liemath::se3::Transformation;
-                using VelocityType = Eigen::Matrix<double, 6, 1>;
-                using CovType = Eigen::Matrix<double, 12, 12>;
+                    using PoseType = liemath::se3::Transformation;
+                    using VelocityType = Eigen::Matrix<double, 6, 1>;
+                    using CovType = Eigen::Matrix<double, 12, 12>;
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Factory method to create an instance.
-                 */
-                static Ptr MakeShared(
-                    const Eigen::Matrix<double, 6, 1>& Qc_diag = Eigen::Matrix<double, 6, 1>::Ones());
+                    // -----------------------------------------------------------------------------
+                    /**
+                     * @brief Factory method to create an instance of `Interface`.
+                     * @param Qc_diag Process noise diagonal (default: ones).
+                     * @return Shared pointer to the created instance.
+                     */
+                    static Ptr MakeShared(const Eigen::Ref<const Eigen::Matrix<double, 6, 1>>& Qc_diag = Eigen::Matrix<double, 6, 1>::Ones());
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Constructor for the Interface.
-                 */
-                explicit Interface(
-                    const Eigen::Matrix<double, 6, 1>& Qc_diag = Eigen::Matrix<double, 6, 1>::Ones());
-                
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Virtual destructor (ensures proper cleanup in derived classes).
-                 */
-                ~Interface() override = default;
+                    // -----------------------------------------------------------------------------
+                    /**
+                     * @brief Constructs an `Interface` instance.
+                     * @param Qc_diag Process noise diagonal (default: ones).
+                     */
+                    explicit Interface(const Eigen::Ref<const Eigen::Matrix<double, 6, 1>>& Qc_diag = Eigen::Matrix<double, 6, 1>::Ones());
 
-                // -----------------------------------------------------------------------------
+                    // -----------------------------------------------------------------------------
+                    /** @brief Adds a new state (pose, velocity) to the trajectory. */
+                    void add(const Time& time, 
+                            const slam::eval::Evaluable<PoseType>::Ptr& T_k0,
+                            const slam::eval::Evaluable<VelocityType>::Ptr& w_0k_ink);
 
-                void add(const slam::traj::Time& time,
-                         const slam::eval::Evaluable<PoseType>::Ptr& T_k0,
-                         const slam::eval::Evaluable<VelocityType>::Ptr& w_0k_ink);
-                
-                // -----------------------------------------------------------------------------
+                    // -----------------------------------------------------------------------------
+                    /** @brief Retrieves the state variable at a given time. */
+                    Variable::ConstPtr get(const Time& time) const;
 
-                Variable::ConstPtr get(const slam::traj::Time& time) const;
+                    // -----------------------------------------------------------------------------
+                    /** @brief Retrieves interpolators for pose and velocity. */
+                    slam::eval::Evaluable<PoseType>::ConstPtr getPoseInterpolator(const Time& time) const;
+                    slam::eval::Evaluable<VelocityType>::ConstPtr getVelocityInterpolator(const Time& time) const;
 
-                // -----------------------------------------------------------------------------
+                    // -----------------------------------------------------------------------------
+                    /** @brief Retrieves process noise covariance at a given time. */
+                    CovType getCovariance(const slam::solver::Covariance& cov, const Time& time);
 
-                slam::eval::Evaluable<PoseType>::ConstPtr getPoseInterpolator(const slam::traj::Time& time) const;
+                    // -----------------------------------------------------------------------------
+                    /** @brief Adds prior constraints for pose, velocity, and full state. */
+                    void addPosePrior(const Time& time, const PoseType& T_k0, const Eigen::Matrix<double, 6, 6>& cov);
+                    void addVelocityPrior(const Time& time, const VelocityType& w_0k_ink, const Eigen::Matrix<double, 6, 6>& cov);
+                    void addStatePrior(const Time& time, const PoseType& T_k0,
+                                    const VelocityType& w_0k_ink, 
+                                    const CovType& cov);
 
-                // -----------------------------------------------------------------------------
+                    // -----------------------------------------------------------------------------
+                    /** @brief Adds prior cost terms to the optimization problem. */
+                    void addPriorCostTerms(slam::problem::Problem& problem) const;
 
-                slam::eval::Evaluable<VelocityType>::ConstPtr getVelocityInterpolator(const slam::traj::Time& time) const;
+                private:
 
-                // -----------------------------------------------------------------------------
+                    // -----------------------------------------------------------------------------
+                    /** @brief Process noise diagonal. */
+                    Eigen::Matrix<double, 6, 1> Qc_diag_;
 
-                CovType getCovariance(const slam::solver::Covariance& cov, const slam::traj::Time& time);
+                    // -----------------------------------------------------------------------------
+                    /** @brief Map storing trajectory knots. */
+                    std::map<Time, Variable::Ptr> knot_map_;
 
-                // -----------------------------------------------------------------------------
-
-                void addPosePrior(const slam::traj::Time& time, const PoseType& T_k0, const Eigen::Matrix<double, 6, 6>& cov);
-                
-                // -----------------------------------------------------------------------------
-
-                void addVelocityPrior(const slam::traj::Time& time, const VelocityType& w_0k_ink, const Eigen::Matrix<double, 6, 6>& cov);
-                
-                // -----------------------------------------------------------------------------
-
-                void addStatePrior(const slam::traj::Time& time, const PoseType& T_k0, const VelocityType& w_0k_ink, const CovType& cov);
-
-                // -----------------------------------------------------------------------------
-
-                void addPriorCostTerms(slam::problem::Problem& problem) const;
-
-            private:
-
-                Eigen::Matrix<double, 6, 1> Qc_diag_;
-
-                std::map<slam::traj::Time, Variable::Ptr> knot_map_;
-
-                slam::problem::costterm::WeightedLeastSqCostTerm<6>::Ptr pose_prior_factor_ = nullptr;
-
-                slam::problem::costterm::WeightedLeastSqCostTerm<6>::Ptr vel_prior_factor_ = nullptr;
-                
-                slam::problem::costterm::WeightedLeastSqCostTerm<12>::Ptr state_prior_factor_ = nullptr;
+                    // -----------------------------------------------------------------------------
+                    /** @brief Weighted least-squares cost terms for pose, velocity, and full state. */
+                    slam::problem::costterm::WeightedLeastSqCostTerm<6>::Ptr pose_prior_factor_ = nullptr;
+                    slam::problem::costterm::WeightedLeastSqCostTerm<6>::Ptr vel_prior_factor_ = nullptr;
+                    slam::problem::costterm::WeightedLeastSqCostTerm<12>::Ptr state_prior_factor_ = nullptr;
             };
 
         }  // namespace const_vel

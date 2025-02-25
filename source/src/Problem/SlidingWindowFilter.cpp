@@ -7,16 +7,16 @@ namespace slam {
         // MakeShared
         // -----------------------------------------------------------------------------
 
-        SlidingWindowFilter::Ptr SlidingWindowFilter::MakeShared(unsigned int num_threads) {
-            return std::make_shared<SlidingWindowFilter>(num_threads);
+        SlidingWindowFilter::Ptr SlidingWindowFilter::MakeShared() {
+            return std::make_shared<SlidingWindowFilter>();
         }
 
         // -----------------------------------------------------------------------------
         // SlidingWindowFilter
         // -----------------------------------------------------------------------------
 
-        SlidingWindowFilter::SlidingWindowFilter(unsigned int num_threads)
-            : num_threads_(num_threads),
+        SlidingWindowFilter::SlidingWindowFilter()
+            : Problem(), // ✅ Correctly initialize the base class 
             active_state_vector_(std::make_shared<StateVector>()),
             marginalize_state_vector_(std::make_shared<StateVector>()),
             state_vector_(std::make_shared<StateVector>()) {}

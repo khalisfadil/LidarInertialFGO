@@ -37,17 +37,15 @@ namespace slam {
                 // -----------------------------------------------------------------------------
                 /**
                  * @brief Creates a shared instance of the Sliding Window Filter.
-                 * @param num_threads Number of threads for parallel processing.
                  * @return Shared pointer to the created instance.
                  */
-                static Ptr MakeShared(unsigned int num_threads = 1);
+                static Ptr MakeShared();
 
                 // -----------------------------------------------------------------------------
                 /**
                  * @brief Constructor for Sliding Window Filter.
-                 * @param num_threads Number of threads for parallel processing.
                  */
-                explicit SlidingWindowFilter(unsigned int num_threads = 1);
+                explicit SlidingWindowFilter();
 
                 // -----------------------------------------------------------------------------
                 /**
@@ -142,10 +140,6 @@ namespace slam {
                     slam::eval::StateVariableBase::Ptr variable = nullptr;  ///< Pointer to the state variable.
                     bool marginalize = false;  ///< Flag indicating if the variable is marked for marginalization.
                 };
-
-                // -----------------------------------------------------------------------------
-                /** @brief Number of threads used for parallel cost term evaluation. */
-                const unsigned int num_threads_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Maps state keys to their corresponding variables. */

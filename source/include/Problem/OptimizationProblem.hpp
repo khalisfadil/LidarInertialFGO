@@ -30,19 +30,17 @@ namespace slam {
                 // -----------------------------------------------------------------------------
                 /**
                  * @brief Creates a shared instance of the optimization problem.
-                 * @param num_threads Number of threads for parallel execution (default: 1).
                  * @return Shared pointer to the newly created problem.
                  */
-                static Ptr MakeShared(unsigned int num_threads = 1) {
-                    return std::make_shared<OptimizationProblem>(num_threads);
+                static Ptr MakeShared() {
+                    return std::make_shared<OptimizationProblem>();
                 }
 
                 // -----------------------------------------------------------------------------
                 /**
                  * @brief Constructor for OptimizationProblem.
-                 * @param num_threads Number of threads for parallel execution (default: 1).
                  */
-                explicit OptimizationProblem(unsigned int num_threads = 1);
+                explicit OptimizationProblem();
 
                 // -----------------------------------------------------------------------------
                 /** @brief Adds a state variable to the problem. */
@@ -79,9 +77,6 @@ namespace slam {
                                             Eigen::VectorXd& gradient_vector) const override;
 
             private:
-                // -----------------------------------------------------------------------------
-                /** @brief Number of threads used for parallel cost term evaluation. */
-                const unsigned int num_threads_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Collection of cost terms. */

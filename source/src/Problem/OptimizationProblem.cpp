@@ -9,17 +9,17 @@ namespace slam {
         // MakeShared
         // ----------------------------------------------------------------------------
 
-        OptimizationProblem::Ptr OptimizationProblem::MakeShared(unsigned int num_threads) {
-            return std::make_shared<OptimizationProblem>(num_threads);
+        OptimizationProblem::Ptr OptimizationProblem::MakeShared() {
+            return std::make_shared<OptimizationProblem>();
         }
 
         // ----------------------------------------------------------------------------
         // OptimizationProblem
         // ----------------------------------------------------------------------------
 
-        OptimizationProblem::OptimizationProblem(unsigned int num_threads)
-            : num_threads_(num_threads),
-              state_vector_(std::make_shared<StateVector>()) {}
+        OptimizationProblem::OptimizationProblem()
+            : Problem(), // ✅ Correctly initialize the base class
+            state_vector_(std::make_shared<StateVector>()) {}
 
         // ----------------------------------------------------------------------------
         // addStateVariable

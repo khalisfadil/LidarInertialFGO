@@ -96,7 +96,7 @@ namespace slam {
                           const slam::eval::Node<OutType>::Ptr& node,
                           slam::eval::StateKeyJacobians& jacs) const override;
 
-        private:
+        protected:
             const Variable::ConstPtr knot1_;  ///< First trajectory knot.
             const Variable::ConstPtr knot2_;  ///< Second trajectory knot.
             Eigen::Matrix<double, 18, 18> omega_;  ///< Precomputed interpolation matrix.

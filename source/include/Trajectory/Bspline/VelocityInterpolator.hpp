@@ -4,7 +4,6 @@
 #include <memory>
 
 #include "source/include/Evaluable/Evaluable.hpp"
-#include "source/include/Evaluable/vspace/Evaluables.hpp"
 #include "source/include/Trajectory/Time.hpp"
 #include "source/include/Trajectory/Bspline/Variable.hpp"
 
