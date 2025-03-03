@@ -4,10 +4,11 @@
 #include <memory>
 #include <iostream>
 #include <Eigen/Core>
-#include <unordered_set>
 #include <optional>
 #include <stdexcept>
 #include <typeinfo>
+
+#include <tbb/concurrent_unordered_set.h>
 
 #include "source/include/Evaluable/StateKeyJacobians.hpp"
 #include "source/include/Evaluable/Node.hpp"
@@ -29,34 +30,23 @@ namespace slam {
 
                 using Ptr = std::shared_ptr<Evaluable<T>>;
                 using ConstPtr = std::shared_ptr<const Evaluable<T>>;
-                using KeySet = std::unordered_set<StateKey, StateKeyHash>;
+                using KeySet = tbb::concurrent_unordered_set<StateKey, StateKeyHash>;
+
 
                 virtual ~Evaluable() = default;
 
                 // -----------------------------------------------------------------------------
                 /**
-                 * @brief Evaluates the function, possibly using a cached value unless force=true.
+                 * @brief Evaluates the function and ensures robust error handling.
                  * @throws std::runtime_error if `value()` throws internally.
                  */
-                [[nodiscard]] T evaluate(bool force = false) const {
-                    // NOTE: This method is NOT thread-safe if called concurrently on the same object.
-                    if (force || !cached_value_) {
-                        try {
-                            cached_value_ = this->value();
-                        } catch (const std::exception& e) {
-                            throw std::runtime_error(std::string("[Evaluable<T>::evaluate] Error in value() of type ")
-                                + typeid(T).name() + ": " + e.what());
-                        }
+                [[nodiscard]] T evaluate() const {
+                    try {
+                        return this->value();
+                    } catch (const std::exception& e) {
+                        throw std::runtime_error("[Evaluable<T>::evaluate] Error in value() of type " +
+                            std::string(typeid(T).name()) + ": " + e.what());
                     }
-                    return *cached_value_;
-                }
-
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Clears the cached value, forcing re-evaluation next time.
-                 */
-                void resetCache() const noexcept {
-                    cached_value_.reset();
                 }
 
                 // -----------------------------------------------------------------------------
@@ -148,11 +138,6 @@ namespace slam {
                     }
                     os << " ] }\n";
                 }
-
-            private:
-
-                // Cache of the last computed value (not thread-safe if used concurrently!)
-                mutable std::optional<T> cached_value_;
         };
     } // namespace eval
 }  // namespace slam

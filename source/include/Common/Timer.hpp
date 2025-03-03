@@ -1,5 +1,7 @@
 #pragma once
 
+#include <ctime>
+#include <ratio>
 #include <chrono>
 
 namespace slam {
@@ -8,7 +10,12 @@ namespace slam {
         // -----------------------------------------------------------------------------
         /**
          * @class Timer
-         * @brief A simple high-resolution timer for measuring elapsed time.
+         * @brief A high-resolution POSIX timer for measuring elapsed time.
+         * 
+         * Uses `clock_gettime(CLOCK_MONOTONIC, &timespec)` for **nanosecond precision**.
+         * - **Thread-safe**
+         * - **Unaffected by system clock changes**
+         * - **Better resolution than `gettimeofday()`**
          */
         class Timer {
             public:
@@ -19,7 +26,7 @@ namespace slam {
                 // -----------------------------------------------------------------------------
                 /** @brief Resets the timer to start counting from zero. */
                 void reset() {
-                    start_time_ = std::chrono::high_resolution_clock::now();
+                    start_time_ = getCurrentTime();
                 }
 
                 // -----------------------------------------------------------------------------
@@ -28,9 +35,7 @@ namespace slam {
                  * @return Elapsed time in seconds.
                  */
                 [[nodiscard]] double seconds() const {
-                    return std::chrono::duration<double>(
-                        std::chrono::high_resolution_clock::now() - start_time_
-                    ).count();
+                    return getElapsedTime().count();
                 }
 
                 // -----------------------------------------------------------------------------
@@ -39,13 +44,30 @@ namespace slam {
                  * @return Elapsed time in milliseconds.
                  */
                 [[nodiscard]] double milliseconds() const {
-                    return seconds() * 1000.0;
+                    return getElapsedTime().count() * 1000.0;
                 }
 
             private:
                 // -----------------------------------------------------------------------------
                 /** @brief Stores the starting time point */
-                std::chrono::high_resolution_clock::time_point start_time_;
+                struct timespec start_time_;
+
+                // -----------------------------------------------------------------------------
+                /** @brief Retrieves the current time using `clock_gettime()` */
+                static struct timespec getCurrentTime() {
+                    struct timespec ts{};
+                    clock_gettime(CLOCK_MONOTONIC, &ts);  // High-resolution, monotonic time
+                    return ts;
+                }
+
+                // -----------------------------------------------------------------------------
+                /** @brief Computes elapsed time since reset */
+                [[nodiscard]] std::chrono::duration<double> getElapsedTime() const {
+                    struct timespec now = getCurrentTime();
+                    double elapsed_sec = (now.tv_sec - start_time_.tv_sec) +
+                                         (now.tv_nsec - start_time_.tv_nsec) * 1e-9;
+                    return std::chrono::duration<double>(elapsed_sec);
+                }
         };
 
     } // namespace common

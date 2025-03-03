@@ -174,5 +174,14 @@ namespace slam {
             }
         }
 
+        // ----------------------------------------------------------------------------
+        // Update State Vector Using a Perturbation
+        // ----------------------------------------------------------------------------
+
+        void StateVector::clear() {
+            states_.clear();
+            num_block_entries_ = 0;
+        }
+
     }  // namespace problem
 }  // namespace slam

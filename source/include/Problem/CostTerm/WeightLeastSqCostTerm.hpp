@@ -4,7 +4,6 @@
 #include <memory>
 #include <Eigen/Core>
 #include <iostream>
-#include <unordered_set>
 #include <optional>
 #include <stdexcept>
 #include <typeinfo>

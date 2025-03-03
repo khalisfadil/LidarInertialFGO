@@ -1,7 +1,7 @@
 #pragma once
 
 #include <memory>
-#include <unordered_set>
+#include <tbb/concurrent_unordered_set.h>  // ✅ Use unordered set, not hash map
 
 #include "source/include/MatrixOperator/BlockSparseMatrix.hpp"
 #include "source/include/MatrixOperator/BlockVector.hpp"
@@ -42,7 +42,7 @@ namespace slam {
                  * @brief Retrieves variable keys that this cost term depends on.
                  * @param keys Set of related variable keys.
                  */
-                using KeySet = std::unordered_set<slam::eval::StateKey, slam::eval::StateKeyHash>;
+                using KeySet = tbb::concurrent_unordered_set<slam::eval::StateKey, slam::eval::StateKeyHash>;
                 virtual void getRelatedVarKeys(KeySet &keys) const noexcept = 0;
 
                 // -----------------------------------------------------------------------------

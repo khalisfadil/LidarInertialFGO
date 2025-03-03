@@ -29,7 +29,7 @@ namespace slam {
              * @param key The state key to hash.
              * @return Hashed value.
              */
-            static size_t hash(const StateKey& key) {
+            size_t hash(const slam::eval::StateKey& key) const {
                 return std::hash<unsigned int>{}(key);
             }
 
@@ -39,7 +39,7 @@ namespace slam {
              * @param b Second state key.
              * @return `true` if keys are equal.
              */
-            static bool equal(const StateKey& a, const StateKey& b) {
+            bool equal(const slam::eval::StateKey& a, const slam::eval::StateKey& b) const {
                 return a == b;
             }
         };

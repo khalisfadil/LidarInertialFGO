@@ -91,6 +91,10 @@ namespace slam {
         /** @brief Updates the state vector using a perturbation. */
         void update(const Eigen::VectorXd& perturbation);
 
+        // -----------------------------------------------------------------------------
+        /** @brief Clears the state vector. */
+        void clear();
+
     private:
         // -----------------------------------------------------------------------------
         /** @brief Container for state variables and indexing. */

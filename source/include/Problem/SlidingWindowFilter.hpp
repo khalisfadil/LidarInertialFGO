@@ -6,6 +6,11 @@
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 #include <tbb/parallel_for.h>
+#include <tbb/concurrent_vector.h>
+#include <tbb/parallel_invoke.h>
+#include <tbb/parallel_reduce.h>
+#include <unordered_set>
+
 
 #include "source/include/Problem/Problem.hpp"
 #include "source/include/Problem/StateVector.hpp"
@@ -143,20 +148,21 @@ namespace slam {
 
                 // -----------------------------------------------------------------------------
                 /** @brief Maps state keys to their corresponding variables. */
-                using VariableMap = std::unordered_map<slam::eval::StateKey, Variable, slam::eval::StateKeyHash>;
+                using VariableMap = tbb::concurrent_hash_map<slam::eval::StateKey, Variable, slam::eval::StateKeyHash>;
                 VariableMap variables_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Maintains an ordered queue of state variables for the sliding window. */
-                std::deque<slam::eval::StateKey> variable_queue_;
+                tbb::concurrent_vector<slam::eval::StateKey> variable_queue_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Tracks variable dependencies for marginalization. */
-                std::unordered_map<slam::eval::StateKey, KeySet, slam::eval::StateKeyHash> related_var_keys_;
+                using RelatedVarKeysMap = tbb::concurrent_hash_map<slam::eval::StateKey, KeySet, slam::eval::StateKeyHash>;
+                RelatedVarKeysMap related_var_keys_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Collection of cost terms affecting the current optimization window. */
-                std::vector<slam::problem::costterm::BaseCostTerm::ConstPtr> cost_terms_;
+                tbb::concurrent_vector<slam::problem::costterm::BaseCostTerm::ConstPtr> cost_terms_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Fixed linearized system from marginalized variables (stored as dense for now). */
@@ -166,6 +172,7 @@ namespace slam {
                 // -----------------------------------------------------------------------------
                 /** @brief Active state vector (only contains non-marginalized variables). */
                 StateVector::Ptr active_state_vector_ = std::make_shared<StateVector>();
+
 
                 // -----------------------------------------------------------------------------
                 /** @brief State vector containing marginalized variables. */
