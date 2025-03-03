@@ -22,7 +22,7 @@ namespace slam {
         class Interface {
             public:
             // -----------------------------------------------------------------------------
-            /// Shared pointer type aliases for better readability.
+            /// Shared pointer type aliases for readability.
             using Ptr = std::shared_ptr<Interface>;
             using ConstPtr = std::shared_ptr<const Interface>;
 
@@ -31,11 +31,7 @@ namespace slam {
             virtual ~Interface() = default;
 
             // -----------------------------------------------------------------------------
-            /**
-             * @brief Returns a reference to the associated optimization problem.
-             * @return Shared pointer to the underlying optimization problem.
-             */
-            virtual slam::problem::OptimizationProblem::Ptr getOptimizationProblem() const = 0;
+            // No pure virtual function here, no need for `getOptimizationProblem()`.
         };
 
     }  // namespace traj

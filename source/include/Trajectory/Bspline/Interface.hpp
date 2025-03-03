@@ -4,6 +4,7 @@
 #include <memory>
 #include <map>
 
+#include "source/include/Problem/CostTerm/WeightLeastSqCostTerm.hpp"
 #include "source/include/Problem/OptimizationProblem.hpp"
 #include "source/include/Trajectory/Bspline/Variable.hpp"
 #include "source/include/Trajectory/Interface.hpp"
