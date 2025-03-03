@@ -1,7 +1,12 @@
 #pragma once
 
+#include <Eigen/Cholesky>
 #include <Eigen/Core>
 #include <memory>
+
+#include <tbb/parallel_for.h>
+#include <tbb/blocked_range.h>
+#include <tbb/concurrent_priority_queue.h>
 
 #include "source/include/Solver/GaussNewtonSolver.hpp"
 
@@ -34,6 +39,20 @@ namespace slam {
             explicit DoglegGaussNewtonSolver(slam::problem::Problem& problem, const Params& params);
 
         private:
+
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Performs the linearization, solves the Gauss-Newton system, and updates the state.
+             * 
+             * This function constructs the Gauss-Newton system, computes the gradient norm, and 
+             * determines the optimal step direction using the Dogleg trust region method. It evaluates 
+             * the proposed step, updates the trust region size accordingly, and determines if the 
+             * optimization step was successful.
+             * 
+             * @param[out] cost Updated cost after applying the optimization step.
+             * @param[out] grad_norm Computed gradient norm for convergence checks.
+             * @return True if the optimization step is successful, false otherwise.
+             */
             bool linearizeSolveAndUpdate(double& cost, double& grad_norm) override;
 
             // -----------------------------------------------------------------------------
@@ -49,8 +68,7 @@ namespace slam {
             /**
              * @brief Computes the predicted cost reduction.
              */
-            double predictedReduction(
-                const Eigen::SparseMatrix<double>& approximate_hessian,
+            double predictedReduction(const Eigen::SparseMatrix<double>& approximate_hessian,
                 const Eigen::VectorXd& gradient_vector, const Eigen::VectorXd& step);
 
             double trust_region_size_ = 1.0;

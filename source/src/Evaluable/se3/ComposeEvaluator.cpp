@@ -90,8 +90,8 @@ namespace slam {
                 }
 
                 // Attempt to cast to `Node<OutType>` (ensure Node<T> inherits from NodeBase)
-                auto child1 = std::dynamic_pointer_cast<Node<OutType>>(child1_base);
-                auto child2 = std::dynamic_pointer_cast<Node<OutType>>(child2_base);
+                auto child1 = std::static_pointer_cast<Node<OutType>>(child1_base);
+                auto child2 = std::static_pointer_cast<Node<OutType>>(child2_base);
 
                 // Check if casting was successful
                 if (!child1 || !child2) {

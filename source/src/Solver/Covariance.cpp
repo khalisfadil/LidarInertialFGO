@@ -49,9 +49,8 @@ namespace slam {
         // Query: Covariance between two variables
         // -----------------------------------------------------------------------------
 
-        Eigen::MatrixXd Covariance::query(
-            const slam::eval::StateVariableBase::ConstPtr& rvar,
-            const slam::eval::StateVariableBase::ConstPtr& cvar) const {
+        Eigen::MatrixXd Covariance::query(const slam::eval::StateVariableBase::ConstPtr& rvar,
+                                            const slam::eval::StateVariableBase::ConstPtr& cvar) const {
             return query({rvar}, {cvar});
         }
 
@@ -59,8 +58,7 @@ namespace slam {
         // Query: Joint covariance of multiple variables
         // -----------------------------------------------------------------------------
 
-        Eigen::MatrixXd Covariance::query(
-            const std::vector<slam::eval::StateVariableBase::ConstPtr>& vars) const {
+        Eigen::MatrixXd Covariance::query(const std::vector<slam::eval::StateVariableBase::ConstPtr>& vars) const {
             return query(vars, vars);
         }
 
@@ -71,10 +69,20 @@ namespace slam {
         Eigen::MatrixXd Covariance::query(
             const std::vector<slam::eval::StateVariableBase::ConstPtr>& rvars,
             const std::vector<slam::eval::StateVariableBase::ConstPtr>& cvars) const {
-            
-            auto state_vector = state_vector_;
+
+            // Ensure state vector is valid
+            auto state_vector = state_vector_.lock();
             if (!state_vector) {
                 throw std::runtime_error("[Covariance::query] State vector expired.");
+            }
+
+            // Retrieve number of row/column variables
+            const size_t num_row_vars = rvars.size();
+            const size_t num_col_vars = cvars.size();
+
+            // Return early if either dimension is empty
+            if (num_row_vars == 0 || num_col_vars == 0) {
+                return Eigen::MatrixXd::Zero(0, 0);
             }
 
             // Create indexing
@@ -82,72 +90,75 @@ namespace slam {
             const auto& blk_row_indexing = indexing.getRowIndexing();
             const auto& blk_col_indexing = indexing.getColumnIndexing();
 
-            // Number of rows/cols
-            const auto num_row_vars = rvars.size();
-            const auto num_col_vars = cvars.size();
+            // Reserve space for efficiency
+            std::vector<unsigned int> blk_row_indices, blk_col_indices;
+            std::vector<unsigned int> blk_row_sizes, blk_col_sizes;
+            blk_row_indices.reserve(num_row_vars);
+            blk_col_indices.reserve(num_col_vars);
+            blk_row_sizes.reserve(num_row_vars);
+            blk_col_sizes.reserve(num_col_vars);
 
-            // Block indices
-            std::vector<unsigned int> blk_row_indices(num_row_vars);
-            std::vector<unsigned int> blk_col_indices(num_col_vars);
-
-            for (size_t i = 0; i < num_row_vars; i++) {
-                blk_row_indices[i] = state_vector->getStateBlockIndex(rvars[i]->key());
+            // Look up block indices and sizes
+            for (const auto& rvar : rvars) {
+                if (!rvar) throw std::runtime_error("[Covariance::query] Null row variable encountered.");
+                blk_row_indices.emplace_back(state_vector->getStateBlockIndex(rvar->key()));
+                blk_row_sizes.emplace_back(blk_row_indexing.getBlockSizeAt(blk_row_indices.back()));
             }
-            for (size_t i = 0; i < num_col_vars; i++) {
-                blk_col_indices[i] = state_vector->getStateBlockIndex(cvars[i]->key());
-            }
-
-            // Block sizes
-            std::vector<unsigned int> blk_row_sizes(num_row_vars);
-            std::vector<unsigned int> blk_col_sizes(num_col_vars);
-
-            for (size_t i = 0; i < num_row_vars; i++) {
-                blk_row_sizes[i] = blk_row_indexing.getBlockSizeAt(blk_row_indices[i]);
-            }
-            for (size_t i = 0; i < num_col_vars; i++) {
-                blk_col_sizes[i] = blk_col_indexing.getBlockSizeAt(blk_col_indices[i]);
+            for (const auto& cvar : cvars) {
+                if (!cvar) throw std::runtime_error("[Covariance::query] Null column variable encountered.");
+                blk_col_indices.emplace_back(state_vector->getStateBlockIndex(cvar->key()));
+                blk_col_sizes.emplace_back(blk_col_indexing.getBlockSizeAt(blk_col_indices.back()));
             }
 
-            // Result container
+            // Create block matrix container
             slam::blockmatrix::BlockMatrix cov_blk(blk_row_sizes, blk_col_sizes);
             const auto& cov_blk_indexing = cov_blk.getIndexing();
+            const auto& cov_blk_row_indexing = cov_blk_indexing.getRowIndexing();
+            const auto& cov_blk_col_indexing = cov_blk_indexing.getColumnIndexing();
 
-            // Compute covariance matrix
-            for (unsigned int c = 0; c < num_col_vars; c++) {
-                Eigen::VectorXd projection(blk_row_indexing.getTotalScalarSize());
-                projection.setZero();
+            // Pre-allocate projection vector
+            Eigen::VectorXd projection = Eigen::VectorXd::Zero(blk_row_indexing.getTotalScalarSize());
 
-                for (unsigned int j = 0; j < blk_col_sizes[c]; j++) {
-                    unsigned int scalar_col_index = blk_col_indexing.getCumulativeBlockSizeAt(blk_col_indices[c]) + j;
-                    projection(scalar_col_index) = 1.0;
+            // **Parallelized loop over columns using TBB**
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, num_col_vars), [&](const tbb::blocked_range<size_t>& range) {
+                for (size_t c = range.begin(); c < range.end(); ++c) {
+                    const unsigned int scalar_col_index = blk_col_indexing.getCumulativeBlockSizeAt(blk_col_indices[c]);
 
-                    Eigen::VectorXd x = hessian_solver_->solve(projection);
-                    projection(scalar_col_index) = 0.0;
+                    for (unsigned int j = 0; j < blk_col_sizes[c]; ++j) {
+                        projection[scalar_col_index + j] = 1.0;
+                        Eigen::VectorXd x = hessian_solver_->solve(projection);
+                        projection[scalar_col_index + j] = 0.0;
 
-                    for (unsigned int r = 0; r < num_row_vars; r++) {
-                        int scalar_row_index = blk_row_indexing.getCumulativeBlockSizeAt(blk_row_indices[r]);
-                        cov_blk.at(r, c).block(0, j, blk_row_sizes[r], 1) =
-                            x.block(scalar_row_index, 0, blk_row_sizes[r], 1);
+                        for (size_t r = 0; r < num_row_vars; ++r) {
+                            cov_blk.at(r, c).col(j) = x.segment(
+                                blk_row_indexing.getCumulativeBlockSizeAt(blk_row_indices[r]),
+                                blk_row_sizes[r]
+                            );
+                        }
                     }
                 }
-            }
+            });
 
-            // Convert to Eigen format
+            // Convert block matrix to Eigen format
             Eigen::MatrixXd cov = Eigen::MatrixXd::Zero(
-                cov_blk_indexing.getRowIndexing().getTotalScalarSize(),
-                cov_blk_indexing.getColumnIndexing().getTotalScalarSize()
+                cov_blk_row_indexing.getTotalScalarSize(),
+                cov_blk_col_indexing.getTotalScalarSize()
             );
 
-            for (unsigned int r = 0; r < num_row_vars; r++) {
-                for (unsigned int c = 0; c < num_col_vars; c++) {
-                    cov.block(cov_blk_indexing.getRowIndexing().getCumulativeBlockSizeAt(r),
-                              cov_blk_indexing.getColumnIndexing().getCumulativeBlockSizeAt(c),
-                              blk_row_sizes[r], blk_col_sizes[c]) = cov_blk.at(r, c);
+            // **Parallelizing final block conversion**
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, num_row_vars), [&](const tbb::blocked_range<size_t>& row_range) {
+                for (size_t r = row_range.begin(); r < row_range.end(); ++r) {
+                    for (size_t c = 0; c < num_col_vars; ++c) {
+                        cov.block(
+                            cov_blk_row_indexing.getCumulativeBlockSizeAt(r),
+                            cov_blk_col_indexing.getCumulativeBlockSizeAt(c),
+                            blk_row_sizes[r], blk_col_sizes[c]
+                        ) = cov_blk.at(r, c);
+                    }
                 }
-            }
+            });
 
             return cov;
         }
-
     }  // namespace solver
 }  // namespace slam

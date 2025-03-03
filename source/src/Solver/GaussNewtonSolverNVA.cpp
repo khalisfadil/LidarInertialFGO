@@ -25,10 +25,10 @@ namespace slam {
         // ----------------------------------------------------------------------------
 
         bool GaussNewtonSolverNVA::linearizeSolveAndUpdate(double& cost, double& grad_norm) {
-            slam::common::Timer iter_timer;
-            slam::common::Timer timer;
+            slam::common::Timer iter_timer, timer;
             double build_time = 0, solve_time = 0, update_time = 0;
 
+            // Initialize Hessian and gradient vector
             Eigen::SparseMatrix<double> approximate_hessian;
             Eigen::VectorXd gradient_vector;
 
@@ -81,21 +81,21 @@ namespace slam {
             if (params_.verbose) {
                 if (curr_iteration_ == 1) {
                     std::cout << std::setw(4) << "Iter"
-                              << std::setw(12) << "Cost"
-                              << std::setw(12) << "Build (ms)"
-                              << std::setw(12) << "Solve (ms)"
-                              << std::setw(13) << "Update (ms)"
-                              << std::setw(11) << "Total (ms)"
-                              << std::endl;
+                            << std::setw(12) << "Cost"
+                            << std::setw(12) << "Build (ms)"
+                            << std::setw(12) << "Solve (ms)"
+                            << std::setw(13) << "Update (ms)"
+                            << std::setw(11) << "Total (ms)"
+                            << std::endl;
                 }
 
                 std::cout << std::setw(4) << curr_iteration_
-                          << std::setw(12) << std::setprecision(5) << cost
-                          << std::setw(12) << std::setprecision(3) << std::fixed << build_time
-                          << std::setw(12) << std::setprecision(3) << solve_time
-                          << std::setw(13) << std::setprecision(3) << update_time
-                          << std::setw(11) << std::setprecision(3) << iter_timer.milliseconds()
-                          << std::endl;
+                        << std::setw(12) << std::setprecision(5) << cost
+                        << std::setw(12) << std::setprecision(3) << std::fixed << build_time
+                        << std::setw(12) << std::setprecision(3) << solve_time
+                        << std::setw(13) << std::setprecision(3) << update_time
+                        << std::setw(11) << std::setprecision(3) << iter_timer.milliseconds()
+                        << std::endl;
             }
 
             return true;

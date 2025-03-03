@@ -169,14 +169,12 @@ namespace slam {
 
                     // -----------------------------------------------------------------------------
                     /**
-                     * @brief Retrieves the measurement time.
-                     * @throws std::runtime_error if the time has not been initialized.
+                     * @brief Retrieves the timestamp for the acceleration measurement.
+                     * @return Timestamp.
+                     * @throws std::runtime_error if the timestamp was not initialized.
                      */
                     Time getTime() const {
-                        if (!time_init_) {
-                            throw std::runtime_error("[P2PlaneErrorGlobalPerturbEvaluator::getTime] Time was not initialized.");
-                        }
-                        return time_;
+                        return time_init_ ? time_ : throw std::runtime_error("[P2PlaneErrorGlobalPerturbEvaluator::getTime] Time was not initialized.");
                     }
 
                     // -----------------------------------------------------------------------------

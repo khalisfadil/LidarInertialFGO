@@ -21,13 +21,11 @@ namespace slam {
         // ----------------------------------------------------------------------------
 
         bool LineSearchGaussNewtonSolver::linearizeSolveAndUpdate(double& cost, double& grad_norm) {
-            slam::common::Timer iter_timer;
-            slam::common::Timer timer;
-
+            slam::common::Timer iter_timer, timer;
             double build_time = 0, solve_time = 0, update_time = 0;
 
             // Keep previous cost in case of failure
-            cost = curr_cost_;
+            cost = prev_cost_;
 
             // Construct Gauss-Newton system
             Eigen::SparseMatrix<double> approximate_hessian;
@@ -45,18 +43,18 @@ namespace slam {
 
             // Perform backtracking line search
             timer.reset();
-            double step_size = 1.0;
+            double backtrack_coeff = 1.0;
             unsigned int num_backtrack = 0;
-            
+            double proposed_cost;
+
             while (num_backtrack < params_.max_backtrack_steps) {
-                double proposed_cost = proposeUpdate(step_size * perturbation);
-                if (proposed_cost <= curr_cost_) {
+                if ((proposed_cost = proposeUpdate(backtrack_coeff * perturbation)) <= prev_cost_) {
                     acceptProposedState();
                     cost = proposed_cost;
                     break;
-                } 
+                }
                 rejectProposedState();
-                step_size *= params_.backtrack_multiplier;
+                backtrack_coeff *= params_.backtrack_multiplier;
                 ++num_backtrack;
             }
 
@@ -80,11 +78,12 @@ namespace slam {
                           << std::setw(12) << std::setprecision(3) << solve_time
                           << std::setw(13) << std::setprecision(3) << update_time
                           << std::setw(11) << std::setprecision(3) << iter_timer.milliseconds()
-                          << std::setw(13) << std::setprecision(3) << step_size << std::endl;
+                          << std::setw(13) << std::setprecision(3) << backtrack_coeff << std::endl;
             }
 
             return num_backtrack < params_.max_backtrack_steps;
         }
+
 
     }  // namespace solver
 }  // namespace slam

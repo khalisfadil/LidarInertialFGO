@@ -110,6 +110,10 @@ namespace slam {
             pending_proposed_state_ = false;
         }
 
+        // -----------------------------------------------------------------------------
+        // rejectProposedState
+        // -----------------------------------------------------------------------------
+
         void SolverBase::rejectProposedState() {
             if (!pending_proposed_state_) {
                 throw std::runtime_error("[SolverBase::rejectProposedState] No update proposed.");

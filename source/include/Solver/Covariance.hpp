@@ -4,6 +4,9 @@
 #include <memory>
 #include <vector>
 
+#include <tbb/parallel_for.h>
+#include <tbb/blocked_range.h>
+
 #include "source/include/Problem/Problem.hpp"
 #include "source/include/Problem/StateVector.hpp"
 #include "source/include/Solver/GaussNewtonSolver.hpp"
@@ -54,7 +57,7 @@ namespace slam {
 
         private:
             // -----------------------------------------------------------------------------
-            slam::problem::StateVector::ConstPtr state_vector_;
+            slam::problem::StateVector::ConstWeakPtr state_vector_;
 
             // -----------------------------------------------------------------------------
             using SolverType = Eigen::SimplicialLLT<Eigen::SparseMatrix<double>, Eigen::Upper>;

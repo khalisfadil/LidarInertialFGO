@@ -86,8 +86,8 @@ namespace slam {
                 }
 
                 // Attempt to cast to `Node<InType>` (ensure proper type conversion)
-                auto child1 = std::dynamic_pointer_cast<Node<InType>>(child1_base);
-                auto child2 = std::dynamic_pointer_cast<Node<InType>>(child2_base);
+                auto child1 = std::static_pointer_cast<Node<InType>>(child1_base);
+                auto child2 = std::static_pointer_cast<Node<InType>>(child2_base);
 
                 // Check if casting was successful
                 if (!child1 || !child2) {

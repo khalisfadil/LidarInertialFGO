@@ -2,6 +2,7 @@
 
 #include <vector>
 #include <memory>
+#include <atomic>
 #include <tbb/concurrent_hash_map.h>
 #include <Eigen/Dense>
 
@@ -13,14 +14,15 @@ namespace slam {
 
     // -----------------------------------------------------------------------------
     /**
-       * @class StateVector
-       * @brief Container for managing state variables in optimization.
-       * 
-       * Provides:
-       * - **Thread-safe storage** using `tbb::concurrent_hash_map`.
-       * - **Ordered block indexing** for optimization.
-       * - **Efficient state updates** with perturbations.
-       */
+     * @class StateVector
+     * @brief Container for managing state variables in optimization.
+     * 
+     * Provides:
+     * - **Thread-safe storage** using `tbb::concurrent_hash_map`.
+     * - **Ordered block indexing** for optimization.
+     * - **Efficient state updates** with perturbations.
+     * - **Weak pointers** to avoid circular references.
+     */
     class StateVector {
       public:
 
@@ -28,6 +30,8 @@ namespace slam {
         /** @brief Convenience typedefs */
         using Ptr = std::shared_ptr<StateVector>;
         using ConstPtr = std::shared_ptr<const StateVector>;
+        using WeakPtr = std::weak_ptr<StateVector>;
+        using ConstWeakPtr = std::weak_ptr<const StateVector>;
 
         // -----------------------------------------------------------------------------
         /** @brief Default constructor */
@@ -103,8 +107,11 @@ namespace slam {
         // -----------------------------------------------------------------------------
         /** @brief Total number of block entries in the state vector (atomic for thread safety). */
         std::atomic<unsigned int> num_block_entries_{0};
+
+        // -----------------------------------------------------------------------------
+        /** @brief Non-owning reference to the state vector (to avoid circular dependencies). */
+        ConstWeakPtr state_vector_;
     };
 
   }  // namespace problem
 }  // namespace slam
- 

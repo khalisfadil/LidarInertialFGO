@@ -81,8 +81,8 @@ namespace slam {
                     throw std::runtime_error("[ComposeVelocityEvaluator::backward] Null child node encountered.");
                 }
 
-                auto child1 = std::dynamic_pointer_cast<Node<PoseInType>>(child1_base);
-                auto child2 = std::dynamic_pointer_cast<Node<VelInType>>(child2_base);
+                auto child1 = std::static_pointer_cast<Node<PoseInType>>(child1_base);
+                auto child2 = std::static_pointer_cast<Node<VelInType>>(child2_base);
 
                 if (!child1 || !child2 || !child1->hasValue() || !child2->hasValue()) {
                     throw std::runtime_error("[ComposeVelocityEvaluator::backward] Invalid child node.");

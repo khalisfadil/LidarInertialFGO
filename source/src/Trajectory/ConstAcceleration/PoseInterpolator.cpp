@@ -142,63 +142,62 @@ namespace slam {
             void PoseInterpolator::backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs, 
                                             const slam::eval::Node<OutType>::Ptr& node, 
                                             slam::eval::StateKeyJacobians& jacs) const {
-            if (!active()) return;
+                if (!active()) return;
 
-            // Retrieve state values
-            const auto T1 = knot1_->getPose()->value(), T2 = knot2_->getPose()->value();
-            const auto w1 = knot1_->getVelocity()->value(), dw1 = knot1_->getAcceleration()->value();
-            const auto w2 = knot2_->getVelocity()->value(), dw2 = knot2_->getAcceleration()->value();
+                // Retrieve state values
+                const auto T1 = knot1_->getPose()->value(), T2 = knot2_->getPose()->value();
+                const auto w1 = knot1_->getVelocity()->value(), dw1 = knot1_->getAcceleration()->value();
+                const auto w2 = knot2_->getVelocity()->value(), dw2 = knot2_->getAcceleration()->value();
 
-            // Compute se(3) transformation and Jacobian
-            const auto xi_21 = (T2 / T1).vec();
-            const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
+                // Compute se(3) transformation and Jacobian
+                const auto xi_21 = (T2 / T1).vec();
+                const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
 
-            // Compute interpolated xi_i1
-            const auto Jw2 = J_21_inv * w2;
-            const auto omega_12 = -0.5 * liemath::se3::curlyhat(Jw2) * w2 + J_21_inv * dw2;
-            const Eigen::Matrix<double, 6, 1> xi_i1 = 
-                lambda_.block<6, 6>(0, 6) * w1 + 
-                lambda_.block<6, 6>(0, 12) * dw1 + 
-                omega_.block<6, 6>(0, 0) * xi_21 + 
-                omega_.block<6, 6>(0, 6) * Jw2 + 
-                omega_.block<6, 6>(0, 12) * omega_12;
+                // Compute interpolated xi_i1
+                const auto Jw2 = J_21_inv * w2;
+                const auto omega_12 = -0.5 * liemath::se3::curlyhat(Jw2) * w2 + J_21_inv * dw2;
+                const Eigen::Matrix<double, 6, 1> xi_i1 = 
+                    lambda_.block<6, 6>(0, 6) * w1 + 
+                    lambda_.block<6, 6>(0, 12) * dw1 + 
+                    omega_.block<6, 6>(0, 0) * xi_21 + 
+                    omega_.block<6, 6>(0, 6) * Jw2 + 
+                    omega_.block<6, 6>(0, 12) * omega_12;
 
-            // Compute interpolated transformation and Jacobians
-            const liemath::se3::Transformation T_21_obj(xi_21,0);
-            const Eigen::Matrix<double, 6, 6> J_i1 = liemath::se3::vec2jac(xi_i1);
+                // Compute interpolated transformation and Jacobians
+                const liemath::se3::Transformation T_21_obj(xi_21,0);
+                const Eigen::Matrix<double, 6, 6> J_i1 = liemath::se3::vec2jac(xi_i1);
 
-            // Precompute common Jacobian expressions
-            const auto J_prep = J_i1 * (omega_.block<6, 6>(0, 6) * 0.5 * liemath::se3::curlyhat(w2) +
-                                        omega_.block<6, 6>(0, 12) * 0.25 * liemath::se3::curlyhat(w2) * liemath::se3::curlyhat(w2) +
-                                        omega_.block<6, 6>(0, 12) * 0.5 * liemath::se3::curlyhat(dw2)) * J_21_inv;
+                // Precompute common Jacobian expressions
+                const auto J_prep = J_i1 * (omega_.block<6, 6>(0, 6) * 0.5 * liemath::se3::curlyhat(w2) +
+                                            omega_.block<6, 6>(0, 12) * 0.25 * liemath::se3::curlyhat(w2) * liemath::se3::curlyhat(w2) +
+                                            omega_.block<6, 6>(0, 12) * 0.5 * liemath::se3::curlyhat(dw2)) * J_21_inv;
 
-            // Process Jacobians efficiently using a lambda-based approach
-            std::array<std::function<void()>, 6> jacobian_updates = {
-                [&] { if (knot1_->getPose()->active()) 
-                        knot1_->getPose()->backward(lhs * (-J_prep * T_21_obj.adjoint() + J_i1.adjoint()), 
-                            std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(0)), jacs); },
-                [&] { if (knot2_->getPose()->active()) 
-                        knot2_->getPose()->backward(lhs * J_prep, 
-                            std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(3)), jacs); },
-                [&] { if (knot1_->getVelocity()->active()) 
-                        knot1_->getVelocity()->backward(lhs * lambda_.block<6, 6>(0, 6) * J_i1, 
-                            std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(1)), jacs); },
-                [&] { if (knot2_->getVelocity()->active()) 
-                        knot2_->getVelocity()->backward(lhs * (omega_.block<6, 6>(0, 6) * J_i1 * J_21_inv +
-                                                            omega_.block<6, 6>(0, 12) * -0.5 * J_i1 *
-                                                            (liemath::se3::curlyhat(Jw2) - liemath::se3::curlyhat(w2) * J_21_inv)), 
-                            std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(4)), jacs); },
-                [&] { if (knot1_->getAcceleration()->active()) 
-                        knot1_->getAcceleration()->backward(lhs * lambda_.block<6, 6>(0, 12) * J_i1, 
-                            std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(2)), jacs); },
-                [&] { if (knot2_->getAcceleration()->active()) 
-                        knot2_->getAcceleration()->backward(lhs * omega_.block<6, 6>(0, 12) * J_i1 * J_21_inv, 
-                            std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(5)), jacs); }
-            };
+                // Process Jacobians efficiently using a lambda-based approach
+                std::array<std::function<void()>, 6> jacobian_updates = {
+                    [&] { if (knot1_->getPose()->active()) 
+                            knot1_->getPose()->backward(lhs * (-J_prep * T_21_obj.adjoint() + J_i1.adjoint()), 
+                                std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(0)), jacs); },
+                    [&] { if (knot2_->getPose()->active()) 
+                            knot2_->getPose()->backward(lhs * J_prep, 
+                                std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(3)), jacs); },
+                    [&] { if (knot1_->getVelocity()->active()) 
+                            knot1_->getVelocity()->backward(lhs * lambda_.block<6, 6>(0, 6) * J_i1, 
+                                std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(1)), jacs); },
+                    [&] { if (knot2_->getVelocity()->active()) 
+                            knot2_->getVelocity()->backward(lhs * (omega_.block<6, 6>(0, 6) * J_i1 * J_21_inv +
+                                                                omega_.block<6, 6>(0, 12) * -0.5 * J_i1 *
+                                                                (liemath::se3::curlyhat(Jw2) - liemath::se3::curlyhat(w2) * J_21_inv)), 
+                                std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(4)), jacs); },
+                    [&] { if (knot1_->getAcceleration()->active()) 
+                            knot1_->getAcceleration()->backward(lhs * lambda_.block<6, 6>(0, 12) * J_i1, 
+                                std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(2)), jacs); },
+                    [&] { if (knot2_->getAcceleration()->active()) 
+                            knot2_->getAcceleration()->backward(lhs * omega_.block<6, 6>(0, 12) * J_i1 * J_21_inv, 
+                                std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(5)), jacs); }
+                };
 
-            for (const auto& update : jacobian_updates) update();
-        }
-
+                for (const auto& update : jacobian_updates) update();
+            }
         }  // namespace const_acc
     }  // namespace traj
 }  // namespace slam

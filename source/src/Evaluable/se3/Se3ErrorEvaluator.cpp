@@ -74,7 +74,7 @@ namespace slam {
                     throw std::runtime_error("[SE3ErrorEvaluator::backward] Null child node encountered.");
                 }
 
-                auto child = std::dynamic_pointer_cast<Node<InType>>(child_base);
+                auto child = std::static_pointer_cast<Node<InType>>(child_base);
                 if (!child || !child->hasValue()) {
                     throw std::runtime_error("[SE3ErrorEvaluator::backward] Invalid child node.");
                 }
