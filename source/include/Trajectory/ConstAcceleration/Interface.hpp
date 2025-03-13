@@ -1,19 +1,42 @@
 #pragma once
 
 #include <Eigen/Core>
-
 #include <memory>
+#include <tbb/concurrent_hash_map.h>  // TBB concurrent hash map
 
-#include "source/include/Problem/CostTerm/WeightLeastSqCostTerm.hpp"
-#include "source/include/Problem/Problem.hpp"
-#include "source/include/Solver/Covariance.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Variables.hpp"
-#include "source/include/Trajectory/Interface.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Problem/CostTerm/WeightLeastSqCostTerm.hpp"
+#include "Problem/Problem.hpp"
+#include "Solver/Covariance.hpp"
+#include "Trajectory/ConstAcceleration/Variables.hpp"
+#include "Trajectory/Interface.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace traj {
         namespace const_acc {
+
+            // Hash and equality comparator for Time
+            struct TimeHashCompare {
+                /**
+                 * @brief Hash function for `Time` using nanoseconds.
+                 * @param key The time key to hash.
+                 * @return Hashed value.
+                 */
+                static size_t hash(const Time& key) {
+                    int64_t nsec = key.nanosecs();
+                    return std::hash<int64_t>{}(nsec) ^ (nsec >> 32);  // Mix higher bits
+                }
+
+                /**
+                 * @brief Equality function for `Time`.
+                 * @param a First time key.
+                 * @param b Second time key.
+                 * @return `true` if keys are equal.
+                 */
+                static bool equal(const Time& a, const Time& b) {
+                    return a.nanosecs() == b.nanosecs();
+                }
+            };
 
             // -----------------------------------------------------------------------------
             /**
@@ -32,6 +55,9 @@ namespace slam {
                 using VelocityType = Eigen::Matrix<double, 6, 1>;
                 using AccelerationType = Eigen::Matrix<double, 6, 1>;
                 using CovType = Eigen::Matrix<double, 18, 18>;
+
+                // Define concurrent hash map type
+                using KnotMap = tbb::concurrent_hash_map<Time, Variable::Ptr, TimeHashCompare>;
 
                 // -----------------------------------------------------------------------------
                 /**
@@ -67,7 +93,7 @@ namespace slam {
 
                 // -----------------------------------------------------------------------------
                 /** @brief Retrieves process noise covariance at a given time. */
-                CovType getCovariance(const slam::solver::Covariance& cov, const Time& time);
+                CovType getCovariance(const slam::solver::Covariance& cov, const Time& time) const;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Adds prior constraints for pose, velocity, acceleration, and full state. */
@@ -96,10 +122,9 @@ namespace slam {
                 Eigen::Matrix<double, 18, 18> getTranPublic(const double& dt) const;
 
             protected:
-
                 // -----------------------------------------------------------------------------
-                /** @brief Map storing trajectory knots. */
-                std::map<Time, Variable::Ptr> knot_map_;
+                /** @brief Concurrent hash map storing trajectory knots. */
+                KnotMap knot_map_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Weighted least-squares cost terms for pose, velocity, acceleration, and full state. */

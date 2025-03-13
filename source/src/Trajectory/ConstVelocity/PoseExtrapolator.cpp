@@ -1,8 +1,8 @@
-#include "source/include/Trajectory/ConstVelocity/PoseExtrapolator.hpp"
+#include "Trajectory/ConstVelocity/PoseExtrapolator.hpp"
 
-#include "source/include/Evaluable/se3/Evaluables.hpp"
-#include "source/include/Evaluable/vspace/Evaluables.hpp"
-#include "source/include/Trajectory/ConstVelocity/Helper.hpp"
+#include "Evaluable/se3/Evaluables.hpp"
+#include "Evaluable/vspace/Evaluables.hpp"
+#include "Trajectory/ConstVelocity/Helper.hpp"
 
 namespace slam {
     namespace traj {
@@ -66,16 +66,18 @@ namespace slam {
             // -----------------------------------------------------------------------------
             // forward
             // -----------------------------------------------------------------------------
-            
+
             auto PoseExtrapolator::forward() const -> slam::eval::Node<OutType>::Ptr {
-                const auto T_k = knot_->getPose()->forward();
-                const auto w_k = knot_->getVelocity()->forward();
+                // Retrieve state values
+                const auto T = knot_->getPose()->forward();
+                const auto w = knot_->getVelocity()->forward();
 
-                const auto interpolated_value = this->value();
-                auto node = slam::eval::Node<OutType>::MakeShared(interpolated_value);
-
-                node->addChild(T_k);
-                node->addChild(w_k);
+                // Create node with extrapolated transformation
+                const auto node = slam::eval::Node<OutType>::MakeShared(
+                    slam::liemath::se3::Transformation(Phi_.block<6, 6>(0, 6) * w->value(),0) * T->value()
+                );
+                node->addChild(T);
+                node->addChild(w);
 
                 return node;
             }
@@ -83,30 +85,38 @@ namespace slam {
             // -----------------------------------------------------------------------------
             // backward
             // -----------------------------------------------------------------------------
-            
-            void PoseExtrapolator::backward(
-                const Eigen::Ref<const Eigen::MatrixXd>& lhs,
-                const slam::eval::Node<OutType>::Ptr& node,
-                slam::eval::StateKeyJacobians& jacs) const {
 
+            void PoseExtrapolator::backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
+                                                const slam::eval::Node<OutType>::Ptr& node,
+                                                slam::eval::StateKeyJacobians& jacs) const {
                 if (!active()) return;
 
-                const auto& w_k = knot_->getVelocity()->value();
-                const Eigen::Matrix<double, 6, 1> xi_k =
-                    Phi_.block<6, 6>(0, 6) * w_k;
+                // Retrieve state value and compute SE(3) algebra
+                const auto w = knot_->getVelocity()->value();
+                const Eigen::Matrix<double, 6, 1> xi_i1 = Phi_.block<6, 6>(0, 6) * w;
 
-                // Compute Jacobian matrix
-                const Eigen::Matrix<double, 6, 6> J_k = slam::liemath::se3::vec2jac(xi_k);
-                const slam::liemath::se3::Transformation T_k(xi_k,0);
+                // Precompute Jacobians and adjoint
+                const Eigen::Matrix<double, 6, 6> J_i1 = liemath::se3::vec2jac(xi_i1);
+                const Eigen::Matrix<double, 6, 6> T_i1_adj = liemath::se3::Transformation(xi_i1,0).adjoint();
 
-                if (knot_->getPose()->active()) {
-                    const auto T_k_ = std::dynamic_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(0));
-                    knot_->getPose()->backward(lhs * T_k.adjoint(), T_k_, jacs);
-                }
-                if (knot_->getVelocity()->active()) {
-                    const auto w_k_ = std::dynamic_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(1));
-                    knot_->getVelocity()->backward(lhs * J_k * Phi_.block<6, 6>(0, 6), w_k_, jacs);
-                }
+                // Lambda-based Jacobian updates
+                std::array<std::function<void()>, 2> updates = {
+                    [&]() {
+                        if (knot_->getPose()->active()) {
+                            const auto T_ = std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(0));
+                            knot_->getPose()->backward(lhs * T_i1_adj, T_, jacs);
+                        }
+                    },
+                    [&]() {
+                        if (knot_->getVelocity()->active()) {
+                            const auto w_ = std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(1));
+                            knot_->getVelocity()->backward(lhs * J_i1 * Phi_.block<6, 6>(0, 6), w_, jacs);
+                        }
+                    }
+                };
+
+                // Execute updates
+                for (const auto& update : updates) update();
             }
 
         }  // namespace const_vel

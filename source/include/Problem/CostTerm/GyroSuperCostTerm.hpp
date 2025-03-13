@@ -9,17 +9,17 @@
 #include <tbb/parallel_for.h>
 #include <tbb/mutex.h>
 
-#include "source/include/Trajectory/ConstVelocity/Helper.hpp"
-#include "source/include/Evaluable/se3/Se3StateVariable.hpp"
-#include "source/include/Evaluable/StateVariable.hpp"
-#include "source/include/Evaluable/vspace/VSpaceStateVar.hpp"
-#include "source/include/Problem/CostTerm/BaseCostTerm.hpp"
-#include "source/include/Problem/CostTerm/IMUSuperCostTerm.hpp"
-#include "source/include/Problem/LossFunc/LossFunc.hpp"
-#include "source/include/Problem/NoiseModel/StaticNoiseModel.hpp"
-#include "source/include/Problem/Problem.hpp"
-#include "source/include/Trajectory/ConstVelocity/Interface.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Trajectory/ConstVelocity/Helper.hpp"
+#include "Evaluable/se3/Se3StateVariable.hpp"
+#include "Evaluable/StateVariable.hpp"
+#include "Evaluable/vspace/VSpaceStateVar.hpp"
+#include "Problem/CostTerm/BaseCostTerm.hpp"
+#include "Problem/CostTerm/IMUSuperCostTerm.hpp"
+#include "Problem/LossFunc/LossFunc.hpp"
+#include "Problem/NoiseModel/StaticNoiseModel.hpp"
+#include "Problem/Problem.hpp"
+#include "Trajectory/ConstVelocity/Interface.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace problem {
@@ -240,6 +240,8 @@ namespace slam {
 
             private:
 
+                const Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
+
                 // -----------------------------------------------------------------------------
                 /** @brief Pointer to the trajectory interface containing state variables.
                  *
@@ -299,7 +301,7 @@ namespace slam {
                  * - Second matrix: Transformation from world frame to IMU.
                  * - Uses `tbb::concurrent_hash_map` for thread-safe parallel access.
                  */
-                tbb::concurrent_hash_map<double, std::pair<Eigen::Matrix3d, Eigen::Matrix3d>> interp_mats_;
+                tbb::concurrent_hash_map<double, std::pair<Eigen::Matrix4d, Eigen::Matrix4d>> interp_mats_;
 
                 // -----------------------------------------------------------------------------
                 /** @brief Container storing raw IMU data measurements.
@@ -344,7 +346,7 @@ namespace slam {
                  *
                  * This **\( 3 \times 6 \) Jacobian** maps gyroscope bias measurements to error terms.
                  */
-                Eigen::Matrix<double, 3, 6> jac_bias_ = Eigen::Matrix<double, 3, 6>::Zero();
+                Eigen::Matrix<double, 3, 6> jac_bias_gyro_ = Eigen::Matrix<double, 3, 6>::Zero();
 
                 // -----------------------------------------------------------------------------
                 /** @brief Initializes precomputed interpolation matrices.

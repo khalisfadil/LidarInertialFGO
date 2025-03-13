@@ -4,11 +4,11 @@
 #include <memory>
 #include <map>
 
-#include "source/include/Problem/CostTerm/WeightLeastSqCostTerm.hpp"
-#include "source/include/Problem/OptimizationProblem.hpp"
-#include "source/include/Trajectory/Bspline/Variable.hpp"
-#include "source/include/Trajectory/Interface.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Problem/CostTerm/WeightLeastSqCostTerm.hpp"
+#include "Problem/OptimizationProblem.hpp"
+#include "Trajectory/Bspline/Variable.hpp"
+#include "Trajectory/Interface.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace traj {

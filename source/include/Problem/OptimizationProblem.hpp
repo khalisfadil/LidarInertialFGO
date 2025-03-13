@@ -6,7 +6,7 @@
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 
-#include "source/include/Problem/Problem.hpp"
+#include "Problem/Problem.hpp"
 
 namespace slam {
     namespace problem {
@@ -88,8 +88,7 @@ namespace slam {
 
                 // -----------------------------------------------------------------------------
                 /** @brief State vector (created when calling `getStateVector()`). */
-                StateVector::Ptr state_vector_;
+                StateVector::Ptr state_vector_ = StateVector::MakeShared();
         };
-
     }  // namespace problem
 }  // namespace slam

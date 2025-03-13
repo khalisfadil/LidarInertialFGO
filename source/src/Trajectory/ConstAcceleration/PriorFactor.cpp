@@ -1,6 +1,5 @@
-#include "source/include/Trajectory/ConstAcceleration/PriorFactor.hpp"
-
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
+#include "Trajectory/ConstAcceleration/PriorFactor.hpp"
+#include "Trajectory/ConstAcceleration/Helper.hpp"
 
 namespace slam {
     namespace traj {
@@ -63,7 +62,7 @@ namespace slam {
                 const auto xi_21 = (T2 / T1).vec();
                 const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
 
-                // Construct gamma1 and gamma2 in a more compact way
+                // Construct gamma1 and gamma2
                 Eigen::Matrix<double, 18, 1> gamma1 = Eigen::Matrix<double, 18, 1>::Zero();
                 gamma1.segment<6>(6) = w1;
                 gamma1.segment<6>(12) = dw1;
@@ -90,7 +89,7 @@ namespace slam {
                 const auto xi_21 = (T2->value() / T1->value()).vec();
                 const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
 
-                // Construct gamma1 and gamma2 efficiently
+                // Construct gamma1 and gamma2
                 Eigen::Matrix<double, 18, 1> gamma1 = Eigen::Matrix<double, 18, 1>::Zero();
                 gamma1.segment<6>(6) = w1->value();
                 gamma1.segment<6>(12) = dw1->value();
@@ -111,13 +110,13 @@ namespace slam {
             }
 
             // -----------------------------------------------------------------------------
-            // forward
+            // backward (Corrected)
             // -----------------------------------------------------------------------------
 
             void PriorFactor::backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
-                                            const eval::Node<OutType>::Ptr& node,
-                                            slam::eval::StateKeyJacobians& jacs) const {
-                // e ≈ ebar + JAC * delta_x
+                                       const eval::Node<OutType>::Ptr& node,
+                                       slam::eval::StateKeyJacobians& jacs) const {
+                // Knots and their Jacobian functions
                 std::array<std::pair<const Variable::ConstPtr&, std::function<Eigen::Matrix<double, 18, 18>()>>, 2> knots = {{
                     {knot1_, [&] { return getJacKnot1_(); }},
                     {knot2_, [&] { return getJacKnot2_(); }}
@@ -128,26 +127,43 @@ namespace slam {
                     if (knot->getPose()->active() || knot->getVelocity()->active() || knot->getAcceleration()->active()) {
                         const auto J_knot = knots[knot_idx].second();
 
+                        // Extract 18x6 blocks for pose, velocity, and acceleration
+                        const auto J_pose = J_knot.block<18, 6>(0, 0);
+                        const auto J_velocity = J_knot.block<18, 6>(0, 6);
+                        const auto J_acceleration = J_knot.block<18, 6>(0, 12);
+
+                        // Compute lhs * J_block separately for each
+                        const auto lhs_J_pose = lhs * J_pose;
+                        const auto lhs_J_velocity = lhs * J_velocity;
+                        const auto lhs_J_acceleration = lhs * J_acceleration;
+
+                        // Update Jacobians using lambda functions
                         std::array<std::pair<int, std::function<void()>>, 3> jacobian_updates = {{
-                            {0, [&] { if (knot->getPose()->active()) {
-                                auto T = std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(knot_idx * 3));
-                                knot->getPose()->backward(lhs * J_knot.block<18, 6>(0, 0), T, jacs);
-                            }}},
-                            {1, [&] { if (knot->getVelocity()->active()) {
-                                auto w = std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(knot_idx * 3 + 1));
-                                knot->getVelocity()->backward(lhs * J_knot.block<18, 6>(0, 6), w, jacs);
-                            }}},
-                            {2, [&] { if (knot->getAcceleration()->active()) {
-                                auto dw = std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(knot_idx * 3 + 2));
-                                knot->getAcceleration()->backward(lhs * J_knot.block<18, 6>(0, 12), dw, jacs);
-                            }}}
+                            {0, [&] {
+                                if (knot->getPose()->active()) {
+                                    auto T = std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(knot_idx * 3));
+                                    knot->getPose()->backward(lhs_J_pose, T, jacs);
+                                }
+                            }},
+                            {1, [&] {
+                                if (knot->getVelocity()->active()) {
+                                    auto w = std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(knot_idx * 3 + 1));
+                                    knot->getVelocity()->backward(lhs_J_velocity, w, jacs);
+                                }
+                            }},
+                            {2, [&] {
+                                if (knot->getAcceleration()->active()) {
+                                    auto dw = std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(knot_idx * 3 + 2));
+                                    knot->getAcceleration()->backward(lhs_J_acceleration, dw, jacs);
+                                }
+                            }}
                         }};
 
                         for (const auto& update : jacobian_updates) update.second();
                     }
                 }
             }
-            
+
             // -----------------------------------------------------------------------------
             // getJacKnot1_
             // -----------------------------------------------------------------------------
@@ -159,7 +175,7 @@ namespace slam {
             // -----------------------------------------------------------------------------
             // getJacKnot2_
             // -----------------------------------------------------------------------------
-            
+
             Eigen::Matrix<double, 18, 18> PriorFactor::getJacKnot2_() const {
                 return getJacKnot2(knot1_, knot2_);
             }

@@ -1,16 +1,14 @@
+// Done
 #pragma once
 
 #include <tbb/concurrent_hash_map.h>
 #include <tbb/parallel_for.h>
-#include <tbb/concurrent_vector.h>
+#include <tbb/parallel_reduce.h>
 
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 
-#include <stdexcept>
-#include <iostream>
-
-#include "source/include/MatrixOperator/BlockMatrixBase.hpp"
+#include "MatrixOperator/BlockMatrixBase.hpp"
 
 namespace slam {
     namespace blockmatrix {
@@ -18,184 +16,117 @@ namespace slam {
         // -----------------------------------------------------------------------------
         /**
          * @class BlockSparseMatrix
-         * @brief A block-sparse matrix optimized for real-time performance using Intel TBB.
+         * @brief A thread-safe, block-sparse matrix optimized with Intel TBB for real-time performance.
          *
-         * This class represents a block-sparse matrix where individual blocks are stored 
-         * in a concurrent hash map for **efficient multi-threaded access**.
-         * - Uses **Intel TBB (`tbb::concurrent_hash_map`)** for **thread-safe** block storage.
-         * - Supports **parallelized operations** such as clearing, zeroing, and conversion.
-         * - Efficiently handles **non-square and symmetric block structures**.
+         * Stores non-zero blocks in a `tbb::concurrent_hash_map` for efficient, multi-threaded access.
+         * Supports rectangular and symmetric structures with parallelized operations.
          */
         class BlockSparseMatrix : public BlockMatrixBase {
-            
-            private:
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Computes the number of **non-zero entries** per scalar column.
-                 *
-                 * This function calculates the number of **active entries** per scalar column 
-                 * in the block matrix, which is useful for optimizing sparse matrix storage 
-                 * and conversions.
-                 *
-                 * @return Eigen::VectorXi - A vector containing the non-zero counts per column.
-                 */
-                Eigen::VectorXi getNnzPerCol() const;
+        private:   
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Represents a **single row entry** in the block-sparse matrix.
-                 *
-                 * Each row entry consists of an **Eigen dense block** (`Eigen::MatrixXd`) 
-                 * that stores the actual numerical values of the block.
-                 */
-                struct BlockRowEntry {
-                    Eigen::MatrixXd data;  ///< Dense block storage for matrix values.
-                };
+            // -----------------------------------------------------------------------------
+            /** @brief Represents a single dense block in the matrix. */
+            struct BlockRowEntry {
+                Eigen::MatrixXd data;
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Structure representing a **single sparse column** in the matrix.
-                 *
-                 * Each column stores a **hash map of row entries**, allowing for **fast lookups**,
-                 * insertions, and modifications in a **thread-safe manner**.
-                 * 
-                 * - Uses `tbb::concurrent_hash_map` for **lock-free** row indexing.
-                 * - Stores **only non-zero blocks**, reducing memory usage.
-                 */
-                struct BlockSparseColumn {
-                    using row_map_t = tbb::concurrent_hash_map<unsigned int, BlockRowEntry>;
-                    row_map_t rows;  ///< Thread-safe hash map storing row entries.
-                };
+                BlockRowEntry() : data(Eigen::MatrixXd::Zero(0, 0)) {}
+                BlockRowEntry(int rows, int cols) : data(Eigen::MatrixXd::Zero(rows, cols)) {}
+            };
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Storage for all **sparse columns** in the matrix.
-                 *
-                 * The matrix is stored **column-wise**, with each column containing 
-                 * its own thread-safe `tbb::concurrent_hash_map` for **efficient sparse indexing**.
-                 */
-                std::vector<BlockSparseColumn> cols_;
+            // -----------------------------------------------------------------------------
+            /** @brief Represents a sparse column with thread-safe row entries. */
+            struct BlockSparseColumn {
+                using row_map_t = tbb::concurrent_hash_map<unsigned int, BlockRowEntry>;
+                row_map_t rows;
+            };
 
-            public:
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Default constructor - Creates an **empty** block-sparse matrix.
-                 *
-                 * The matrix size must be **explicitly set** before usage.
-                 */
-                BlockSparseMatrix();
+            std::vector<BlockSparseColumn> cols_;  ///< Column-wise storage of sparse blocks.
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Constructs a **rectangular block matrix** with specified block sizes.
-                 *
-                 * @param blockRowSizes Vector containing the sizes of each row block.
-                 * @param blockColumnSizes Vector containing the sizes of each column block.
-                 */
-                BlockSparseMatrix(const std::vector<unsigned int>& blockRowSizes,
-                                  const std::vector<unsigned int>& blockColumnSizes);
+            Eigen::VectorXi getNnzPerCol() const;  ///< Computes non-zero entries per scalar column.
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Constructs a **symmetric block matrix** with specified block sizes.
-                 *
-                 * @param blockSizes Vector containing the sizes of each block.
-                 * @param symmetric If `true`, enforces symmetry by storing only **upper-triangular** entries.
-                 */
-                BlockSparseMatrix(const std::vector<unsigned int>& blockSizes, bool symmetric = false);
+        public:
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Clears **all sparse entries** while maintaining the matrix size.
-                 *
-                 * This operation is **parallelized using TBB**, ensuring **fast execution** 
-                 * by clearing columns in parallel.
-                 */
-                void clear();
+            // -----------------------------------------------------------------------------
+            /** @brief Constructs an empty block-sparse matrix (size must be set later). */
+            BlockSparseMatrix() noexcept;
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Sets all **existing** matrix entries to zero.
-                 *
-                 * Unlike `clear()`, this function does **not remove** entries—it simply 
-                 * sets their numerical values to zero, preserving the **sparsity structure**.
-                 * 
-                 * This operation is **TBB optimized** for **parallel execution**.
-                 */
-                void zero() override;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Constructs a rectangular block-sparse matrix.
+             * @param blockRowSizes Row block sizes.
+             * @param blockColumnSizes Column block sizes.
+             * @throws std::invalid_argument If sizes are empty.
+             */
+            BlockSparseMatrix(const std::vector<unsigned int>& blockRowSizes,
+                            const std::vector<unsigned int>& blockColumnSizes);
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Adds a **matrix block** at the specified position (r, c).
-                 *
-                 * If the entry at `(r, c)` does not exist, it will be **created automatically**.
-                 * If it exists, the new values will be **added** to the existing block.
-                 *
-                 * @param r Row index (block level).
-                 * @param c Column index (block level).
-                 * @param m The Eigen matrix to be added.
-                 *
-                 * @throws std::invalid_argument If block sizes **do not match**.
-                 */
-                void add(unsigned int r, unsigned int c, const Eigen::MatrixXd& m) override;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Constructs a symmetric block-sparse matrix.
+             * @param blockSizes Block sizes (square matrix).
+             * @param symmetric If true, stores only upper-triangular entries.
+             * @throws std::invalid_argument If sizes are empty.
+             */
+            BlockSparseMatrix(const std::vector<unsigned int>& blockSizes, bool symmetric = false);
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Returns a **reference** to the row entry at `(r, c)`, creating it if necessary.
-                 *
-                 * This function allows **direct modification** of block entries.
-                 * If `allowInsert = false`, it throws an exception if the entry does not exist.
-                 *
-                 * @param r Row index (block level).
-                 * @param c Column index (block level).
-                 * @param allowInsert If `true`, inserts a new entry if it does not exist.
-                 *
-                 * @return BlockRowEntry& - A reference to the block at `(r, c)`.
-                 * @throws std::invalid_argument If the entry does not exist and `allowInsert = false`.
-                 */
-                BlockRowEntry& rowEntryAt(unsigned int r, unsigned int c, bool allowInsert = false);
+            // -----------------------------------------------------------------------------
+            /** @brief Clears all sparse entries, preserving matrix size (TBB-optimized). */
+            void clear() noexcept;
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Returns a **mutable reference** to the matrix at `(r, c)`.
-                 *
-                 * Unlike `rowEntryAt()`, this function does **not** insert a new block if it is missing.
-                 *
-                 * @param r Row index (block level).
-                 * @param c Column index (block level).
-                 *
-                 * @return Eigen::MatrixXd& - Reference to the block matrix at `(r, c)`.
-                 * @throws std::invalid_argument If the block does not exist.
-                 */
-                Eigen::MatrixXd& at(unsigned int r, unsigned int c) override;
+            // -----------------------------------------------------------------------------
+            /** @brief Sets all existing entries to zero, keeping sparsity (TBB-optimized). */
+            void zero() override;
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Returns a **copy** of the matrix at `(r, c)`.
-                 *
-                 * If the block does **not exist**, it returns a **zero-matrix** of appropriate size.
-                 *
-                 * @param r Row index (block level).
-                 * @param c Column index (block level).
-                 *
-                 * @return Eigen::MatrixXd - Copy of the block at `(r, c)`, or a zero matrix if missing.
-                 */
-                Eigen::MatrixXd copyAt(unsigned int r, unsigned int c) const override;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Adds a matrix block at (r, c), creating it if absent (thread-safe).
+             * @param r Row block index.
+             * @param c Column block index.
+             * @param m Matrix to add (must match block size).
+             * @throws std::invalid_argument If sizes mismatch.
+             */
+            void add(unsigned int r, unsigned int c, const Eigen::MatrixXd& m) override;
 
-                // -----------------------------------------------------------------------------
-                /** 
-                 * @brief Converts the **block-sparse matrix** to an **Eigen sparse format**.
-                 *
-                 * This operation is **TBB optimized** using parallelized conversion:
-                 * - Uses **Eigen::Triplet** format for efficient sparse storage.
-                 * - Parallelized to accelerate **large matrix** conversions.
-                 *
-                 * @param getSubBlockSparsity If `true`, retains sub-block sparsity instead of merging.
-                 * 
-                 * @return Eigen::SparseMatrix<double> - The converted sparse matrix.
-                 */
-                Eigen::SparseMatrix<double> toEigen(bool getSubBlockSparsity = false) const;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Accesses or inserts a block at (r, c).
+             * @param r Row block index.
+             * @param c Column block index.
+             * @param allowInsert If true, creates block if absent; if false, throws if missing.
+             * @return Reference to the block entry.
+             * @throws std::out_of_range If indices are invalid.
+             * @throws std::invalid_argument If block doesn’t exist and allowInsert is false.
+             */
+            BlockRowEntry& rowEntryAt(unsigned int r, unsigned int c, bool allowInsert = false);
+
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Returns a mutable reference to the block at (r, c).
+             * @param r Row block index.
+             * @param c Column block index.
+             * @return Reference to the block matrix.
+             * @throws std::out_of_range If indices are invalid.
+             * @throws std::invalid_argument If block doesn’t exist.
+             */
+            Eigen::MatrixXd& at(unsigned int r, unsigned int c) override;
+
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Returns a copy of the block at (r, c), or zero matrix if absent.
+             * @param r Row block index.
+             * @param c Column block index.
+             * @return Copy of the block matrix.
+             * @throws std::out_of_range If indices are invalid.
+             */
+            Eigen::MatrixXd copyAt(unsigned int r, unsigned int c) const override;
+
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Converts the block-sparse matrix to an Eigen sparse matrix (TBB-optimized).
+             * @param getSubBlockSparsity If true, preserves sub-block sparsity.
+             * @return Eigen::SparseMatrix<double> representation.
+             */
+            Eigen::SparseMatrix<double> toEigen(bool getSubBlockSparsity = false) const;
         };
-
-    } // namespace blockmatrix
-} // namespace slam
+    }  // namespace blockmatrix
+}  // namespace slam

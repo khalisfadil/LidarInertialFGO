@@ -1,0 +1,1 @@
+/usr/bin/c++ CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.cpp.o -o BSplineTrajectoryExample  libcore.a /usr/lib/x86_64-linux-gnu/libtbb.so.12.11 /usr/lib/x86_64-linux-gnu/libboost_system.so.1.83.0 

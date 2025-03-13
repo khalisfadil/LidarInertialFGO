@@ -3,10 +3,10 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/Trajectory/ConstAcceleration/PriorFactor.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Variables.hpp"
-#include "source/include/Trajectory/Singer/Helper.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Trajectory/ConstAcceleration/PriorFactor.hpp"
+#include "Trajectory/ConstAcceleration/Variables.hpp"
+#include "Trajectory/Singer/Helper.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace traj {

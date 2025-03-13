@@ -1,4 +1,4 @@
-#include "source/include/Evaluable/point2point/VelErrorEvaluator.hpp"
+#include "Evaluable/point2point/VelErrorEvaluator.hpp"
 
 namespace slam {
     namespace eval {

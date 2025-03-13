@@ -1,4 +1,4 @@
-#include "source/include/Evaluable/point2point/p2pErrorEvaluator.hpp"
+#include "Evaluable/point2point/p2pErrorEvaluator.hpp"
 
 namespace slam {
     namespace eval {

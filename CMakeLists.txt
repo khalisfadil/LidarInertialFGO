@@ -3,7 +3,7 @@ project(slam)
 
 option(BUILD_TESTING "Build tests for slam" OFF)
 
-# Compiler setup (assumed to be GNU)
+# Compiler setup
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
@@ -13,31 +13,17 @@ add_compile_options(-march=native -O3 -Wall -pedantic -Wno-unused-function)
 cmake_policy(SET CMP0072 NEW) # OpenGL handling
 
 # Find required dependencies
-set(Open3D_DIR "/usr/local/lib/cmake/Open3D/") # Ensure correct directory
+# set(Open3D_DIR "/usr/local/lib/cmake/Open3D/") # Ensure correct directory
 set(TBB_DIR "/usr/lib/x86_64-linux-gnu/cmake/TBB") # Ensure correct directory
-find_package(Open3D REQUIRED)
+# find_package(Open3D REQUIRED)
 find_package(Boost 1.83 REQUIRED COMPONENTS system)
 find_package(TBB REQUIRED)
 find_package(Eigen3 3.4 REQUIRED NO_MODULE)
-find_package(PCL 1.14 REQUIRED)
-find_package(OpenMP REQUIRED)
+# find_package(PCL 1.14 REQUIRED)
+# find_package(OpenMP REQUIRED)
 
 # Define include directories for reuse
-set(INCLUDE_DIRECTORIES
-    ${CMAKE_SOURCE_DIR}/source/include/Common
-
-    ${CMAKE_SOURCE_DIR}/source/include/Evaluable
-    ${CMAKE_SOURCE_DIR}/source/include/Evaluable/imu
-    ${CMAKE_SOURCE_DIR}/source/include/Evaluable/point2point
-    ${CMAKE_SOURCE_DIR}/source/include/Evaluable/se3
-    ${CMAKE_SOURCE_DIR}/source/include/Evaluable/vspace
-
-    ${CMAKE_SOURCE_DIR}/source/include/LGMath
-    ${CMAKE_SOURCE_DIR}/source/include/MatrixOperator
-    ${CMAKE_SOURCE_DIR}/source/include/Problem
-    ${CMAKE_SOURCE_DIR}/source/include/Solver
-    ${CMAKE_SOURCE_DIR}/source/include/Trajectory
-)
+set(INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/source/include)
 
 # Core library
 add_library(core STATIC
@@ -66,16 +52,6 @@ add_library(core STATIC
     source/src/Evaluable/se3/Se3StateVariable.cpp
     source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp
 
-    source/src/Evaluable/vspace/AdditionEvaluator.cpp
-    source/src/Evaluable/vspace/MatrixMultEvaluator.cpp
-    source/src/Evaluable/vspace/MergeEvaluator.cpp
-    source/src/Evaluable/vspace/NegationEvaluator.cpp
-    source/src/Evaluable/vspace/PreIntVelocityStateVar.cpp
-    source/src/Evaluable/vspace/ScalarMultEvaluator.cpp
-    source/src/Evaluable/vspace/VSpaceErrorEvaluator.cpp
-    source/src/Evaluable/vspace/VSpaceInterpolator.cpp
-    source/src/Evaluable/vspace/VSpaceStateVar.cpp
-
     source/src/LGMath/r3/Operations.cpp
     source/src/LGMath/se3/Operations.cpp
     source/src/LGMath/se3/Transformation.cpp
@@ -93,7 +69,6 @@ add_library(core STATIC
 
     source/src/Problem/CostTerm/GyroSuperCostTerm.cpp
     source/src/Problem/CostTerm/IMUSuperCostTerm.cpp
-    source/src/Problem/CostTerm/WeightLeastSqCostTerm.cpp
     source/src/Problem/OptimizationProblem.cpp
     source/src/Problem/SlidingWindowFilter.cpp
     source/src/Problem/StateVector.cpp
@@ -145,41 +120,21 @@ target_include_directories(core PUBLIC ${INCLUDE_DIRECTORIES})
 
 # Link libraries to the core library
 target_link_libraries(core
-  PRIVATE
+  PUBLIC
     TBB::tbb
     Boost::system
-    Open3D::Open3D
+    # Open3D::Open3D
     Eigen3::Eigen
-    ${PCL_LIBRARIES}
-    OpenMP::OpenMP_CXX
+    # ${PCL_LIBRARIES}
+    # OpenMP::OpenMP_CXX
 )
 
 # Install the headers and library
-install(
-  DIRECTORY source/include/
-  DESTINATION include
-)
+install(DIRECTORY source/include/ DESTINATION include)
+install(TARGETS core DESTINATION lib)
 
-install(
-  TARGETS core
-  DESTINATION lib
-)
-
-# Executables
+# 🔥 **Fix for `BSplineTrajectoryExample` missing headers**
 add_executable(BSplineTrajectoryExample source/samples/BSplineTrajectoryExample.cpp)
+target_include_directories(BSplineTrajectoryExample PRIVATE ${CMAKE_SOURCE_DIR}/source/include)
+target_link_libraries(BSplineTrajectoryExample PRIVATE core)
 
-# Optionally uncomment and add more executables as needed
-# add_executable(LandmarkSLAMExample samples/LandmarkSLAMExample.cpp)
-# add_executable(RadialVelMeasWithConstVelTraj samples/RadialVelMeasWithConstVelTraj.cpp)
-# add_executable(RadialVelocityMeasurement samples/RadialVelocityMeasurement.cpp)
-# add_executable(SimplePoseGraphRelax samples/SimplePoseGraphRelax.cpp)
-# add_executable(SpherePoseGraphRelax samples/SpherePoseGraphRelax.cpp)
-# add_executable(SimplePointCloudAlignment samples/SimplePointCloudAlignment.cpp)
-# add_executable(TrustRegionExample samples/TrustRegionExample.cpp)
-# add_executable(SimpleConstVelTrajPrior samples/SimpleConstVelTrajPrior.cpp)
-# add_executable(SimpleBundleAdjustment samples/SimpleBundleAdjustment.cpp)
-# add_executable(SimpleBundleAdjustmentRelLand samples/SimpleBundleAdjustmentRelLand.cpp)
-# add_executable(SimpleBundleAdjustmentFullRel samples/SimpleBundleAdjustmentFullRel.cpp)
-# add_executable(SimpleBAandConstVelTrajPrior samples/SimpleBAandConstVelTrajPrior.cpp)
-# add_executable(SlidingWindowFilterExample samples/SlidingWindowFilterExample.cpp)
-# add_executable(MotionPriors samples/MotionPriors.cpp)

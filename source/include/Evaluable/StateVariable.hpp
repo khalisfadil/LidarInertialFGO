@@ -2,8 +2,8 @@
 
 #include <memory>  // Ensure this is at the top
 #include <Eigen/Dense>
-#include "source/include/Evaluable/StateVariableBase.hpp"
-#include "source/include/Evaluable/StateKey.hpp"
+#include "Evaluable/StateVariableBase.hpp"
+#include "Evaluable/StateKey.hpp"
 
 namespace slam {
     namespace eval{

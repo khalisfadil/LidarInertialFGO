@@ -10,8 +10,8 @@
 
 #include <tbb/concurrent_unordered_set.h>
 
-#include "source/include/Evaluable/StateKeyJacobians.hpp"
-#include "source/include/Evaluable/Node.hpp"
+#include "Evaluable/StateKeyJacobians.hpp"
+#include "Evaluable/Node.hpp"
 
 namespace slam {
     namespace eval{
@@ -30,7 +30,7 @@ namespace slam {
 
                 using Ptr = std::shared_ptr<Evaluable<T>>;
                 using ConstPtr = std::shared_ptr<const Evaluable<T>>;
-                using KeySet = tbb::concurrent_unordered_set<StateKey, StateKeyHash>;
+                using KeySet = tbb::concurrent_unordered_set<StateKey, StateKeyHasher, StateKeyEqual>;
 
 
                 virtual ~Evaluable() = default;

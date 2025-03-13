@@ -5,7 +5,7 @@
 #include <Eigen/Dense>
 #include <tbb/concurrent_hash_map.h>
 
-#include "source/include/Evaluable/StateKey.hpp"
+#include "Evaluable/StateKey.hpp"
 
 namespace slam {
     namespace eval {
@@ -42,7 +42,7 @@ namespace slam {
             };
 
             /// **Concurrent Hash Map Definition**  
-            using StateJacobianMap = tbb::concurrent_hash_map<StateKey, JacobianEntry, StateKeyHash>;
+            using StateJacobianMap = tbb::concurrent_hash_map<StateKey, JacobianEntry, StateKeyHashCompare>;
 
             // -----------------------------------------------------------------------------
             /**
@@ -90,23 +90,18 @@ namespace slam {
             void clear() {
                 jacobian_map_.clear();
             }
+            
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Returns a reference to the internal concurrent hash map
+             */
+            StateJacobianMap& get() { return jacobian_map_; }
 
             // -----------------------------------------------------------------------------
             /**
-             * @brief Retrieves a **copy** of all stored (key, Jacobian) pairs.
-             *
-             * @return A vector of key-Jacobian pairs.
-             *
-             * **Note:** This may not be a fully consistent snapshot if other  
-             * threads modify the map while this function is running.
+             * @brief Const version for const methods. Const version ensures read-only access in const methods, while non-const allows modification (not used here but included for completeness).
              */
-            std::vector<std::pair<StateKey, Eigen::MatrixXd>> getCopy() const {
-                std::vector<std::pair<StateKey, Eigen::MatrixXd>> result;
-                for (const auto& it : jacobian_map_) {
-                    result.emplace_back(it.first, it.second.mat);
-                }
-                return result;
-            }
+            const StateJacobianMap& get() const { return jacobian_map_; }
 
             // -----------------------------------------------------------------------------
             /**

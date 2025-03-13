@@ -3,8 +3,8 @@
 #include <memory>
 #include <Eigen/Core>
 
-#include "source/include/Evaluable/Evaluable.hpp"
-#include "source/include/Evaluable/Node.hpp"
+#include "Evaluable/Evaluable.hpp"
+#include "Evaluable/Node.hpp"
 
 namespace slam {
     namespace eval {
@@ -25,56 +25,76 @@ namespace slam {
              */
             template <int DIM = Eigen::Dynamic>
             class NegationEvaluator : public Evaluable<Eigen::Matrix<double, DIM, 1>> {
-                public:
-                    using Ptr = std::shared_ptr<NegationEvaluator>;
-                    using ConstPtr = std::shared_ptr<const NegationEvaluator>;
+            public:
+                using Ptr = std::shared_ptr<NegationEvaluator>;
+                using ConstPtr = std::shared_ptr<const NegationEvaluator>;
 
-                    using InType = Eigen::Matrix<double, DIM, 1>;
-                    using OutType = Eigen::Matrix<double, DIM, 1>;
+                using InType = Eigen::Matrix<double, DIM, 1>;
+                using OutType = Eigen::Matrix<double, DIM, 1>;
 
-                    // -----------------------------------------------------------------------------
-                    /**
-                     * @brief Factory method for creating a shared instance.
-                     * @param v Function to be negated.
-                     */
-                    static Ptr MakeShared(const typename Evaluable<InType>::ConstPtr& v);
+                // -----------------------------------------------------------------------------
+                /**
+                 * @brief Factory method for creating a shared instance.
+                 * @param v Function to be negated.
+                 */
+                static Ptr MakeShared(const typename Evaluable<InType>::ConstPtr& v) {
+                    return std::make_shared<NegationEvaluator>(v);
+                }
 
-                    // -----------------------------------------------------------------------------
-                    /**
-                     * @brief Constructor for NegationEvaluator.
-                     * @param v Function to be negated.
-                     */
-                    explicit NegationEvaluator(const typename Evaluable<InType>::ConstPtr& v);
+                // -----------------------------------------------------------------------------
+                /**
+                 * @brief Constructor for NegationEvaluator.
+                 * @param v Function to be negated.
+                 */
+                explicit NegationEvaluator(const typename Evaluable<InType>::ConstPtr& v)
+                    : v_(v) {}
 
-                    // -----------------------------------------------------------------------------
-                    /** @brief Determines if this evaluator depends on active variables. */
-                    bool active() const override;
+                // -----------------------------------------------------------------------------
+                /** @brief Determines if this evaluator depends on active variables. */
+                bool active() const override {
+                    return v_->active();
+                }
 
-                    // -----------------------------------------------------------------------------
-                    /** @brief Retrieves keys of related state variables. */
-                    void getRelatedVarKeys(typename Evaluable<OutType>::KeySet& keys) const override;
+                // -----------------------------------------------------------------------------
+                /** @brief Retrieves keys of related state variables. */
+                void getRelatedVarKeys(typename Evaluable<OutType>::KeySet& keys) const override {
+                    v_->getRelatedVarKeys(keys);
+                }
 
-                    // -----------------------------------------------------------------------------
-                    /** @brief Computes the negated output value. */
-                    OutType value() const override;
+                // -----------------------------------------------------------------------------
+                /** @brief Computes the negated output value. */
+                OutType value() const override {
+                    return -v_->value();
+                }
 
-                    // -----------------------------------------------------------------------------
-                    /** @brief Creates a computation node for forward propagation. */
-                    typename Node<OutType>::Ptr forward() const override;
+                // -----------------------------------------------------------------------------
+                /** @brief Creates a computation node for forward propagation. */
+                typename Node<OutType>::Ptr forward() const override {
+                    const auto child = v_->forward();
+                    const auto value = -child->value();
+                    const auto node = Node<OutType>::MakeShared(value);
+                    node->addChild(child);
+                    return node;
+                }
 
-                    // -----------------------------------------------------------------------------
-                    /**
-                     * @brief Performs backpropagation to accumulate Jacobians.
-                     * @param lhs Left-hand-side weight matrix.
-                     * @param node Computation node from `forward()`.
-                     * @param jacs Storage for accumulated Jacobians.
-                     */
-                    void backward(const Eigen::MatrixXd& lhs,
-                                const typename Node<OutType>::Ptr& node,
-                                StateKeyJacobians& jacs) const override;
+                // -----------------------------------------------------------------------------
+                /**
+                 * @brief Performs backpropagation to accumulate Jacobians.
+                 * @param lhs Left-hand-side weight matrix.
+                 * @param node Computation node from `forward()`.
+                 * @param jacs Storage for accumulated Jacobians.
+                 */
+                void backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
+                              const typename Node<OutType>::Ptr& node,
+                              StateKeyJacobians& jacs) const override {
+                    const auto child = std::static_pointer_cast<Node<InType>>(node->getChild(0));
+                    if (v_->active()) {
+                        v_->backward(-lhs, child, jacs);
+                    }
+                }
 
-                private:
-                    const typename Evaluable<InType>::ConstPtr v_;  ///< Input function.
+            private:
+                const typename Evaluable<InType>::ConstPtr v_;  ///< Input function.
             };
 
             // -----------------------------------------------------------------------------
@@ -84,7 +104,9 @@ namespace slam {
              */
             template <int DIM>
             typename NegationEvaluator<DIM>::Ptr neg(
-                const typename Evaluable<typename NegationEvaluator<DIM>::InType>::ConstPtr& v);
+                const typename Evaluable<typename NegationEvaluator<DIM>::InType>::ConstPtr& v) {
+                return NegationEvaluator<DIM>::MakeShared(v);
+            }
 
         }  // namespace vspace
     }  // namespace eval

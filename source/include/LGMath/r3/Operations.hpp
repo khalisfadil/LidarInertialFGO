@@ -4,9 +4,9 @@
 #include <stdexcept>
 #include <Eigen/Dense>
 
-#include "source/include/LGMath/r3/Types.hpp"
-#include "source/include/LGMath/se3/Operations.hpp"
-#include "source/include/LGMath/se3/TransformationWithCovariance.hpp"
+#include "LGMath/r3/Types.hpp"
+#include "LGMath/se3/Operations.hpp"
+#include "LGMath/se3/TransformationWithCovariance.hpp"
 
 namespace slam {
     namespace liemath {
@@ -45,7 +45,7 @@ namespace slam {
                                 "Error: Transformation never has covariance explicitly set.");
 
                 // The covariance is transformed by the rotation matrix
-                return T_ba.rotation() * cov_a * T_ba.rotation().transpose();
+                return T_ba.C_ba() * cov_a * T_ba.C_ba().transpose();
             }
 
             // -----------------------------------------------------------------------------
@@ -75,12 +75,12 @@ namespace slam {
                 }
 
                 // Transform covariance using base transformation (rotation matrix only)
-                const auto &T_ba_base = static_cast<const slam::se3::Transformation &>(T_ba);
+                const auto &T_ba_base = static_cast<const slam::liemath::se3::Transformation &>(T_ba);
                 CovarianceMatrix cov_b = transformCovariance<false>(T_ba_base, cov_a, p_b);
 
                 // Add uncertainty from the transformation itself
                 if (T_ba.covarianceSet()) {
-                    auto jacobian = slam::se3::point2fs(p_b.hnormalized()).topRows<3>(); // Compute Jacobian
+                    auto jacobian = slam::liemath::se3::point2fs(p_b.hnormalized()).topRows<3>(); // Compute Jacobian
                     cov_b += jacobian * T_ba.cov() * jacobian.transpose();
                 }
 

@@ -3,9 +3,9 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/LGMath/LieGroupMath.hpp"
-#include "source/include/Evaluable/Evaluable.hpp"
-#include "source/include/Trajectory/ConstVelocity/Variables.hpp"
+#include "LGMath/LieGroupMath.hpp"
+#include "Evaluable/Evaluable.hpp"
+#include "Trajectory/ConstVelocity/Variables.hpp"
 
 namespace slam {
     namespace traj {

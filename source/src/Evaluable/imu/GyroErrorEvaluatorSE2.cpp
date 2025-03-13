@@ -1,4 +1,4 @@
-#include "source/include/Evaluable/imu/GyroErrorEvaluatorSE2.hpp"
+#include "Evaluable/imu/GyroErrorEvaluatorSE2.hpp"
 
 namespace slam {
     namespace eval {

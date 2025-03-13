@@ -1,4 +1,4 @@
-#include "source/include/Trajectory/ConstVelocity/Variables.hpp"
+#include "Trajectory/ConstVelocity/Variables.hpp"
 
 namespace slam {
     namespace traj {

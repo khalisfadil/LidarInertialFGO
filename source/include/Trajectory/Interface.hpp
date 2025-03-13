@@ -2,7 +2,7 @@
 
 #include <memory>
 
-#include "source/include/Problem/OptimizationProblem.hpp"
+#include "Problem/OptimizationProblem.hpp"
 
 namespace slam {
     namespace traj {

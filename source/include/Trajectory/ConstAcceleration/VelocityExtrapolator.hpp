@@ -3,9 +3,9 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/Evaluable/Evaluable.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Variables.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Evaluable/Evaluable.hpp"
+#include "Trajectory/ConstAcceleration/Variables.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace traj {

@@ -5,8 +5,8 @@
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 
-#include "source/include/Problem/CostTerm/BaseCostTerm.hpp"
-#include "source/include/Problem/StateVector.hpp"
+#include "Problem/CostTerm/BaseCostTerm.hpp"
+#include "Problem/StateVector.hpp"
 
 namespace slam {
     namespace problem {

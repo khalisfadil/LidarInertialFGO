@@ -1,6 +1,6 @@
 #pragma once
 
-#include "source/include/Solver/GaussNewtonSolver.hpp"
+#include "Solver/GaussNewtonSolver.hpp"
 
 namespace slam {
     namespace solver {

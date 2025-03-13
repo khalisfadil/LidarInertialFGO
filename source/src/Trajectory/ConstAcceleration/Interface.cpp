@@ -1,17 +1,17 @@
-#include "source/include/Trajectory/ConstAcceleration/Interface.hpp"
+#include "Trajectory/ConstAcceleration/Interface.hpp"
 
-#include "source/include/Evaluable/se3/Evaluables.hpp"
-#include "source/include/Evaluable/vspace/Evaluables.hpp"
-#include "source/include/Problem/LossFunc/LossFunc.hpp"
-#include "source/include/Problem/NoiseModel/StaticNoiseModel.hpp"
-#include "source/include/Trajectory/ConstAcceleration/AccelerationExtrapolator.hpp"
-#include "source/include/Trajectory/ConstAcceleration/AccelerationInterpolator.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
-#include "source/include/Trajectory/ConstAcceleration/PoseExtrapolator.hpp"
-#include "source/include/Trajectory/ConstAcceleration/PoseInterpolator.hpp"
-#include "source/include/Trajectory/ConstAcceleration/PriorFactor.hpp"
-#include "source/include/Trajectory/ConstAcceleration/VelocityExtrapolator.hpp"
-#include "source/include/Trajectory/ConstAcceleration/VelocityInterpolator.hpp"
+#include "Evaluable/se3/Evaluables.hpp"
+#include "Evaluable/vspace/Evaluables.hpp"
+#include "Problem/LossFunc/LossFunc.hpp"
+#include "Problem/NoiseModel/StaticNoiseModel.hpp"
+#include "Trajectory/ConstAcceleration/AccelerationExtrapolator.hpp"
+#include "Trajectory/ConstAcceleration/AccelerationInterpolator.hpp"
+#include "Trajectory/ConstAcceleration/Helper.hpp"
+#include "Trajectory/ConstAcceleration/PoseExtrapolator.hpp"
+#include "Trajectory/ConstAcceleration/PoseInterpolator.hpp"
+#include "Trajectory/ConstAcceleration/PriorFactor.hpp"
+#include "Trajectory/ConstAcceleration/VelocityExtrapolator.hpp"
+#include "Trajectory/ConstAcceleration/VelocityInterpolator.hpp"
 
 namespace slam {
     namespace traj {
@@ -36,258 +36,374 @@ namespace slam {
             // add
             // -----------------------------------------------------------------------------
 
-            void Interface::add(const Time& time, 
-                                const slam::eval::Evaluable<PoseType>::Ptr& T_k0,
-                                const slam::eval::Evaluable<VelocityType>::Ptr& w_0k_ink,
-                                const slam::eval::Evaluable<VelocityType>::Ptr& dw_0k_ink) {
-                // Null check for essential evaluables
-                if (!T_k0 || !w_0k_ink) {
-                    throw std::invalid_argument("[Interface::add] Pose or velocity evaluable is null.");
-                }
+            void Interface::add(const Time& time, const slam::eval::Evaluable<PoseType>::Ptr& T_k0,
+                    const slam::eval::Evaluable<VelocityType>::Ptr& w_0k_ink,
+                    const slam::eval::Evaluable<AccelerationType>::Ptr& dw_0k_ink) {
+                // Check for duplicate time using an accessor
+                KnotMap::const_accessor acc;
+                if (knot_map_.find(acc, time))
+                    throw std::runtime_error("[Interface::add] adding knot at duplicated time");
 
-                // Check for duplicate time in knot_map_
-                if (knot_map_.count(time)) {
-                    throw std::runtime_error("[Interface::add] Duplicate trajectory knot at time " +
-                                            std::to_string(time.seconds()));
-                }
+                // Create the new knot
+                const auto knot = std::make_shared<Variable>(time, T_k0, w_0k_ink, dw_0k_ink);
 
-                // Insert new Variable into knot_map_
-                knot_map_.emplace(time, std::make_shared<Variable>(time, T_k0, w_0k_ink, dw_0k_ink));
+                // Insert the knot into the concurrent hash map
+                if (!knot_map_.insert(std::make_pair(time, knot)))
+                    throw std::runtime_error("[Interface::add] failed to insert knot into map");
             }
 
             // -----------------------------------------------------------------------------
             // get
             // -----------------------------------------------------------------------------
-            
+
             Variable::ConstPtr Interface::get(const Time& time) const {
-                if (auto it = knot_map_.find(time); it != knot_map_.end()) {
-                    return it->second;
-                }
-                throw std::out_of_range("[Interface::get] No trajectory knot exists at time " + std::to_string(time.seconds()));
+                KnotMap::const_accessor acc;
+                if (!knot_map_.find(acc, time))
+                    throw std::out_of_range("[Interface::get] no knot found at provided time");
+                return acc->second;
             }
 
             // -----------------------------------------------------------------------------
             // getPoseInterpolator
             // -----------------------------------------------------------------------------
 
-            auto Interface::getPoseInterpolator(const Time& time) const -> slam::eval::Evaluable<PoseType>::ConstPtr {
-                if (knot_map_.empty()) 
-                    throw std::runtime_error("[Interface::getPoseInterpolator] Knot map is empty");
+            auto Interface::getPoseInterpolator(const Time& time) const
+                    -> slam::eval::Evaluable<PoseType>::ConstPtr {
+                // Check that map is not empty
+                if (knot_map_.empty()) throw std::runtime_error("[Interface::getPoseInterpolator] knot map is empty");
 
-                auto it_upper = knot_map_.lower_bound(time);
+                // Try exact match first
+                KnotMap::const_accessor acc;
+                if (knot_map_.find(acc, time)) {
+                    return acc->second->getPose();
+                }
 
-                // If `time` is beyond the last entry, extrapolate from the last knot
-                if (it_upper == knot_map_.end()) 
-                    return getPoseExtrapolator_(time, std::prev(it_upper)->second);
+                // No exact match, find bounding knots
+                Time t1, t2;
+                Variable::ConstPtr knot1 = nullptr, knot2 = nullptr;
 
-                // If `time` matches exactly, return the existing pose evaluator
-                if (it_upper->second->getTime() == time) 
-                    return it_upper->second->getPose();
+                // Iterate over the map to locate the interval
+                for (KnotMap::const_iterator it = knot_map_.begin(); it != knot_map_.end(); ++it) {
+                    const Time& knot_time = it->first;
+                    const auto& knot = it->second;
 
-                // If `time` is before the first entry, extrapolate from the first knot
-                if (it_upper == knot_map_.begin()) 
-                    return getPoseExtrapolator_(time, it_upper->second);
+                    if (knot_time <= time) {
+                    t1 = knot_time;
+                    knot1 = knot;
+                    } else if (knot_time > time && !knot2) {
+                    t2 = knot_time;
+                    knot2 = knot;
+                    break; // Found upper bound, no need to continue
+                    }
+                }
 
-                // Get iterators bounding the interpolation interval
-                auto it_lower = std::prev(it_upper);
-                
-                if (time <= it_lower->second->getTime() || time >= it_upper->second->getTime()) 
-                    throw std::runtime_error("[Interface::getPoseInterpolator] Requested interpolation at an invalid time: " +
-                                            std::to_string(time.seconds()) + " not in (" +
-                                            std::to_string(it_lower->second->getTime().seconds()) + ", " +
-                                            std::to_string(it_upper->second->getTime().seconds()) + ")");
+                // Handle edge cases
+                if (!knot1 && !knot2) {
+                    throw std::runtime_error("[Interface::getPoseInterpolator] knot map iteration failed unexpectedly");
+                }
 
-                return getPoseInterpolator_(time, it_lower->second, it_upper->second);
+                if (!knot1) {
+                    // Time is before the first knot
+                    return getPoseExtrapolator_(time, knot2);
+                }
+
+                if (!knot2) {
+                    // Time is after the last knot
+                    return getPoseExtrapolator_(time, knot1);
+                }
+
+                // Check if time is within the interval
+                if (time <= t1 || time >= t2) {
+                    throw std::runtime_error(
+                        "[Interface::getPoseInterpolator] Requested interpolation at an invalid time: " +
+                        std::to_string(time.seconds()) + " not in (" +
+                        std::to_string(t1.seconds()) + ", " +
+                        std::to_string(t2.seconds()) + ")");
+                }
+
+                // Create interpolated evaluator
+                return getPoseInterpolator_(time, knot1, knot2);
             }
 
             // -----------------------------------------------------------------------------
             // getVelocityInterpolator
             // -----------------------------------------------------------------------------
 
-            auto Interface::getVelocityInterpolator(const Time& time) const -> slam::eval::Evaluable<VelocityType>::ConstPtr {
-                if (knot_map_.empty()) 
-                    throw std::runtime_error("[Interface::getVelocityInterpolator] Knot map is empty");
+            auto Interface::getVelocityInterpolator(const Time& time) const
+                    -> slam::eval::Evaluable<VelocityType>::ConstPtr {
+                // Check that map is not empty
+                if (knot_map_.empty()) throw std::runtime_error("[Interface::getVelocityInterpolator] knot map is empty");
 
-                auto it_upper = knot_map_.lower_bound(time);
+                // Try exact match first
+                KnotMap::const_accessor acc;
+                if (knot_map_.find(acc, time)) {
+                    return acc->second->getVelocity();
+                }
 
-                // If `time` is beyond the last entry, extrapolate from the last knot
-                if (it_upper == knot_map_.end()) 
-                    return getVelocityExtrapolator_(time, std::prev(it_upper)->second);
+                // No exact match, find bounding knots
+                Time t1, t2;
+                Variable::ConstPtr knot1 = nullptr, knot2 = nullptr;
 
-                // If `time` matches exactly, return the existing velocity evaluator
-                if (it_upper->second->getTime() == time) 
-                    return it_upper->second->getVelocity();
+                // Iterate over the map to locate the interval
+                for (KnotMap::const_iterator it = knot_map_.begin(); it != knot_map_.end(); ++it) {
+                    const Time& knot_time = it->first;
+                    const auto& knot = it->second;
 
-                // If `time` is before the first entry, extrapolate from the first knot
-                if (it_upper == knot_map_.begin()) 
-                    return getVelocityExtrapolator_(time, it_upper->second);
+                    if (knot_time <= time) {
+                    t1 = knot_time;
+                    knot1 = knot;
+                    } else if (knot_time > time && !knot2) {
+                    t2 = knot_time;
+                    knot2 = knot;
+                    break; // Found upper bound, no need to continue
+                    }
+                }
 
-                // Get iterators bounding the interpolation interval
-                auto it_lower = std::prev(it_upper);
+                // Handle edge cases
+                if (!knot1 && !knot2) {
+                    throw std::runtime_error("[Interface::getVelocityInterpolator] knot map iteration failed unexpectedly");
+                }
 
-                if (time <= it_lower->second->getTime() || time >= it_upper->second->getTime()) 
-                    throw std::runtime_error("[Interface::getVelocityInterpolator] Requested interpolation at an invalid time: " +
-                                            std::to_string(time.seconds()) + " not in (" +
-                                            std::to_string(it_lower->second->getTime().seconds()) + ", " +
-                                            std::to_string(it_upper->second->getTime().seconds()) + ")");
+                if (!knot1) {
+                    // Time is before the first knot
+                    return getVelocityExtrapolator_(time, knot2);
+                }
 
-                return getVelocityInterpolator_(time, it_lower->second, it_upper->second);
+                if (!knot2) {
+                    // Time is after the last knot
+                    return getVelocityExtrapolator_(time, knot1);
+                }
+
+                // Check if time is within the interval
+                if (time <= t1 || time >= t2) {
+                    throw std::runtime_error(
+                        "[Interface::getVelocityInterpolator] Requested interpolation at an invalid time: " +
+                        std::to_string(time.seconds()) + " not in (" +
+                        std::to_string(t1.seconds()) + ", " +
+                        std::to_string(t2.seconds()) + ")");
+                }
+
+                // Create interpolated evaluator
+                return getVelocityInterpolator_(time, knot1, knot2);
             }
 
             // -----------------------------------------------------------------------------
             // getAccelerationInterpolator
             // -----------------------------------------------------------------------------
 
-            auto Interface::getAccelerationInterpolator(const Time& time) const -> slam::eval::Evaluable<AccelerationType>::ConstPtr {
-                if (knot_map_.empty()) 
-                    throw std::runtime_error("[Interface::getAccelerationInterpolator] Knot map is empty");
+            auto Interface::getAccelerationInterpolator(const Time& time) const
+                    -> slam::eval::Evaluable<AccelerationType>::ConstPtr {
+                // Check that map is not empty
+                if (knot_map_.empty()) throw std::runtime_error("[Interface::getAccelerationInterpolator] knot map is empty");
 
-                auto it_upper = knot_map_.lower_bound(time);
+                // Try exact match first
+                KnotMap::const_accessor acc;
+                if (knot_map_.find(acc, time)) {
+                    return acc->second->getAcceleration();
+                }
 
-                // If `time` is beyond the last entry, extrapolate from the last knot
-                if (it_upper == knot_map_.end()) 
-                    return getAccelerationExtrapolator_(time, std::prev(it_upper)->second);
+                // No exact match, find bounding knots
+                Time t1, t2;
+                Variable::ConstPtr knot1 = nullptr, knot2 = nullptr;
 
-                // If `time` matches exactly, return the existing acceleration evaluator
-                if (it_upper->second->getTime() == time) 
-                    return it_upper->second->getAcceleration();
+                // Iterate over the map to locate the interval
+                for (KnotMap::const_iterator it = knot_map_.begin(); it != knot_map_.end(); ++it) {
+                    const Time& knot_time = it->first;
+                    const auto& knot = it->second;
 
-                // If `time` is before the first entry, extrapolate from the first knot
-                if (it_upper == knot_map_.begin()) 
-                    return getAccelerationExtrapolator_(time, it_upper->second);
+                    if (knot_time <= time) {
+                    t1 = knot_time;
+                    knot1 = knot;
+                    } else if (knot_time > time && !knot2) {
+                    t2 = knot_time;
+                    knot2 = knot;
+                    break; // Found upper bound, no need to continue
+                    }
+                }
 
-                // Get iterators bounding the interpolation interval
-                auto it_lower = std::prev(it_upper);
+                // Handle edge cases
+                if (!knot1 && !knot2) {
+                    throw std::runtime_error("[Interface::getAccelerationInterpolator] knot map iteration failed unexpectedly");
+                }
 
-                if (time <= it_lower->second->getTime() || time >= it_upper->second->getTime()) 
-                    throw std::runtime_error("[Interface::getAccelerationInterpolator] Requested interpolation at an invalid time: " +
-                                            std::to_string(time.seconds()) + " not in (" +
-                                            std::to_string(it_lower->second->getTime().seconds()) + ", " +
-                                            std::to_string(it_upper->second->getTime().seconds()) + ")");
+                if (!knot1) {
+                    // Time is before the first knot
+                    return getAccelerationExtrapolator_(time, knot2);
+                }
 
-                return getAccelerationInterpolator_(time, it_lower->second, it_upper->second);
+                if (!knot2) {
+                    // Time is after the last knot
+                    return getAccelerationExtrapolator_(time, knot1);
+                }
+
+                // Check if time is within the interval
+                if (time <= t1 || time >= t2) {
+                    throw std::runtime_error(
+                        "[Interface::getAccelerationInterpolator] Requested interpolation at an invalid time: " +
+                        std::to_string(time.seconds()) + " not in (" +
+                        std::to_string(t1.seconds()) + ", " +
+                        std::to_string(t2.seconds()) + ")");
+                }
+
+                // Create interpolated evaluator
+                return getAccelerationInterpolator_(time, knot1, knot2);
             }
 
             // -----------------------------------------------------------------------------
             // getCovariance
             // -----------------------------------------------------------------------------
 
-            auto Interface::getCovariance(const slam::solver::Covariance& cov, const Time& time) -> CovType {
-                if (knot_map_.empty()) 
-                    throw std::runtime_error("[Interface::getCovariance] Knot map is empty");
+            auto Interface::getCovariance(const slam::solver::Covariance& cov, const Time& time) const
+                    -> CovType {
+                // Check that map is not empty
+                if (knot_map_.empty()) throw std::runtime_error("map is empty");
 
-                auto it_upper = knot_map_.lower_bound(time);
+                // Try exact match first
+                KnotMap::const_accessor acc;
+                if (knot_map_.find(acc, time)) {
+                    const auto& knot = acc->second;
+                    const auto T_k0 = knot->getPose();
+                    const auto w_0k_ink = knot->getVelocity();
+                    const auto dw_0k_ink = knot->getAcceleration();
+                    if (!T_k0->active() || !w_0k_ink->active() || !dw_0k_ink->active())
+                    throw std::runtime_error("extrapolation from a locked knot not implemented.");
 
-                // Extrapolate after last entry
-                if (it_upper == knot_map_.end()) {
-                    const auto& endKnot = std::prev(it_upper)->second;
-
-                    // Ensure active state variables
-                    if (!endKnot->getPose()->active() || !endKnot->getVelocity()->active() || !endKnot->getAcceleration()->active())
-                        throw std::runtime_error("[Interface::getCovariance] Extrapolation from a locked knot not implemented.");
-
-                    // Convert to state variables
-                    auto T_k0_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(endKnot->getPose());
-                    auto w_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(endKnot->getVelocity());
-                    auto dw_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(endKnot->getAcceleration());
-
+                    const auto T_k0_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(T_k0);
+                    const auto w_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(w_0k_ink);
+                    const auto dw_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(dw_0k_ink);
                     if (!T_k0_var || !w_0k_ink_var || !dw_0k_ink_var)
-                        throw std::runtime_error("[Interface::getCovariance] Trajectory states are not variables.");
+                    throw std::runtime_error("trajectory states are not variables.");
 
-                    // Construct extrapolated knot
-                    auto extrap_knot = Variable::MakeShared(time, 
-                                                            getPoseExtrapolator_(time, endKnot),
-                                                            getVelocityExtrapolator_(time, endKnot),
-                                                            getAccelerationExtrapolator_(time, endKnot));
+                    std::vector<slam::eval::StateVariableBase::ConstPtr> state_var{T_k0_var, w_0k_ink_var, dw_0k_ink_var};
+                    return cov.query(state_var);
+                }
+
+                // No exact match, find bounding knots
+                Time t1, t2;
+                Variable::ConstPtr knot1 = nullptr, knot2 = nullptr;
+
+                // Iterate over the map to locate the interval
+                for (KnotMap::const_iterator it = knot_map_.begin(); it != knot_map_.end(); ++it) {
+                    const Time& knot_time = it->first;
+                    const auto& knot = it->second;
+
+                    if (knot_time <= time) {
+                    t1 = knot_time;
+                    knot1 = knot;
+                    } else if (knot_time > time && !knot2) {
+                    t2 = knot_time;
+                    knot2 = knot;
+                    break; // Found upper bound, no need to continue
+                    }
+                }
+
+                // Handle edge cases
+                if (!knot1 && !knot2) {
+                    throw std::runtime_error("knot map iteration failed unexpectedly");
+                }
+
+                if (!knot1) {
+                    throw std::runtime_error("Requested covariance before first time.");
+                }
+
+                if (!knot2) {
+                    // Extrapolate after last knot
+                    const auto& endKnot = knot1;
+                    const auto T_k0 = endKnot->getPose();
+                    const auto w_0k_ink = endKnot->getVelocity();
+                    const auto dw_0k_ink = endKnot->getAcceleration();
+                    if (!T_k0->active() || !w_0k_ink->active() || !dw_0k_ink->active())
+                    throw std::runtime_error("extrapolation from a locked knot not implemented.");
+
+                    const auto T_k0_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(T_k0);
+                    const auto w_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(w_0k_ink);
+                    const auto dw_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(dw_0k_ink);
+                    if (!T_k0_var || !w_0k_ink_var || !dw_0k_ink_var)
+                    throw std::runtime_error("trajectory states are not variables.");
+
+                    // Construct a knot for the extrapolated state
+                    const auto T_t_0 = getPoseExtrapolator_(time, endKnot);
+                    const auto w_t_0 = getVelocityExtrapolator_(time, endKnot);
+                    const auto dw_t_0 = getAccelerationExtrapolator_(time, endKnot);
+                    const auto extrap_knot = Variable::MakeShared(time, T_t_0, w_t_0, dw_t_0);
 
                     // Compute Jacobians
-                    auto F_t1 = -getJacKnot1_(endKnot, extrap_knot);
-                    auto E_t1_inv = getJacKnot2_(endKnot, extrap_knot).inverse();
+                    const auto F_t1 = -getJacKnot1_(endKnot, extrap_knot);
+                    const auto E_t1_inv = getJacKnot2_(endKnot, extrap_knot).inverse();
 
-                    // Compute prior covariance
-                    auto Qt1 = getQ_((extrap_knot->getTime() - endKnot->getTime()).seconds(), Qc_diag_);
-                    auto P_end = cov.query({T_k0_var, w_0k_ink_var, dw_0k_ink_var});
+                    // Prior covariance
+                    const auto Qt1 = getQ_((extrap_knot->getTime() - endKnot->getTime()).seconds(), Qc_diag_);
+
+                    // End knot covariance
+                    const std::vector<slam::eval::StateVariableBase::ConstPtr> state_var{T_k0_var, w_0k_ink_var, dw_0k_ink_var};
+                    const Eigen::Matrix<double, 18, 18> P_end = cov.query(state_var);
 
                     // Compute covariance
                     return E_t1_inv * (F_t1 * P_end * F_t1.transpose() + Qt1) * E_t1_inv.transpose();
                 }
 
-                // If `time` matches exactly, return stored covariance
-                if (it_upper->second->getTime() == time) {
-                    const auto& knot = it_upper->second;
+                // Interpolation between knot1 and knot2
+                const auto T_10 = knot1->getPose();
+                const auto w_01_in1 = knot1->getVelocity();
+                const auto dw_01_in1 = knot1->getAcceleration();
+                const auto T_20 = knot2->getPose();
+                const auto w_02_in2 = knot2->getVelocity();
+                const auto dw_02_in2 = knot2->getAcceleration();
+                if (!T_10->active() || !w_01_in1->active() || !dw_01_in1->active() ||
+                    !T_20->active() || !w_02_in2->active() || !dw_02_in2->active())
+                    throw std::runtime_error("extrapolation from a locked knot not implemented.");
 
-                    // Ensure active state variables
-                    if (!knot->getPose()->active() || !knot->getVelocity()->active() || !knot->getAcceleration()->active())
-                        throw std::runtime_error("[Interface::getCovariance] Extrapolation from a locked knot not implemented.");
-
-                    auto T_k0_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(knot->getPose());
-                    auto w_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(knot->getVelocity());
-                    auto dw_0k_ink_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(knot->getAcceleration());
-
-                    if (!T_k0_var || !w_0k_ink_var || !dw_0k_ink_var)
-                        throw std::runtime_error("[Interface::getCovariance] Trajectory states are not variables.");
-
-                    return cov.query({T_k0_var, w_0k_ink_var, dw_0k_ink_var});
-                }
-
-                // If `time` is before the first entry, throw an error
-                if (it_upper == knot_map_.begin())
-                    throw std::runtime_error("[Interface::getCovariance] Requested covariance before first time.");
-
-                // Get iterators bounding the interpolation interval
-                auto it_lower = std::prev(it_upper);
-                const auto& knot1 = it_lower->second;
-                const auto& knot2 = it_upper->second;
-
-                // Ensure active state variables
-                if (!knot1->getPose()->active() || !knot1->getVelocity()->active() || !knot1->getAcceleration()->active() ||
-                    !knot2->getPose()->active() || !knot2->getVelocity()->active() || !knot2->getAcceleration()->active()) {
-                    throw std::runtime_error("[Interface::getCovariance] Extrapolation from a locked knot not implemented.");
-                }
-
-                // Convert to state variables
-                auto T_10_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(knot1->getPose());
-                auto w_01_in1_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(knot1->getVelocity());
-                auto dw_01_in1_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(knot1->getAcceleration());
-                auto T_20_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(knot2->getPose());
-                auto w_02_in2_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(knot2->getVelocity());
-                auto dw_02_in2_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(knot2->getAcceleration());
-
+                const auto T_10_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(T_10);
+                const auto w_01_in1_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(w_01_in1);
+                const auto dw_01_in1_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(dw_01_in1);
+                const auto T_20_var = std::dynamic_pointer_cast<slam::eval::se3::SE3StateVariable>(T_20);
+                const auto w_02_in2_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(w_02_in2);
+                const auto dw_02_in2_var = std::dynamic_pointer_cast<slam::eval::vspace::VSpaceStateVar<6>>(dw_02_in2);
                 if (!T_10_var || !w_01_in1_var || !dw_01_in1_var || !T_20_var || !w_02_in2_var || !dw_02_in2_var)
-                    throw std::runtime_error("[Interface::getCovariance] Trajectory states are not variables.");
+                    throw std::runtime_error("trajectory states are not variables.");
 
-                // Construct interpolated knot
-                auto knotq = Variable::MakeShared(time, 
-                                                getPoseInterpolator_(time, knot1, knot2),
-                                                getVelocityInterpolator_(time, knot1, knot2),
-                                                getAccelerationInterpolator_(time, knot1, knot2));
+                // Construct a knot for the interpolated state
+                const auto T_q0_eval = getPoseInterpolator_(time, knot1, knot2);
+                const auto w_0q_inq_eval = getVelocityInterpolator_(time, knot1, knot2);
+                const auto dw_0q_inq_eval = getAccelerationInterpolator_(time, knot1, knot2);
+                const auto knotq = Variable::MakeShared(time, T_q0_eval, w_0q_inq_eval, dw_0q_inq_eval);
 
                 // Compute Jacobians
-                auto F_t1 = -getJacKnot1_(knot1, knotq);
-                auto E_t1 = getJacKnot2_(knot1, knotq);
-                auto F_2t = -getJacKnot1_(knotq, knot2);
-                auto E_2t = getJacKnot2_(knotq, knot2);
+                const Eigen::Matrix<double, 18, 18> F_t1 = -getJacKnot1_(knot1, knotq);
+                const Eigen::Matrix<double, 18, 18> E_t1 = getJacKnot2_(knot1, knotq);
+                const Eigen::Matrix<double, 18, 18> F_2t = -getJacKnot1_(knotq, knot2);
+                const Eigen::Matrix<double, 18, 18> E_2t = getJacKnot2_(knotq, knot2);
 
-                // Compute inverse prior covariances
-                auto Qt1_inv = getQinv_((knotq->getTime() - knot1->getTime()).seconds(), Qc_diag_);
-                auto Q2t_inv = getQinv_((knot2->getTime() - knotq->getTime()).seconds(), Qc_diag_);
+                // Prior inverse covariances
+                const Eigen::Matrix<double, 18, 18> Qt1_inv = getQinv_((knotq->getTime() - knot1->getTime()).seconds(), Qc_diag_);
+                const Eigen::Matrix<double, 18, 18> Q2t_inv = getQinv_((knot2->getTime() - knotq->getTime()).seconds(), Qc_diag_);
 
-                // Query covariance of knot1 and knot2
-                auto P_1n2 = cov.query({T_10_var, w_01_in1_var, dw_01_in1_var, T_20_var, w_02_in2_var, dw_02_in2_var});
+                // Covariance of knot1 and knot2
+                const std::vector<slam::eval::StateVariableBase::ConstPtr> state_var{T_10_var, w_01_in1_var, dw_01_in1_var, T_20_var, w_02_in2_var, dw_02_in2_var};
+                const Eigen::Matrix<double, 36, 36> P_1n2 = cov.query(state_var);
 
                 // Helper matrices
-                Eigen::Matrix<double, 36, 18> A;
-                A << F_t1.transpose() * Qt1_inv * E_t1, 
-                    E_2t.transpose() * Q2t_inv * F_2t;
+                Eigen::Matrix<double, 36, 18> A = Eigen::Matrix<double, 36, 18>::Zero();
+                A.block<18, 18>(0, 0) = F_t1.transpose() * Qt1_inv * E_t1;
+                A.block<18, 18>(18, 0) = E_2t.transpose() * Q2t_inv * F_2t;
 
                 Eigen::Matrix<double, 36, 36> B = Eigen::Matrix<double, 36, 36>::Zero();
                 B.block<18, 18>(0, 0) = F_t1.transpose() * Qt1_inv * F_t1;
                 B.block<18, 18>(18, 18) = E_2t.transpose() * Q2t_inv * E_2t;
 
-                // Compute interpolated covariance
-                auto P_t_inv = E_t1.transpose() * Qt1_inv * E_t1 + 
-                            F_2t.transpose() * Q2t_inv * F_2t -
-                            A.transpose() * (P_1n2.inverse() + B).inverse() * A;
+                const Eigen::Matrix<double, 18, 18> F_21 = -getJacKnot1_(knot1, knot2);
+                const Eigen::Matrix<double, 18, 18> E_21 = getJacKnot2_(knot1, knot2);
+                const Eigen::Matrix<double, 18, 18> Q21_inv = getQinv_((knot2->getTime() - knot1->getTime()).seconds(), Qc_diag_);
+
+                Eigen::Matrix<double, 36, 36> Pinv_comp = Eigen::Matrix<double, 36, 36>::Zero();
+                Pinv_comp.block<18, 18>(0, 0) = F_21.transpose() * Q21_inv * F_21;
+                Pinv_comp.block<18, 18>(18, 0) = -E_21.transpose() * Q21_inv * F_21;
+                Pinv_comp.block<18, 18>(0, 18) = Pinv_comp.block<18, 18>(18, 0).transpose();
+                Pinv_comp.block<18, 18>(18, 18) = E_21.transpose() * Q21_inv * E_21;
+
+                // Interpolated covariance
+                const Eigen::Matrix<double, 18, 18> P_t_inv = E_t1.transpose() * Qt1_inv * E_t1 + F_2t.transpose() * Q2t_inv * F_2t -
+                                A.transpose() * (P_1n2.inverse() + B - Pinv_comp).inverse() * A;
 
                 return P_t_inv.inverse();
             }
@@ -298,26 +414,32 @@ namespace slam {
 
             void Interface::addPosePrior(const Time& time, const PoseType& T_k0,
                              const Eigen::Matrix<double, 6, 6>& cov) {
-                if (pose_prior_factor_) 
-                    throw std::runtime_error("[Interface::addPosePrior] Can only add one pose prior.");
+                if (pose_prior_factor_ != nullptr)
+                    throw std::runtime_error("[Interface::addPosePrior] can only add one pose prior.");
 
-                if (knot_map_.empty()) 
-                    throw std::runtime_error("[Interface::addPosePrior] Knot map is empty.");
+                // Check that map is not empty
+                if (knot_map_.empty()) throw std::runtime_error("[Interface::addPosePrior] knot map is empty.");
 
-                auto it = knot_map_.find(time);
-                if (it == knot_map_.end()) 
-                    throw std::runtime_error("[Interface::addPosePrior] No knot at provided time.");
+                // Try to find knot at the specified time
+                KnotMap::const_accessor acc;
+                if (!knot_map_.find(acc, time))
+                    throw std::runtime_error("[Interface::addPosePrior] no knot at provided time.");
 
-                const auto& knot = it->second;
+                // Get reference to the knot
+                const auto& knot = acc->second;
 
-                if (!knot->getPose()->active()) 
-                    throw std::runtime_error("[Interface::addPosePrior] Attempted to add prior to a locked pose.");
+                // Check that the pose is not locked
+                if (!knot->getPose()->active())
+                    throw std::runtime_error("[Interface::addPosePrior] tried to add prior to locked pose.");
 
-                // Create cost term using streamlined initialization
+                // Set up loss function, noise model, and error function
+                auto error_func = slam::eval::se3::se3_error(knot->getPose(), T_k0);
+                auto noise_model = slam::problem::noisemodel::StaticNoiseModel<6>::MakeShared(cov);
+                auto loss_func = slam::problem::lossfunc::L2LossFunc::MakeShared();
+
+                // Create cost term
                 pose_prior_factor_ = slam::problem::costterm::WeightedLeastSqCostTerm<6>::MakeShared(
-                    slam::eval::se3::se3_error(knot->getPose(), T_k0), 
-                    slam::problem::noisemodel::StaticNoiseModel<6>::MakeShared(cov), 
-                    slam::problem::lossfunc::L2LossFunc::MakeShared());
+                    error_func, noise_model, loss_func);
             }
 
             // -----------------------------------------------------------------------------
@@ -326,26 +448,32 @@ namespace slam {
 
             void Interface::addVelocityPrior(const Time& time, const VelocityType& w_0k_ink,
                                  const Eigen::Matrix<double, 6, 6>& cov) {
-                if (vel_prior_factor_) 
-                    throw std::runtime_error("[Interface::addVelocityPrior] Can only add one velocity prior.");
+                if (vel_prior_factor_ != nullptr)
+                    throw std::runtime_error("[Interface::addVelocityPrior] can only add one velocity prior.");
 
-                if (knot_map_.empty()) 
-                    throw std::runtime_error("[Interface::addVelocityPrior] Knot map is empty.");
+                // Check that map is not empty
+                if (knot_map_.empty()) throw std::runtime_error("[Interface::addVelocityPrior] knot map is empty.");
 
-                auto it = knot_map_.find(time);
-                if (it == knot_map_.end()) 
-                    throw std::runtime_error("[Interface::addVelocityPrior] No knot found at provided time.");
+                // Try to find knot at the specified time
+                KnotMap::const_accessor acc;
+                if (!knot_map_.find(acc, time))
+                    throw std::runtime_error("[Interface::addVelocityPrior] no knot at provided time.");
 
-                const auto& knot = it->second;
+                // Get reference to the knot
+                const auto& knot = acc->second;
 
-                if (!knot->getVelocity()->active()) 
-                    throw std::runtime_error("[Interface::addVelocityPrior] Attempted to add prior to a locked velocity.");
+                // Check that the velocity is not locked
+                if (!knot->getVelocity()->active())
+                    throw std::runtime_error("[Interface::addVelocityPrior] tried to add prior to locked velocity.");
 
-                // Directly initialize cost term with error function, noise model, and loss function
+                // Set up loss function, noise model, and error function
+                auto error_func = slam::eval::vspace::vspace_error<6>(knot->getVelocity(), w_0k_ink);
+                auto noise_model = slam::problem::noisemodel::StaticNoiseModel<6>::MakeShared(cov);
+                auto loss_func = slam::problem::lossfunc::L2LossFunc::MakeShared();
+
+                // Create cost term
                 vel_prior_factor_ = slam::problem::costterm::WeightedLeastSqCostTerm<6>::MakeShared(
-                    slam::eval::vspace::vspace_error<6>(knot->getVelocity(), w_0k_ink),
-                    slam::problem::noisemodel::StaticNoiseModel<6>::MakeShared(cov),
-                    slam::problem::lossfunc::L2LossFunc::MakeShared());
+                    error_func, noise_model, loss_func);
             }
 
             // -----------------------------------------------------------------------------
@@ -355,26 +483,32 @@ namespace slam {
             void Interface::addAccelerationPrior(const Time& time,
                                      const AccelerationType& dw_0k_ink,
                                      const Eigen::Matrix<double, 6, 6>& cov) {
-                if (acc_prior_factor_)
-                    throw std::runtime_error("[Interface::addAccelerationPrior] Can only add one acceleration prior.");
+                // Early exit if prior exists (avoid unnecessary map access)
+                if (acc_prior_factor_)  // nullptr check optimized with member directly
+                    throw std::runtime_error("[Interface::addAccelerationPrior] can only add one acceleration prior.");
 
-                if (knot_map_.empty())
-                    throw std::runtime_error("[Interface::addAccelerationPrior] Knot map is empty.");
+                // Check map emptiness once
+                if (knot_map_.empty()) throw std::runtime_error("[Interface::addAccelerationPrior] knot map is empty.");
 
-                auto it = knot_map_.find(time);
-                if (it == knot_map_.end())
-                    throw std::runtime_error("[Interface::addAccelerationPrior] No knot found at provided time.");
+                // Find knot with minimal overhead
+                KnotMap::const_accessor acc;
+                if (!knot_map_.find(acc, time))
+                    throw std::runtime_error("[Interface::addAccelerationPrior] no knot at provided time.");
 
-                const auto& knot = it->second;
+                const auto& knot = acc->second;
 
-                if (!knot->getAcceleration()->active())
-                    throw std::runtime_error("[Interface::addAccelerationPrior] Attempted to add prior to a locked acceleration.");
+                // Check acceleration state efficiently
+                auto accel = knot->getAcceleration();
+                if (!accel->active())
+                    throw std::runtime_error("[Interface::addAccelerationPrior] tried to add prior to locked acceleration.");
 
-                // Directly initialize cost term with error function, noise model, and loss function
-                acc_prior_factor_ = slam::problem::costterm::WeightedLeastSqCostTerm<6>::MakeShared(
-                    slam::eval::vspace::vspace_error<6>(knot->getAcceleration(), dw_0k_ink),
-                    slam::problem::noisemodel::StaticNoiseModel<6>::MakeShared(cov),
-                    slam::problem::lossfunc::L2LossFunc::MakeShared());
+                // Reuse static resources where possible
+                static const auto loss_func = slam::problem::lossfunc::L2LossFunc::MakeShared();  // Singleton for L2 loss
+                auto error_func = slam::eval::vspace::vspace_error<6>(accel, dw_0k_ink);
+                auto noise_model = slam::problem::noisemodel::StaticNoiseModel<6>::MakeShared(cov);
+
+                // Assign cost term directly
+                acc_prior_factor_ = slam::problem::costterm::WeightedLeastSqCostTerm<6>::MakeShared(error_func, noise_model, loss_func);
             }
 
             // -----------------------------------------------------------------------------
@@ -385,32 +519,40 @@ namespace slam {
                               const VelocityType& w_0k_ink,
                               const AccelerationType& dw_0k_ink,
                               const CovType& cov) {
-                if (state_prior_factor_)
-                    throw std::runtime_error("[Interface::addStatePrior] Can only add one state prior.");
-
+                // Only allow adding 1 prior
                 if (pose_prior_factor_ || vel_prior_factor_ || acc_prior_factor_)
-                    throw std::runtime_error("[Interface::addStatePrior] A pose, velocity, or acceleration prior already exists.");
+                    throw std::runtime_error("[Interface::addStatePrior] a pose/velocity/acceleration prior already exists.");
 
-                if (knot_map_.empty())
-                    throw std::runtime_error("[Interface::addStatePrior] Knot map is empty.");
+                if (state_prior_factor_)
+                    throw std::runtime_error("[Interface::addStatePrior] can only add one state prior.");
 
-                auto it = knot_map_.find(time);
-                if (it == knot_map_.end())
-                    throw std::runtime_error("[Interface::addStatePrior] No knot found at provided time.");
+                // Check that map is not empty
+                if (knot_map_.empty()) throw std::runtime_error("[Interface::addStatePrior] knot map is empty.");
 
-                const auto& knot = it->second;
+                // Try to find knot at the specified time
+                KnotMap::const_accessor acc;
+                if (!knot_map_.find(acc, time))
+                    throw std::runtime_error("[Interface::addStatePrior] no knot at provided time.");
 
+                // Get reference to the knot
+                const auto& knot = acc->second;
+
+                // Check that the pose, velocity, and acceleration are not locked
                 if (!knot->getPose()->active() || !knot->getVelocity()->active() || !knot->getAcceleration()->active())
-                    throw std::runtime_error("[Interface::addStatePrior] Attempted to add prior to a locked state.");
+                    throw std::runtime_error("[Interface::addStatePrior] tried to add prior to locked state.");
 
-                // Create merged error functions directly in the cost term
+                // Set up error functions, noise model, and loss function
+                auto pose_error = slam::eval::se3::se3_error(knot->getPose(), T_k0);
+                auto velo_error = slam::eval::vspace::vspace_error<6>(knot->getVelocity(), w_0k_ink);
+                auto acc_error = slam::eval::vspace::vspace_error<6>(knot->getAcceleration(), dw_0k_ink);
+                auto error_temp = slam::eval::vspace::merge<6, 6>(pose_error, velo_error);
+                auto error_func = slam::eval::vspace::merge<12, 6>(error_temp, acc_error);
+                auto noise_model = slam::problem::noisemodel::StaticNoiseModel<18>::MakeShared(cov);
+                auto loss_func = slam::problem::lossfunc::L2LossFunc::MakeShared();
+
+                // Create cost term
                 state_prior_factor_ = slam::problem::costterm::WeightedLeastSqCostTerm<18>::MakeShared(
-                    slam::eval::vspace::merge<12, 6>(slam::eval::vspace::merge<6, 6>(
-                        slam::eval::se3::se3_error(knot->getPose(), T_k0),
-                        slam::eval::vspace::vspace_error<6>(knot->getVelocity(), w_0k_ink)),
-                        slam::eval::vspace::vspace_error<6>(knot->getAcceleration(), dw_0k_ink)),
-                    slam::problem::noisemodel::StaticNoiseModel<18>::MakeShared(cov),
-                    slam::problem::lossfunc::L2LossFunc::MakeShared());
+                    error_func, noise_model, loss_func);
             }
 
             // -----------------------------------------------------------------------------
@@ -418,32 +560,53 @@ namespace slam {
             // -----------------------------------------------------------------------------
 
             void Interface::addPriorCostTerms(slam::problem::Problem& problem) const {
+                // If empty, return none
                 if (knot_map_.empty()) return;
 
-                // Add available prior factors
-                for (const auto& prior_factor : {pose_prior_factor_, vel_prior_factor_, acc_prior_factor_})
-                    if (prior_factor) problem.addCostTerm(prior_factor);
+                // Check for pose, velocity, or acceleration priors
+                if (pose_prior_factor_) problem.addCostTerm(pose_prior_factor_);
+                if (vel_prior_factor_) problem.addCostTerm(vel_prior_factor_);
+                if (acc_prior_factor_) problem.addCostTerm(acc_prior_factor_);
 
-                // Use a single shared L2 loss function
-                static const auto loss_function = slam::problem::lossfunc::L2LossFunc::MakeShared();
+                // All prior factors will use an L2 loss function
+                const auto loss_function = std::make_shared<slam::problem::lossfunc::L2LossFunc>();
 
-                // Iterate over adjacent knots and add prior cost terms for active variables
-                for (auto it1 = knot_map_.begin(), it2 = std::next(it1); it2 != knot_map_.end(); ++it1, ++it2) {
-                    const auto& [_, knot1] = *it1;
-                    const auto& [__, knot2] = *it2;
+                // Collect knots into a sorted vector to process consecutive pairs
+                std::vector<std::pair<Time, Variable::ConstPtr>> sorted_knots;
+                auto range = knot_map_.range();
+                for (auto it = range.begin(); it != range.end(); ++it) {
+                    sorted_knots.emplace_back(it->first, it->second);
+                }
 
-                    // Skip if all states are locked
-                    if (!(knot1->getPose()->active() || knot1->getVelocity()->active() || knot1->getAcceleration()->active() ||
-                        knot2->getPose()->active() || knot2->getVelocity()->active() || knot2->getAcceleration()->active()))
-                        continue;
+                // Sort by time to ensure consecutive pairs
+                std::sort(sorted_knots.begin(), sorted_knots.end(),
+                            [](const auto& a, const auto& b) { return a.first < b.first; });
 
-                    // Compute information matrix for GP prior factor
-                    const auto Qinv = getQinv_((knot2->getTime() - knot1->getTime()).seconds(), Qc_diag_);
-                    const auto noise_model = slam::problem::noisemodel::StaticNoiseModel<18>::MakeShared(Qinv, slam::problem::noisemodel::NoiseType::INFORMATION);
+                // If fewer than 2 knots, no prior terms to add between knots
+                if (sorted_knots.size() < 2) return;
 
-                    // Create and add cost term
-                    problem.addCostTerm(slam::problem::costterm::WeightedLeastSqCostTerm<18>::MakeShared(
-                        getPriorFactor_(knot1, knot2), noise_model, loss_function));
+                // Iterate through consecutive pairs of knots
+                for (size_t i = 0; i < sorted_knots.size() - 1; ++i) {
+                    const auto& knot1 = sorted_knots[i].second;
+                    const auto& knot2 = sorted_knots[i + 1].second;
+
+                    // Check if any of the variables are unlocked
+                    if (knot1->getPose()->active() || knot1->getVelocity()->active() ||
+                        knot1->getAcceleration()->active() || knot2->getPose()->active() ||
+                        knot2->getVelocity()->active() || knot2->getAcceleration()->active()) {
+                        // Generate information matrix for GP prior factor
+                        auto Qinv = getQinv_((knot2->getTime() - knot1->getTime()).seconds(), Qc_diag_);
+                        const auto noise_model =
+                            std::make_shared<slam::problem::noisemodel::StaticNoiseModel<18>>(Qinv, slam::problem::noisemodel::NoiseType::INFORMATION);
+
+                        // Create error function and cost term
+                        const auto error_function = getPriorFactor_(knot1, knot2);
+                        const auto cost_term = std::make_shared<slam::problem::costterm::WeightedLeastSqCostTerm<18>>(
+                            error_function, noise_model, loss_function);
+
+                        // Add cost term to the problem
+                        problem.addCostTerm(cost_term);
+                    }
                 }
             }
 

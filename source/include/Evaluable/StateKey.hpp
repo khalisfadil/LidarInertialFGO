@@ -1,3 +1,4 @@
+// Done
 #pragma once
 
 #include <atomic>
@@ -11,7 +12,8 @@ namespace slam {
          * @file stateKey.hpp
          * @brief Provides a unique key system for identifying states in SLAM.
          */
-
+        
+        // -----------------------------------------------------------------------------
         /**
          * @typedef StateKey
          * @brief Represents a unique state key as an unsigned integer.
@@ -20,16 +22,41 @@ namespace slam {
 
         // -----------------------------------------------------------------------------
         /**
-         * @struct StateKeyHash
-         * @brief Custom hash and equality functions for `StateKey`, compatible with TBB.
+         * @struct StateKeyHasher
+         * @brief Hash function for `StateKey`, compatible with TBB concurrent containers.
          */
-        struct StateKeyHash {
+        struct StateKeyHasher {
+            size_t operator()(const StateKey& key) const noexcept {
+                return std::hash<unsigned int>{}(key);
+            }
+        };
+
+        // -----------------------------------------------------------------------------
+        /**
+         * @struct StateKeyEqual
+         * @brief Equality comparison for `StateKey`, compatible with TBB concurrent containers.
+         */
+        struct StateKeyEqual {
+            bool operator()(const StateKey& a, const StateKey& b) const noexcept {
+                return a == b;
+            }
+        };
+
+        // -----------------------------------------------------------------------------
+        /**
+         * @struct StateKeyHashCompare
+         * @brief Custom hashing and equality comparison struct for `tbb::concurrent_hash_map`.
+         *
+         * This structure is required because `tbb::concurrent_hash_map` does not allow separate
+         * hasher and comparator like `tbb::concurrent_unordered_set`.
+         */
+        struct StateKeyHashCompare {
             /**
              * @brief Hash function for `StateKey`.
              * @param key The state key to hash.
              * @return Hashed value.
              */
-            size_t hash(const slam::eval::StateKey& key) const {
+            static size_t hash(const StateKey& key) {
                 return std::hash<unsigned int>{}(key);
             }
 
@@ -39,7 +66,7 @@ namespace slam {
              * @param b Second state key.
              * @return `true` if keys are equal.
              */
-            bool equal(const slam::eval::StateKey& a, const slam::eval::StateKey& b) const {
+            static bool equal(const StateKey& a, const StateKey& b) {
                 return a == b;
             }
         };

@@ -3,8 +3,8 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/Problem/Problem.hpp"
-#include "source/include/Solver/SolverBase.hpp"
+#include "Problem/Problem.hpp"
+#include "Solver/SolverBase.hpp"
 
 namespace slam {
     namespace solver {

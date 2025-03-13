@@ -1,7 +1,7 @@
-#include "source/include/Solver/Covariance.hpp"
-#include "source/include/MatrixOperator/BlockMatrix.hpp"
-#include "source/include/MatrixOperator/BlockSparseMatrix.hpp"
-#include "source/include/MatrixOperator/BlockVector.hpp"
+#include "Solver/Covariance.hpp"
+#include "MatrixOperator/BlockMatrix.hpp"
+#include "MatrixOperator/BlockSparseMatrix.hpp"
+#include "MatrixOperator/BlockVector.hpp"
 
 namespace slam {
     namespace solver {
@@ -50,8 +50,9 @@ namespace slam {
         // -----------------------------------------------------------------------------
 
         Eigen::MatrixXd Covariance::query(const slam::eval::StateVariableBase::ConstPtr& rvar,
-                                            const slam::eval::StateVariableBase::ConstPtr& cvar) const {
-            return query({rvar}, {cvar});
+                                          const slam::eval::StateVariableBase::ConstPtr& cvar) const {
+            return query(std::vector<slam::eval::StateVariableBase::ConstPtr>{rvar},
+                         std::vector<slam::eval::StateVariableBase::ConstPtr>{cvar});
         }
 
         // -----------------------------------------------------------------------------
@@ -119,7 +120,7 @@ namespace slam {
             // Pre-allocate projection vector
             Eigen::VectorXd projection = Eigen::VectorXd::Zero(blk_row_indexing.getTotalScalarSize());
 
-            // **Parallelized loop over columns using TBB**
+            // Parallelized loop over columns using TBB
             tbb::parallel_for(tbb::blocked_range<size_t>(0, num_col_vars), [&](const tbb::blocked_range<size_t>& range) {
                 for (size_t c = range.begin(); c < range.end(); ++c) {
                     const unsigned int scalar_col_index = blk_col_indexing.getCumulativeBlockSizeAt(blk_col_indices[c]);
@@ -145,7 +146,7 @@ namespace slam {
                 cov_blk_col_indexing.getTotalScalarSize()
             );
 
-            // **Parallelizing final block conversion**
+            // Parallelizing final block conversion
             tbb::parallel_for(tbb::blocked_range<size_t>(0, num_row_vars), [&](const tbb::blocked_range<size_t>& row_range) {
                 for (size_t r = row_range.begin(); r < row_range.end(); ++r) {
                     for (size_t c = 0; c < num_col_vars; ++c) {
@@ -160,5 +161,6 @@ namespace slam {
 
             return cov;
         }
+
     }  // namespace solver
 }  // namespace slam

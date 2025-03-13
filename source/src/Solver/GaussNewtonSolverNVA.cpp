@@ -2,8 +2,8 @@
 #include <iomanip>
 #include <Eigen/Cholesky>
 
-#include "source/include/Solver/GaussNewtonSolverNVA.hpp"
-#include "source/include/Common/Timer.hpp"
+#include "Solver/GaussNewtonSolverNVA.hpp"
+#include "Common/Timer.hpp"
 
 namespace slam {
     namespace solver {

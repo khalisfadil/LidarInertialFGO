@@ -3,7 +3,7 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/Solver/GaussNewtonSolver.hpp"
+#include "Solver/GaussNewtonSolver.hpp"
 
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>

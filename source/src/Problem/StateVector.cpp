@@ -2,8 +2,8 @@
 #include <numeric>
 #include <sstream>
 
-#include "source/include/Problem/StateVector.hpp"
-#include "source/include/MatrixOperator/BlockVector.hpp"
+#include "Problem/StateVector.hpp"
+#include "MatrixOperator/BlockVector.hpp"
 
 namespace slam {
     namespace problem {
@@ -40,7 +40,7 @@ namespace slam {
             }
 
             for (auto& [key, entry] : states_) {
-                tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHash>::const_accessor acc;
+                tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHashCompare>::const_accessor acc;
                 
                 if (!other.states_.find(acc, key)) {
                 throw std::runtime_error("[StateVector::copyValues] structure mismatch in copyValues(): missing key " + std::to_string(key));
@@ -77,7 +77,7 @@ namespace slam {
         // Check if a State Variable Exists
         // ----------------------------------------------------------------------------
 
-        bool StateVector::hasStateVariable(const slam::eval::StateKey& key) const {
+        bool StateVector::hasStateVariable(const slam::eval::StateKey& key) const noexcept {
             return states_.count(key) > 0;
         }
 
@@ -88,7 +88,7 @@ namespace slam {
         slam::eval::StateVariableBase::ConstPtr StateVector::getStateVariable(
                 const slam::eval::StateKey& key) const {
             
-            tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHash>::const_accessor acc;
+            tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHashCompare>::const_accessor acc;
             
             if (!states_.find(acc, key)) {
                 throw std::runtime_error("[StateVector::getStateVariable] State variable not found in getStateVariable()");
@@ -102,7 +102,7 @@ namespace slam {
         // ----------------------------------------------------------------------------
         
 
-        unsigned int StateVector::getNumberOfStates() const {
+        unsigned int StateVector::getNumberOfStates() const noexcept {
             return states_.size();
         }
 
@@ -112,7 +112,7 @@ namespace slam {
 
         int StateVector::getStateBlockIndex(const slam::eval::StateKey& key) const {
         
-            tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHash>::const_accessor acc;
+            tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHashCompare>::const_accessor acc;
             
             if (!states_.find(acc, key)) {
                 throw std::runtime_error("[StateVector::getStateBlockIndex] Requested state is missing in getStateBlockIndex()");
@@ -142,7 +142,7 @@ namespace slam {
         // Get Total Size of the State Vector
         // ----------------------------------------------------------------------------
 
-        unsigned int StateVector::getStateSize() const {
+        unsigned int StateVector::getStateSize() const noexcept {
             return std::accumulate(states_.begin(), states_.end(), 0U,
                                     [](unsigned int sum, const auto& pair) {
                                     return sum + pair.second.state->perturb_dim();
@@ -158,7 +158,7 @@ namespace slam {
 
             // Iterate safely over the concurrent hash map
             for (auto it = states_.begin(); it != states_.end(); ++it) {
-                tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHash>::accessor acc;
+                tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHashCompare>::accessor acc;
 
                 // Ensure safe access to the entry
                 if (!states_.find(acc, it->first)) {

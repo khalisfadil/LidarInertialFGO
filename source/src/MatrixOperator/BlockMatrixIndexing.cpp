@@ -1,4 +1,4 @@
-#include "source/include/MatrixOperator/BlockMatrixIndexing.hpp"
+#include "MatrixOperator/BlockMatrixIndexing.hpp"
 
 namespace slam {
     namespace blockmatrix {

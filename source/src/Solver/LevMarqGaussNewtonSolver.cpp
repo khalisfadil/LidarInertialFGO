@@ -1,8 +1,8 @@
 #include <iostream>
 #include <iomanip>
 
-#include "source/include/Solver/LevMarqGaussNewtonSolver.hpp"
-#include "source/include/Common/Timer.hpp"
+#include "Solver/LevMarqGaussNewtonSolver.hpp"
+#include "Common/Timer.hpp"
 
 namespace slam {
     namespace solver {

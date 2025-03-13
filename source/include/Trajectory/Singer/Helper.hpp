@@ -2,7 +2,7 @@
 
 #include <Eigen/Core>
 
-#include "source/include/Trajectory/ConstAcceleration/Variables.hpp"
+#include "Trajectory/ConstAcceleration/Variables.hpp"
 
 namespace slam {
     namespace traj {
@@ -68,7 +68,7 @@ namespace slam {
 
                     if (std::abs(ad) >= 1.0) {
                         const double adi = 1.0 / ad, adi2 = adi * adi, adi3 = adi2 * adi;
-                        const double adi4 = adi3 * adi, adi5 = adi4 * adi;
+                        const double adi4 = adi3 * adi;
                         const double adt = ad * dt, adt2 = adt * adt, adt3 = adt2 * adt;
                         const double exp_adt = std::exp(-adt), exp_2adt = exp_adt * exp_adt;
 
@@ -137,43 +137,33 @@ namespace slam {
              */
             inline Eigen::Matrix<double, 18, 18> getTran(
                 const double& dt, const Eigen::Matrix<double, 6, 1>& add) {
-
                 Eigen::Matrix<double, 18, 18> Tran = Eigen::Matrix<double, 18, 18>::Identity();
 
                 for (int i = 0; i < 6; ++i) {
                     const double ad = add(i);
-
                     if (std::abs(ad) >= 1.0) {
                         const double ad_inv = 1.0 / ad;
                         const double adt = ad * dt;
                         const double exp_adt = std::exp(-adt);
-
-                        const double ad_inv2 = ad_inv * ad_inv;  // Precompute squared inverse
+                        const double ad_inv2 = ad_inv * ad_inv;
 
                         Tran(i, i + 12) = (adt - 1.0 + exp_adt) * ad_inv2;   // C1
                         Tran(i + 6, i + 12) = (1.0 - exp_adt) * ad_inv;      // C2
                         Tran(i + 12, i + 12) = exp_adt;                      // C3
-                    } 
-                    else {
-                        // Use Taylor series expansion for small ad values
+                    } else {
                         const double dt2 = dt * dt, dt3 = dt2 * dt, dt4 = dt3 * dt;
                         const double dt5 = dt4 * dt, dt6 = dt5 * dt;
-
                         const double ad2 = ad * ad, ad3 = ad2 * ad, ad4 = ad3 * ad;
 
                         Tran(i, i + 12) = 0.5 * dt2 - (1.0 / 6.0) * dt3 * ad + (1.0 / 24.0) * dt4 * ad2
                                         - (1.0 / 120.0) * dt5 * ad3 + (1.0 / 720.0) * dt6 * ad4;
-
                         Tran(i + 6, i + 12) = dt - 0.5 * dt2 * ad + (1.0 / 6.0) * dt3 * ad2
                                             - (1.0 / 24.0) * dt4 * ad3 + (1.0 / 120.0) * dt5 * ad4;
-
                         Tran(i + 12, i + 12) = 1.0 - dt * ad + 0.5 * dt2 * ad2
                                             - (1.0 / 6.0) * dt3 * ad3 + (1.0 / 24.0) * dt4 * ad4;
                     }
                 }
-
-                Tran.block<6, 6>(0, 6).diagonal().array() = dt;  // Assign dt directly
-
+                Tran.block<6, 6>(0, 6).diagonal() = dt * Eigen::Array<double, 6, 1>::Ones(); // Use second version
                 return Tran;
             }
 

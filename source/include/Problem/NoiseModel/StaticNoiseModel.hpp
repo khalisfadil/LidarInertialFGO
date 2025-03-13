@@ -4,7 +4,7 @@
 #include <memory>
 #include <sstream>
 
-#include "source/include/Problem/NoiseModel/BaseNoiseModel.hpp"
+#include "Problem/NoiseModel/BaseNoiseModel.hpp"
 
 namespace slam {
     namespace problem {

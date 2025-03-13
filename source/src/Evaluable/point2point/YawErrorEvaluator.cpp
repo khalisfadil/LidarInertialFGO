@@ -1,4 +1,4 @@
-#include "source/include/Evaluable/point2point/YawErrorEvaluator.hpp"
+#include "Evaluable/point2point/YawErrorEvaluator.hpp"
 
 namespace slam {
     namespace eval {

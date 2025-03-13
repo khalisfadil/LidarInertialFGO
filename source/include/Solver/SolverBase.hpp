@@ -4,8 +4,8 @@
 #include <memory>
 #include <Eigen/Core>
 
-#include "source/include/Problem/Problem.hpp"
-#include "source/include/Problem/StateVector.hpp"
+#include "Problem/Problem.hpp"
+#include "Problem/StateVector.hpp"
 
 namespace slam {
     namespace solver {

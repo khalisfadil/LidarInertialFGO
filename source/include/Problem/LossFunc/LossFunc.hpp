@@ -1,9 +1,9 @@
 #pragma once
 
-#include "source/include/Problem/LossFunc/BaseLossFunc.hpp"
-#include "source/include/Problem/LossFunc/CauchyLossFunc.hpp"
-#include "source/include/Problem/LossFunc/DynCovScalingLossFunc.hpp"
-#include "source/include/Problem/LossFunc/GemanMcClureLossFunc.hpp"
-#include "source/include/Problem/LossFunc/HuberLossFunc.hpp"
-#include "source/include/Problem/LossFunc/L1LossFunc.hpp"
-#include "source/include/Problem/LossFunc/L2LossFunc.hpp"
+#include "Problem/LossFunc/BaseLossFunc.hpp"
+#include "Problem/LossFunc/CauchyLossFunc.hpp"
+#include "Problem/LossFunc/DynCovScalingLossFunc.hpp"
+#include "Problem/LossFunc/GemanMcClureLossFunc.hpp"
+#include "Problem/LossFunc/HuberLossFunc.hpp"
+#include "Problem/LossFunc/L1LossFunc.hpp"
+#include "Problem/LossFunc/L2LossFunc.hpp"

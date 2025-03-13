@@ -6,7 +6,7 @@
 #include <vector>
 #include <iostream>
 
-#include "source/include/MatrixOperator/BlockMatrixBase.hpp"
+#include "MatrixOperator/BlockMatrixBase.hpp"
 
 namespace slam {
     namespace blockmatrix {

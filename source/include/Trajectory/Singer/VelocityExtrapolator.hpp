@@ -2,10 +2,10 @@
 
 #include <Eigen/Core>
 
-#include "source/include/Trajectory/ConstAcceleration/Variables.hpp"
-#include "source/include/Trajectory/ConstAcceleration/VelocityExtrapolator.hpp"
-#include "source/include/Trajectory/Singer/Helper.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Trajectory/ConstAcceleration/Variables.hpp"
+#include "Trajectory/ConstAcceleration/VelocityExtrapolator.hpp"
+#include "Trajectory/Singer/Helper.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace traj {

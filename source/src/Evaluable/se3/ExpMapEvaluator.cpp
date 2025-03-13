@@ -1,4 +1,4 @@
-#include "source/include/Evaluable/se3/ExpMapEvaluator.hpp"
+#include "Evaluable/se3/ExpMapEvaluator.hpp"
 
 namespace slam {
     namespace eval {

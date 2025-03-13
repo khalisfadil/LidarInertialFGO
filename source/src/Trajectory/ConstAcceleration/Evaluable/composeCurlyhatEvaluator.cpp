@@ -1,4 +1,4 @@
-#include "source/include/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.hpp"
+#include "Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.hpp"
 
 namespace slam {
     namespace traj {

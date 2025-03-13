@@ -2,8 +2,8 @@
 #include <cassert>
 #include <iostream>
 
-#include "source/include/LGMath/so3/Operations.hpp"
-#include "source/include/LGMath/so3/Rotations.hpp"
+#include "LGMath/so3/Operations.hpp"
+#include "LGMath/so3/Rotations.hpp"
 
 namespace slam {
     namespace liemath {

@@ -1,6 +1,5 @@
-#include "source/include/Trajectory/ConstAcceleration/VelocityExtrapolator.hpp"
-
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
+#include "Trajectory/ConstAcceleration/VelocityExtrapolator.hpp"
+#include "Trajectory/ConstAcceleration/Helper.hpp"
 
 namespace slam {
     namespace traj {
@@ -50,7 +49,7 @@ namespace slam {
 
             auto VelocityExtrapolator::value() const -> OutType {
                 return Phi_.block<6, 6>(6, 6) * knot_->getVelocity()->value() +
-                    Phi_.block<6, 6>(6, 12) * knot_->getAcceleration()->value();
+                       Phi_.block<6, 6>(6, 12) * knot_->getAcceleration()->value();
             }
 
             // -----------------------------------------------------------------------------
@@ -73,26 +72,40 @@ namespace slam {
             }
 
             // -----------------------------------------------------------------------------
-            // backward
+            // backward (Corrected)
             // -----------------------------------------------------------------------------
 
             void VelocityExtrapolator::backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
-                                    const eval::Node<OutType>::Ptr& node,
-                                    eval::StateKeyJacobians& jacs) const {
+                                                const eval::Node<OutType>::Ptr& node,
+                                                eval::StateKeyJacobians& jacs) const {
                 if (!active()) return;
 
                 // Precompute Phi matrix blocks
-                const auto phi_v = Phi_.block<6, 6>(6, 6);
-                const auto phi_a = Phi_.block<6, 6>(6, 12);
+                const auto phi_v = Phi_.block<6, 6>(6, 6);  // 6x6 matrix for velocity
+                const auto phi_a = Phi_.block<6, 6>(6, 12); // 6x6 matrix for acceleration
 
-                // Lambda-based Jacobian updates
+                // Compute intermediate matrix products to avoid vectorization issues
+                const auto lhs_phi_v = lhs * phi_v;  // 6xN * 6x6 = 6x6
+                const auto lhs_phi_a = lhs * phi_a;  // 6xN * 6x6 = 6x6
+
+                // Lambda-based Jacobian updates using intermediate results
                 std::array<std::function<void()>, 2> jacobian_updates = {
-                    [&] { if (knot_->getVelocity()->active()) 
-                            knot_->getVelocity()->backward(lhs * phi_v, 
-                                std::static_pointer_cast<eval::Node<InVelType>>(node->getChild(1)), jacs); },
-                    [&] { if (knot_->getAcceleration()->active()) 
-                            knot_->getAcceleration()->backward(lhs * phi_a, 
-                                std::static_pointer_cast<eval::Node<InAccType>>(node->getChild(2)), jacs); }
+                    [&] {
+                        if (knot_->getVelocity()->active()) 
+                            knot_->getVelocity()->backward(
+                                lhs_phi_v, 
+                                std::static_pointer_cast<eval::Node<InVelType>>(node->getChild(0)), 
+                                jacs
+                            );
+                    },
+                    [&] {
+                        if (knot_->getAcceleration()->active()) 
+                            knot_->getAcceleration()->backward(
+                                lhs_phi_a, 
+                                std::static_pointer_cast<eval::Node<InAccType>>(node->getChild(1)), 
+                                jacs
+                            );
+                    }
                 };
 
                 for (const auto& update : jacobian_updates) update();

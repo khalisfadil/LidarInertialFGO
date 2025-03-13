@@ -3,9 +3,9 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/LGMath/LieGroupMath.hpp"
+#include "LGMath/LieGroupMath.hpp"
 
-#include "source/include/Evaluable/Evaluable.hpp"
+#include "Evaluable/Evaluable.hpp"
 
 namespace slam {
     namespace traj {

@@ -6,8 +6,8 @@
 #include <tbb/concurrent_hash_map.h>
 #include <Eigen/Dense>
 
-#include "source/include/Evaluable/StateKeyJacobians.hpp"
-#include "source/include/Evaluable/StateVariableBase.hpp"
+#include "Evaluable/StateKeyJacobians.hpp"
+#include "Evaluable/StateVariableBase.hpp"
 
 namespace slam {
   namespace problem {
@@ -105,7 +105,7 @@ namespace slam {
 
         // -----------------------------------------------------------------------------
         /** @brief Thread-safe storage for state variables. */
-        using StateMap = tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHash>;
+        using StateMap = tbb::concurrent_hash_map<slam::eval::StateKey, StateContainer, slam::eval::StateKeyHashCompare>;
         StateMap states_;
 
         // -----------------------------------------------------------------------------

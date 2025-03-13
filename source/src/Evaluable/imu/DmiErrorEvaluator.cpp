@@ -1,5 +1,5 @@
-#include "source/include/Evaluable/imu/DmiErrorEvaluator.hpp"
-#include "source/include/LGMath/LieGroupMath.hpp"
+#include "Evaluable/imu/DmiErrorEvaluator.hpp"
+#include "LGMath/LieGroupMath.hpp"
 
 namespace slam {
     namespace eval {

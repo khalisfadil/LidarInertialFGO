@@ -1,6 +1,6 @@
-#include "source/include/Trajectory/ConstAcceleration/PoseExtrapolator.hpp"
+#include "Trajectory/ConstAcceleration/PoseExtrapolator.hpp"
 
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
+#include "Trajectory/ConstAcceleration/Helper.hpp"
 
 namespace slam {
     namespace traj {

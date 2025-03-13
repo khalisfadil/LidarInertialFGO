@@ -5,7 +5,7 @@
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 
-#include "source/include/MatrixOperator/BlockDimensionIndexing.hpp"
+#include "MatrixOperator/BlockDimensionIndexing.hpp"
 
 namespace slam {
     namespace blockmatrix {

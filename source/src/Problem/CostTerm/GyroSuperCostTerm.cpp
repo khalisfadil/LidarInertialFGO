@@ -1,4 +1,4 @@
-#include "source/include/Problem/CostTerm/GyroSuperCostTerm.hpp"
+#include "Problem/CostTerm/GyroSuperCostTerm.hpp"
 #include <iostream>
 
 namespace slam {
@@ -50,12 +50,12 @@ namespace slam {
 
                 // Initialize Jacobians
                 jac_vel_.block<3, 3>(0, 3).setIdentity();
-                jac_bias_.block<3, 3>(0, 3).setIdentity() *= -1;
+                jac_bias_gyro_.block<3, 3>(0, 3).setIdentity() *= -1;
 
                 // Apply SE(2) constraints if enabled
                 if (options_.se2) {
                     jac_vel_.block<1, 1>(0, 5).setConstant(1);  // Equivalent to `jac_vel_(0, 5) = 1`
-                    jac_bias_.block<1, 1>(0, 5).setConstant(-1);  // Equivalent to `jac_bias_(0, 5) = -1`
+                    jac_bias_gyro_.block<1, 1>(0, 5).setConstant(-1);  // Equivalent to `jac_bias_(0, 5) = -1`
                 }
 
                 // Configure noise models
@@ -66,7 +66,7 @@ namespace slam {
             // cost
             // -----------------------------------------------------------------------------
 
-            double GyroSuperCostTerm::cost() const {
+            double GyroSuperCostTerm::cost() const noexcept {
                 using namespace slam::eval::se3;
                 using namespace slam::eval::vspace;
 
@@ -103,10 +103,10 @@ namespace slam {
                             const double ts = imu_data.timestamp;
 
                             // Declare omega and lambda before lookup
-                            Eigen::Matrix3d omega, lambda;
+                            Eigen::Matrix4d omega, lambda;
 
                             // Use TBB concurrent_hash_map accessor for thread-safe lookup
-                            tbb::concurrent_hash_map<double, std::pair<Eigen::Matrix3d, Eigen::Matrix3d>>::const_accessor accessor;
+                            tbb::concurrent_hash_map<double, std::pair<Eigen::Matrix4d, Eigen::Matrix4d>>::const_accessor accessor;
                             if (interp_mats_.find(accessor, ts)) {
                                 omega = accessor->second.first;
                                 lambda = accessor->second.second;
@@ -156,73 +156,13 @@ namespace slam {
             // getRelatedVarKeys
             // -----------------------------------------------------------------------------
 
-            void GyroSuperCostTerm::getRelatedVarKeys(KeySet &keys) const {
-                knot1_->getPose()->getRelatedVarKeys(keys);
-                knot1_->getVelocity()->getRelatedVarKeys(keys);
-                knot2_->getPose()->getRelatedVarKeys(keys);
-                knot2_->getVelocity()->getRelatedVarKeys(keys);
-                bias1_->getRelatedVarKeys(keys);
-                bias2_->getRelatedVarKeys(keys);
-            }
-
-            // -----------------------------------------------------------------------------
-            // initialize_interp_matrices_
-            // -----------------------------------------------------------------------------
-
-            void GyroSuperCostTerm::initialize_interp_matrices_() {
-                static const Eigen::Matrix<double, 6, 1> ones = Eigen::Matrix<double, 6, 1>::Ones();
-
-                for (const IMUData &imu_data : imu_data_vec_) {
-                    const double time = imu_data.timestamp;
-
-                    // Use TBB concurrent_hash_map accessor for thread-safe lookup
-                    tbb::concurrent_hash_map<double, std::pair<Eigen::Matrix3d, Eigen::Matrix3d>>::accessor accessor;
-                    if (!interp_mats_.find(accessor, time)) {
-
-                        Eigen::Matrix<double, 6, 6> I6 = Eigen::Matrix<double, 6, 6>::Identity();  // Precompute identity matrix
-
-                        // Compute time deltas
-                        const double tau = time - time1_.seconds();
-                        const double kappa = knot2_->getTime().seconds() - time;
-
-                        // Precompute required matrices
-                        const Matrix12d Q_tau = slam::traj::const_vel::getQ(tau, ones);
-                        const Matrix12d Tran_kappa_T = slam::traj::const_vel::getTran(kappa).transpose();
-                        const Matrix12d Tran_tau = slam::traj::const_vel::getTran(tau);
-
-                        // Compute Omega and Lambda
-                        const Matrix12d omega12 = Q_tau * Tran_kappa_T * Qinv_T_;
-                        const Matrix12d lambda12 = Tran_tau - omega12 * Tran_T_;
-
-                        // Extract Omega and Lambda (mapping every 6th row and column)
-                        Eigen::Matrix2d omega, lambda;
-                        for (int i = 0; i < 2; ++i) {
-                            for (int j = 0; j < 2; ++j) {
-                                omega(i, j) = omega12(6 * i, 6 * j);
-                                lambda(i, j) = lambda12(6 * i, 6 * j);
-                            }
-                        }
-
-                        // Insert into concurrent hash map safely
-                        interp_mats_.insert(accessor, time);
-                        accessor->second = std::make_pair(omega, lambda);
-                    }
-                }
-            }
-
-            // -----------------------------------------------------------------------------
-            // buildGaussNewtonTerms
-            // -----------------------------------------------------------------------------
-
-            void IMUSuperCostTerm::buildGaussNewtonTerms(const StateVector &state_vec, slam::blockmatrix::BlockSparseMatrix *approximate_hessian,
-                                                            slam::blockmatrix::BlockVector *gradient_vector) const {
-
+            void GyroSuperCostTerm::buildGaussNewtonTerms(const StateVector &state_vec,
+                                                        slam::blockmatrix::BlockSparseMatrix *approximate_hessian,
+                                                        slam::blockmatrix::BlockVector *gradient_vector) const {
                 using namespace slam::eval::se3;
                 using namespace slam::eval::vspace;
 
-                // -----------------------------------------------------------------------------
-                // Extract Forward Values (Pose, Velocity, Acceleration, Bias, Transformations)
-                // -----------------------------------------------------------------------------
+                // Extract Forward Values (Pose, Velocity, Bias)
                 const auto T1_ = knot1_->getPose()->forward();
                 const auto w1_ = knot1_->getVelocity()->forward();
                 const auto T2_ = knot2_->getPose()->forward();
@@ -230,150 +170,106 @@ namespace slam {
                 const auto b1_ = bias1_->forward();
                 const auto b2_ = bias2_->forward();
 
-                // Extract the underlying SE(3) values
-                const auto T1 = T1_->value();
-                const auto w1 = w1_->value();
+                const auto T1 = T1_->value(); // 4x4 SE(3) pose
+                const auto w1 = w1_->value(); // 6D velocity
                 const auto T2 = T2_->value();
                 const auto w2 = w2_->value();
-                const auto b1 = b1_->value();
+                const auto b1 = b1_->value(); // 6D bias
                 const auto b2 = b2_->value();
 
-                // -----------------------------------------------------------------------------
-                // Initialize Hessian and Gradient Terms
-                // -----------------------------------------------------------------------------
-                Eigen::Matrix<double, 36, 36> A = Eigen::Matrix<double, 36, 36>::Zero();
-                Eigen::Matrix<double, 36, 1> b = Eigen::Matrix<double, 36, 1>::Zero();
-
-                // -----------------------------------------------------------------------------
                 // Compute Relative Transformation Between Knots
-                // -----------------------------------------------------------------------------
                 const auto xi_21 = (T2 / T1).vec();
-                const liemath::se3::Transformation T_21(xi_21,0);
+                const liemath::se3::Transformation T_21(xi_21, 0);
                 const auto Ad_T_21 = liemath::se3::tranAd(T_21.matrix());
                 const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
                 const auto w2_j_21_inv = 0.5 * liemath::se3::curlyhat(w2) * J_21_inv;
                 const auto J_21_inv_w2 = J_21_inv * w2;
 
-                // ----------------------------------------------------------------------------
-                // Parallel Computation Using TBB (Fixed `parallel_reduce` Argument Type Issue)
-                // ----------------------------------------------------------------------------
-                auto result = tbb::parallel_reduce(
-                    tbb::blocked_range<int>(0, imu_data_vec_.size()),
-                    std::make_pair(Eigen::Matrix<double, 36, 36>::Zero().eval(), Eigen::Matrix<double, 36, 1>::Zero().eval()),
-                    [&](const tbb::blocked_range<int> &range, 
-                        std::pair<Eigen::Matrix<double, 36, 36>, Eigen::Matrix<double, 36, 1>> A_b) -> 
-                        std::pair<Eigen::Matrix<double, 36, 36>, Eigen::Matrix<double, 36, 1>> {
+                // Define type aliases for clarity and consistency
+                using Matrix36x36 = Eigen::Matrix<double, 36, 36>;
+                using Matrix36x1 = Eigen::Matrix<double, 36, 1>;
+                using PairType = std::pair<Matrix36x36, Matrix36x1>;
 
-                        Eigen::Matrix<double, 36, 36> &A_local = A_b.first;
-                        Eigen::Matrix<double, 36, 1> &b_local = A_b.second;
+                // Parallel Computation Using TBB
+                auto [A, b] = tbb::parallel_reduce(
+                    tbb::blocked_range<int>(0, imu_data_vec_.size()),
+                    PairType(Matrix36x36::Zero(), Matrix36x1::Zero()), // Concrete initial value
+                    [&](const tbb::blocked_range<int> &range, PairType A_b) -> PairType {
+                        Matrix36x36 &A_local = A_b.first;
+                        Matrix36x1 &b_local = A_b.second;
 
                         for (int i = range.begin(); i < range.end(); ++i) {
                             const double ts = imu_data_vec_[i].timestamp;
                             const IMUData &imu_data = imu_data_vec_[i];
 
-                            // -------------------------------------------------------------------------
-                            // Retrieve Precomputed Interpolation Matrices (Ensure Validity)
-                            // -------------------------------------------------------------------------
-                            tbb::concurrent_hash_map<double, std::pair<Eigen::Matrix3d, Eigen::Matrix3d>>::const_accessor accessor;
+                            // Retrieve Precomputed Interpolation Matrices
+                            tbb::concurrent_hash_map<double, std::pair<Eigen::Matrix4d, Eigen::Matrix4d>>::const_accessor accessor;
                             if (!interp_mats_.find(accessor, ts)) {
                                 throw std::runtime_error("Timestamp not found in interpolation matrices.");
                             }
                             const auto &omega = accessor->second.first;
                             const auto &lambda = accessor->second.second;
 
-                            // -------------------------------------------------------------------------
                             // Optimized Velocity
-                            // -------------------------------------------------------------------------
                             const Eigen::Matrix<double, 6, 1> xi_i1 = lambda(0, 1) * w1 + omega(0, 0) * xi_21 + omega(0, 1) * J_21_inv_w2;
-
-                            const Eigen::Matrix<double, 6, 1> xi_j1 = lambda(1, 1) * w1 + omega(1, 0) * xi_21 + omega(1, 1) * J_21_inv_w2;
-
-                            // Compute interpolated velocity 
+                            const Eigen::Matrix<double, 6, 1> xi_j1 = lambda(1, 1) * w1 + omega(1, 0) * xi_21 + omega(1, 1) * J_21_inv_w2 + w2_j_21_inv * w2;
                             const Eigen::Matrix<double, 6, 1> w_i = liemath::se3::vec2jac(xi_i1) * xi_j1;
 
-                            // ----------------------------------------------------------------------------
-                            // Further Optimized Interpolated Bias Computation (Functionally Equivalent)
-                            // ----------------------------------------------------------------------------
-                            Eigen::Matrix<double, 6, 6> I6 = Eigen::Matrix<double, 6, 6>::Identity();  // Precompute identity matrix
-
+                            // Interpolated Bias Computation
+                            Eigen::Matrix<double, 6, 6> I6 = Eigen::Matrix<double, 6, 6>::Identity();
                             const double T_inv = 1.0 / (knot2_->getTime().seconds() - knot1_->getTime().seconds());
                             const double omega_ = (ts - knot1_->getTime().seconds()) * T_inv;
                             const double lambda_ = 1.0 - omega_;
-
-                            // Compute bias interpolation directly without unnecessary initialization
                             Eigen::Matrix<double, 6, 1> bias_i = lambda_ * b1 + omega_ * b2;
 
-                            // Compute Jacobian for bias interpolation without redundant zero initialization
                             Eigen::Matrix<double, 6, 12> interp_jac_bias;
                             interp_jac_bias << lambda_ * I6, omega_ * I6;
 
-                            // ----------------------------------------------------------------------------
-                            // Optimized Velocity Interpolation Jacobians
-                            // ----------------------------------------------------------------------------
+                            // Velocity Interpolation Jacobians
                             Eigen::Matrix<double, 6, 24> interp_jac_vel;
                             interp_jac_vel.setZero();
 
-                            // Compute essential Jacobians
                             const Eigen::Matrix<double, 6, 6> J_i1 = liemath::se3::vec2jac(xi_i1);
                             const Eigen::Matrix<double, 6, 6> xi_j1_ch = -0.5 * liemath::se3::curlyhat(xi_j1);
+                            const Eigen::Matrix<double, 6, 6> omega_J_21_inv = J_i1 * (omega(1, 0) * J_21_inv + omega(1, 1) * w2_j_21_inv);
+                            const Eigen::Matrix<double, 6, 6> xi_j1_ch_omega = xi_j1_ch * (omega(0, 0) * J_21_inv + omega(0, 1) * w2_j_21_inv);
 
-                            // Precompute reusable terms to minimize redundant calculations
-                            const Eigen::Matrix<double, 6, 6> omega_J_21_inv = omega.block<2, 2>(0, 0) * J_21_inv;
-                            const Eigen::Matrix<double, 6, 6> xi_j1_ch_omega = xi_j1_ch * omega_J_21_inv;
+                            Eigen::Matrix<double, 6, 6> w = omega_J_21_inv + xi_j1_ch_omega;
+                            interp_jac_vel.block<6, 6>(0, 0) = -w * Ad_T_21; // T1
+                            interp_jac_vel.block<6, 6>(0, 6) = (lambda(1, 1) * J_i1 + lambda(0, 1) * xi_j1_ch); // w1
+                            interp_jac_vel.block<6, 6>(0, 12) = w; // T2
+                            interp_jac_vel.block<6, 6>(0, 18) = omega(1, 1) * J_i1 * J_21_inv + omega(0, 1) * xi_j1_ch * J_21_inv; // w2
 
-                            // Compute velocity Jacobian updates
-                            Eigen::Matrix<double, 6, 6> w = J_i1 * omega_J_21_inv + xi_j1_ch_omega;
-
-                            // Assign blocks efficiently
-                            interp_jac_vel.block<6, 6>(0, 0).noalias() = -w * Ad_T_21;  // T1
-                            interp_jac_vel.block<6, 6>(0, 6).noalias() = lambda.block<2, 2>(0, 0) * J_i1 + lambda.block<2, 2>(0, 1) * xi_j1_ch;  // w1
-                            interp_jac_vel.block<6, 6>(0, 12).noalias() = w;  // T2
-                            interp_jac_vel.block<6, 6>(0, 18).noalias() = omega.block<2, 2>(1, 1) * J_i1 * J_21_inv + omega.block<2, 2>(0, 1) * xi_j1_ch * J_21_inv;  // w2
-
-                            // ----------------------------------------------------------------------------
                             // Evaluate, Weight, and Whiten Gyroscope Error
-                            // ----------------------------------------------------------------------------
-                            Eigen::Matrix<double, 3, 1> raw_error_gyro = imu_data.ang_vel;  // Default case
-
+                            Eigen::Matrix<double, 3, 1> raw_error_gyro = imu_data.ang_vel;
                             if (options_.se2) {
-                                raw_error_gyro.setZero();  // Ensures other components remain unchanged
+                                raw_error_gyro.setZero();
                                 raw_error_gyro(2, 0) = imu_data.ang_vel(2, 0) + w_i(5, 0) - bias_i(5, 0);
                             } else {
                                 raw_error_gyro.noalias() += w_i.block<3, 1>(3, 0) - bias_i.block<3, 1>(3, 0);
                             }
 
-                            // Compute whitened error and weighted loss function
                             const Eigen::Matrix<double, 3, 1> white_error_gyro = gyro_noise_model_->whitenError(raw_error_gyro);
                             const double sqrt_w_gyro = std::sqrt(gyro_loss_func_->weight(white_error_gyro.squaredNorm()));
                             const Eigen::Matrix<double, 3, 1> error_gyro = sqrt_w_gyro * white_error_gyro;
 
-                            // ----------------------------------------------------------------------------
-                            // Optimized Gyro Measurement Jacobians
-                            // ----------------------------------------------------------------------------
+                            // Gyro Measurement Jacobians
                             Eigen::Matrix<double, 3, 36> G;
                             G.setZero();
-
                             G.block<3, 24>(0, 0).noalias() = sqrt_w_gyro * gyro_noise_model_->getSqrtInformation() * jac_vel_ * interp_jac_vel;
                             G.block<3, 12>(0, 24).noalias() = sqrt_w_gyro * gyro_noise_model_->getSqrtInformation() * jac_bias_gyro_ * interp_jac_bias;
 
-                            // ----------------------------------------------------------------------------
-                            // Optimized Hessian and Gradient Computation
-                            // ----------------------------------------------------------------------------
-
-                            A.noalias() += G.transpose() * G;
-                            b.noalias() -= G.transpose() * error_gyro;
+                            // Update Local Hessian and Gradient
+                            A_local.noalias() += G.transpose() * G;
+                            b_local.noalias() -= G.transpose() * error_gyro;
                         }
-                    
-                    return A_b;
-                },
-                    [](const std::pair<Eigen::Matrix<double, 36, 36>, Eigen::Matrix<double, 36, 1>> &a,
-                    const std::pair<Eigen::Matrix<double, 36, 36>, Eigen::Matrix<double, 36, 1>> &b) {
-                        return std::make_pair(a.first + b.first, a.second + b.second);
-                });
+                        return A_b;
+                    },
+                    [](const PairType &a, const PairType &b) -> PairType {
+                        return PairType(a.first + b.first, a.second + b.second); // Force evaluation to concrete type
+                    });
 
-                // ----------------------------------------------------------------------------
                 // Optimized Active State Extraction
-                // ----------------------------------------------------------------------------
                 constexpr int num_states = 6;
                 std::array<bool, num_states> active = {
                     knot1_->getPose()->active(),
@@ -387,45 +283,63 @@ namespace slam {
                 // Preallocate memory for keys
                 std::vector<slam::eval::StateKey> keys(num_states, -1);
 
-                // ----------------------------------------------------------------------------
-                // Parallel Jacobian Computation Using TBB
-                // ----------------------------------------------------------------------------
+                // Parallel Jacobian Computation Using TBB with Proper Type Casting
                 tbb::parallel_for(0, num_states, [&](int i) {
                     if (!active[i]) return;
 
                     slam::eval::StateKeyJacobians jacs;
-                    Eigen::Matrix<double, 1, 1> lhs = Eigen::Matrix<double, 1, 1>::Zero();
+                    Eigen::Matrix<double, 1, 1> lhs = Eigen::Matrix<double, 1, 1>::Zero(); 
 
                     switch (i) {
-                        case 0: knot1_->getPose()->backward(lhs, T1_, jacs); break;
-                        case 1: knot1_->getVelocity()->backward(lhs, w1_, jacs); break;
-                        case 2: knot2_->getPose()->backward(lhs, T2_, jacs); break;
-                        case 3: knot2_->getVelocity()->backward(lhs, w2_, jacs); break;
-                        case 4: bias1_->backward(lhs, b1_, jacs); break;
-                        case 5: bias2_->backward(lhs, b2_, jacs); break;
+                        case 0: {
+                            auto T1node = std::static_pointer_cast<slam::eval::Node<PoseType>>(T1_);
+                            knot1_->getPose()->backward(lhs, T1node, jacs);
+                            break;
+                        }
+                        case 1: {
+                            auto w1node = std::static_pointer_cast<slam::eval::Node<VelType>>(w1_);
+                            knot1_->getVelocity()->backward(lhs, w1node, jacs);
+                            break;
+                        }
+                        case 2: {
+                            auto T2node = std::static_pointer_cast<slam::eval::Node<PoseType>>(T2_);
+                            knot2_->getPose()->backward(lhs, T2node, jacs);
+                            break;
+                        }
+                        case 3: {
+                            auto w2node = std::static_pointer_cast<slam::eval::Node<VelType>>(w2_);
+                            knot2_->getVelocity()->backward(lhs, w2node, jacs);
+                            break;
+                        }
+                        case 4: {
+                            auto b1node = std::static_pointer_cast<slam::eval::Node<BiasType>>(b1_);
+                            bias1_->backward(lhs, b1node, jacs);
+                            break;
+                        }
+                        case 5: {
+                            auto b2node = std::static_pointer_cast<slam::eval::Node<BiasType>>(b2_);
+                            bias2_->backward(lhs, b2node, jacs);
+                            break;
+                        }
                     }
 
-                    const auto jacmap = jacs.getCopy();
+                    const auto jacmap = jacs.get();
                     assert(jacmap.size() == 1);
                     keys[i] = jacmap.begin()->first;
                 });
 
-                // ----------------------------------------------------------------------------
-                // Parallel Hessian and Gradient Update Using TBB (Ensuring Safe Modifications)
-                // ----------------------------------------------------------------------------
-                tbb::parallel_for(0, 6, [&](int i) {
+                // Parallel Hessian and Gradient Update Using TBB
+                tbb::parallel_for(0, num_states, [&](int i) {
                     if (!active[i]) return;
 
                     unsigned int blkIdx1 = state_vec.getStateBlockIndex(keys[i]);
-
                     Eigen::MatrixXd newGradTerm = b.block<6, 1>(i * 6, 0);
-                    gradient_vector->mapAt(blkIdx1) += newGradTerm;  // Thread-safe update
+                    gradient_vector->mapAt(blkIdx1) += newGradTerm;
 
-                    tbb::parallel_for(i, 6, [&](int j) {
+                    tbb::parallel_for(i, num_states, [&](int j) {
                         if (!active[j]) return;
 
                         unsigned int blkIdx2 = state_vec.getStateBlockIndex(keys[j]);
-
                         unsigned int row = std::min(blkIdx1, blkIdx2);
                         unsigned int col = std::max(blkIdx1, blkIdx2);
 
@@ -433,7 +347,6 @@ namespace slam {
                             ? A.block<6, 6>(i * 6, j * 6)
                             : A.block<6, 6>(j * 6, i * 6);
 
-                        //  Correct way to modify BlockSparseMatrix (TBB-safe)
                         approximate_hessian->add(row, col, newHessianTerm);
                     });
                 });

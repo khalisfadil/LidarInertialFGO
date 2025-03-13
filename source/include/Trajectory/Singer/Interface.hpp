@@ -3,17 +3,17 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/Trajectory/ConstAcceleration/Interface.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Trajectory/ConstAcceleration/Interface.hpp"
+#include "Trajectory/Time.hpp"
 
-#include "source/include/Trajectory/Singer/AccelerationExtrapolator.hpp"
-#include "source/include/Trajectory/Singer/AccelerationInterpolator.hpp"
-#include "source/include/Trajectory/Singer/Helper.hpp"
-#include "source/include/Trajectory/Singer/PoseExtrapolator.hpp"
-#include "source/include/Trajectory/Singer/PoseInterpolator.hpp"
-#include "source/include/Trajectory/Singer/PriorFactor.hpp"
-#include "source/include/Trajectory/Singer/VelocityExtrapolator.hpp"
-#include "source/include/Trajectory/Singer/VelocityInterpolator.hpp"
+#include "Trajectory/Singer/AccelerationExtrapolator.hpp"
+#include "Trajectory/Singer/AccelerationInterpolator.hpp"
+#include "Trajectory/Singer/Helper.hpp"
+#include "Trajectory/Singer/PoseExtrapolator.hpp"
+#include "Trajectory/Singer/PoseInterpolator.hpp"
+#include "Trajectory/Singer/PriorFactor.hpp"
+#include "Trajectory/Singer/VelocityExtrapolator.hpp"
+#include "Trajectory/Singer/VelocityInterpolator.hpp"
 
 namespace slam {
     namespace traj {

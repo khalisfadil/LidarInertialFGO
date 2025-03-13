@@ -3,10 +3,10 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/LGMath/LieGroupMath.hpp"
-#include "source/include/Evaluable/Evaluable.hpp"
-#include "source/include/Trajectory/ConstVelocity/Variables.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "LGMath/LieGroupMath.hpp"
+#include "Evaluable/Evaluable.hpp"
+#include "Trajectory/ConstVelocity/Variables.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace traj {

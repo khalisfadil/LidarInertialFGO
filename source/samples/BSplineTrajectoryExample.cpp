@@ -3,8 +3,8 @@
 #include <iomanip>
 #include <vector>
 #include <Eigen/Dense>
-#include "source/include/LGMath/LieGroupMath.hpp"
-#include "source/include/slam.hpp"
+#include "LGMath/LieGroupMath.hpp"
+#include "slam.hpp"
 
 using namespace slam;
 

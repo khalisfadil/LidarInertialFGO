@@ -1,4 +1,4 @@
-#include "source/include/Trajectory/Singer/Interface.hpp"
+#include "Trajectory/Singer/Interface.hpp"
 
 namespace slam {
     namespace traj {
@@ -8,8 +8,8 @@ namespace slam {
             // MakeShared
             // -----------------------------------------------------------------------------
 
-            auto Interface::MakeShared(const Eigen::Matrix<double, 6, 1>& alpha_diag = Eigen::Matrix<double, 6, 1>::Ones(),
-                                       const Eigen::Matrix<double, 6, 1>& Qc_diag = Eigen::Matrix<double, 6, 1>::Ones()) -> Ptr {
+            auto Interface::MakeShared(const Eigen::Matrix<double, 6, 1>& alpha_diag,
+                                       const Eigen::Matrix<double, 6, 1>& Qc_diag) -> Ptr {
                 return std::make_shared<Interface>(alpha_diag, Qc_diag);
             }
 
@@ -17,8 +17,8 @@ namespace slam {
             // Constructor
             // -----------------------------------------------------------------------------
 
-            Interface::Interface(const Eigen::Matrix<double, 6, 1>& alpha_diag = Eigen::Matrix<double, 6, 1>::Ones(),
-                                 const Eigen::Matrix<double, 6, 1>& Qc_diag = Eigen::Matrix<double, 6, 1>::Ones())
+            Interface::Interface(const Eigen::Matrix<double, 6, 1>& alpha_diag,
+                                 const Eigen::Matrix<double, 6, 1>& Qc_diag)
                 : slam::traj::const_acc::Interface(Qc_diag), alpha_diag_(alpha_diag) {}
 
             // -----------------------------------------------------------------------------

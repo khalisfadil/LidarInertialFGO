@@ -3,8 +3,8 @@
 #include <stdexcept>
 #include <Eigen/Dense>
 
-#include "source/include/LGMath/se3/Transformation.hpp"
-#include "source/include/LGMath/se3/Operations.hpp"
+#include "LGMath/se3/Transformation.hpp"
+#include "LGMath/se3/Operations.hpp"
 
 namespace slam {
     namespace liemath {

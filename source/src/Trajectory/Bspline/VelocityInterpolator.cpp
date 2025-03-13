@@ -1,6 +1,6 @@
-#include "source/include/Trajectory/Bspline/VelocityInterpolator.hpp"
+#include "Trajectory/Bspline/VelocityInterpolator.hpp"
 
-#include "source/include/Evaluable/vspace/Evaluables.hpp"
+#include "Evaluable/vspace/Evaluables.hpp"
 
 namespace slam {
     namespace traj {

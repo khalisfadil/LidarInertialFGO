@@ -1,4 +1,4 @@
-#include "source/include/Trajectory/Singer/AccelerationExtrapolator.hpp"
+#include "Trajectory/Singer/AccelerationExtrapolator.hpp"
 
 namespace slam {
     namespace traj {

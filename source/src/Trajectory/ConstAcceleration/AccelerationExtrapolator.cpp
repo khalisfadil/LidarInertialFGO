@@ -1,5 +1,5 @@
-#include "source/include/Trajectory/ConstAcceleration/AccelerationExtrapolator.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
+#include "Trajectory/ConstAcceleration/AccelerationExtrapolator.hpp"
+#include "Trajectory/ConstAcceleration/Helper.hpp"
 
 namespace slam {
     namespace traj {

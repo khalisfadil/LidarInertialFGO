@@ -1,24 +1,16 @@
 #include <iostream>
 
-#include "source/include/Problem/OptimizationProblem.hpp"
+#include "Problem/OptimizationProblem.hpp"
 
 namespace slam {
     namespace problem {
 
         // ----------------------------------------------------------------------------
-        // MakeShared
-        // ----------------------------------------------------------------------------
-
-        OptimizationProblem::Ptr OptimizationProblem::MakeShared() {
-            return std::make_shared<OptimizationProblem>();
-        }
-
-        // ----------------------------------------------------------------------------
-        // OptimizationProblem
+        // Constructor
         // ----------------------------------------------------------------------------
 
         OptimizationProblem::OptimizationProblem()
-            : Problem(), // ✅ Correctly initialize the base class
+            : Problem(),
             state_vector_(std::make_shared<StateVector>()) {}
 
         // ----------------------------------------------------------------------------
@@ -50,24 +42,38 @@ namespace slam {
         // ----------------------------------------------------------------------------
 
         double OptimizationProblem::cost() const noexcept {
-            double total_cost = 0.0;
+            struct CostReducer {
+                double total = 0.0;
+                const std::vector<slam::problem::costterm::BaseCostTerm::ConstPtr>& terms;
 
-            tbb::parallel_for(size_t(0), cost_terms_.size(), [&](size_t i) {
-                try {
-                    double cost_i = cost_terms_[i]->cost();
-                    if (!std::isnan(cost_i)) {
-                        total_cost += cost_i;
-                    } else {
-                        std::cerr << "[OptimizationProblem::cost] Warning: Ignored NaN cost term." << std::endl;
+                CostReducer(const std::vector<slam::problem::costterm::BaseCostTerm::ConstPtr>& t) : terms(t) {}
+                CostReducer(CostReducer& other, tbb::split) : terms(other.terms) {}
+
+                void operator()(const tbb::blocked_range<size_t>& range) {
+                    for (size_t i = range.begin(); i != range.end(); ++i) {
+                        try {
+                            double cost_i = terms[i]->cost();
+                            if (!std::isnan(cost_i)) {
+                                total += cost_i;
+                            } else {
+                                std::cerr << "[OptimizationProblem::cost] Warning: Ignored NaN cost term." << std::endl;
+                            }
+                        } catch (const std::exception &e) {
+                            std::cerr << "[OptimizationProblem::cost] Exception in cost term evaluation: " << e.what() << std::endl;
+                        } catch (...) {
+                            std::cerr << "[OptimizationProblem::cost] Unknown exception in cost term evaluation." << std::endl;
+                        }
                     }
-                } catch (const std::exception &e) {
-                    std::cerr << "[OptimizationProblem::cost] Exception in cost term evaluation: " << e.what() << std::endl;
-                } catch (...) {
-                    std::cerr << "[OptimizationProblem::cost] Unknown exception in cost term evaluation." << std::endl;
                 }
-            });
 
-            return total_cost;
+                void join(const CostReducer& other) {
+                    total += other.total;
+                }
+            };
+
+            CostReducer reducer(cost_terms_);
+            tbb::parallel_reduce(tbb::blocked_range<size_t>(0, cost_terms_.size()), reducer);
+            return reducer.total;
         }
 
         // ----------------------------------------------------------------------------
@@ -93,13 +99,10 @@ namespace slam {
         void OptimizationProblem::buildGaussNewtonTerms(
             Eigen::SparseMatrix<double>& approximate_hessian,
             Eigen::VectorXd& gradient_vector) const {
-
-            // Initialize block matrices
             std::vector<unsigned int> block_sizes = state_vector_->getStateBlockSizes();
             slam::blockmatrix::BlockSparseMatrix A_(block_sizes, true);
             slam::blockmatrix::BlockVector b_(block_sizes);
 
-            // Compute Hessians and gradients in parallel
             tbb::parallel_for(size_t(0), cost_terms_.size(), [&](size_t i) {
                 try {
                     cost_terms_[i]->buildGaussNewtonTerms(*state_vector_, &A_, &b_);
@@ -110,7 +113,6 @@ namespace slam {
                 }
             });
 
-            // Convert block matrix to Eigen sparse matrix
             approximate_hessian = A_.toEigen(false);
             gradient_vector = b_.toEigen();
         }

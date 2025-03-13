@@ -10,15 +10,15 @@
 #include <tbb/parallel_for.h>
 #include <tbb/mutex.h>
 
-#include "source/include/Evaluable/se3/Se3StateVariable.hpp"
-#include "source/include/Evaluable/StateVariable.hpp"
-#include "source/include/Evaluable/vspace/VSpaceStateVar.hpp"
-#include "source/include/Problem/CostTerm/BaseCostTerm.hpp"
-#include "source/include/Problem/LossFunc/LossFunc.hpp"
-#include "source/include/Problem/NoiseModel/StaticNoiseModel.hpp"
-#include "source/include/Problem/Problem.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Interface.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "Evaluable/se3/Se3StateVariable.hpp"
+#include "Evaluable/StateVariable.hpp"
+#include "Evaluable/vspace/VSpaceStateVar.hpp"
+#include "Problem/CostTerm/BaseCostTerm.hpp"
+#include "Problem/LossFunc/LossFunc.hpp"
+#include "Problem/NoiseModel/StaticNoiseModel.hpp"
+#include "Problem/Problem.hpp"
+#include "Trajectory/ConstAcceleration/Interface.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace problem {
@@ -35,9 +35,9 @@ namespace slam {
              * - **lin_acc**: Linear acceleration in the IMU frame (3D vector).
              */
             struct IMUData {
-                double timestamp = 0.0;                   ///< Measurement timestamp (seconds).
-                Eigen::Vector3d ang_vel = Eigen::Vector3d::Zero(); ///< Angular velocity (rad/s).
-                Eigen::Vector3d lin_acc = Eigen::Vector3d::Zero(); ///< Linear acceleration (m/s²).
+                double timestamp = 0.0;                                 ///< Measurement timestamp (seconds).
+                Eigen::Vector3d ang_vel = Eigen::Vector3d::Zero();      ///< Angular velocity (rad/s).
+                Eigen::Vector3d lin_acc = Eigen::Vector3d::Zero();      ///< Linear acceleration (m/s²).     
 
                 IMUData() = default;
                 IMUData(double timestamp_, Eigen::Vector3d ang_vel_, Eigen::Vector3d lin_acc_)
@@ -152,12 +152,12 @@ namespace slam {
                  * @param options          Struct containing additional cost term options (e.g., loss function settings).
                  */
                 IMUSuperCostTerm(const Interface::ConstPtr& interface, 
-                                const Time time1, const Time time2,
-                                const slam::eval::Evaluable<BiasType>::ConstPtr& bias1,
-                                const slam::eval::Evaluable<BiasType>::ConstPtr& bias2,
-                                const slam::eval::Evaluable<PoseType>::ConstPtr& transform_i_to_m_1,
-                                const slam::eval::Evaluable<PoseType>::ConstPtr& transform_i_to_m_2,
-                                const Options& options);
+                                    const Time time1, const Time time2,
+                                    const slam::eval::Evaluable<BiasType>::ConstPtr& bias1,
+                                    const slam::eval::Evaluable<BiasType>::ConstPtr& bias2,
+                                    const slam::eval::Evaluable<PoseType>::ConstPtr& transform_i_to_m_1,
+                                    const slam::eval::Evaluable<PoseType>::ConstPtr& transform_i_to_m_2,
+                                    const Options& options);
 
                 // -----------------------------------------------------------------------------
                 /**
@@ -252,6 +252,8 @@ namespace slam {
 
 
             private:
+
+                const Eigen::Matrix3d R = Eigen::Matrix3d::Identity();
 
                 // -----------------------------------------------------------------------------
                 /** @brief Shared pointer to the trajectory interface.

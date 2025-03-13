@@ -1,8 +1,8 @@
 #include <iostream>
 #include <iomanip>
 
-#include "source/include/Solver/DoglegGaussNewtonSolver.hpp"
-#include "source/include/Common/Timer.hpp"
+#include "Solver/DoglegGaussNewtonSolver.hpp"
+#include "Common/Timer.hpp"
 
 namespace slam {
     namespace solver {

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Eigen/Core>
-#include "source/include/Trajectory/ConstAcceleration/Variables.hpp"
+#include "Trajectory/ConstAcceleration/Variables.hpp"
 
 namespace slam {
     namespace traj {

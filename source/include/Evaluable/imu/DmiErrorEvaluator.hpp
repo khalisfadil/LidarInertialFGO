@@ -1,9 +1,9 @@
 #pragma once
 
 #include <Eigen/Core>
-#include "source/include/LGMath/LieGroupMath.hpp"
-#include "source/include/Evaluable/Evaluable.hpp"
-#include "source/include/Trajectory/Time.hpp"
+#include "LGMath/LieGroupMath.hpp"
+#include "Evaluable/Evaluable.hpp"
+#include "Trajectory/Time.hpp"
 
 namespace slam {
     namespace eval {

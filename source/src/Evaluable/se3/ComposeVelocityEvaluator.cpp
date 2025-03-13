@@ -1,4 +1,4 @@
-#include "source/include/Evaluable/se3/ComposeVelocityEvaluator.hpp"
+#include "Evaluable/se3/ComposeVelocityEvaluator.hpp"
 
 namespace slam {
     namespace eval {

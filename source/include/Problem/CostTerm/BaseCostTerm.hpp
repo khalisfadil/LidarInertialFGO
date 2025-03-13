@@ -3,10 +3,10 @@
 #include <memory>
 #include <tbb/concurrent_unordered_set.h>  // ✅ Use unordered set, not hash map
 
-#include "source/include/MatrixOperator/BlockSparseMatrix.hpp"
-#include "source/include/MatrixOperator/BlockVector.hpp"
-#include "source/include/Problem/StateVector.hpp"
-#include "source/include/Evaluable/StateKey.hpp"
+#include "MatrixOperator/BlockSparseMatrix.hpp"
+#include "MatrixOperator/BlockVector.hpp"
+#include "Problem/StateVector.hpp"
+#include "Evaluable/StateKey.hpp"
 
 namespace slam {
     namespace problem {
@@ -42,7 +42,7 @@ namespace slam {
                  * @brief Retrieves variable keys that this cost term depends on.
                  * @param keys Set of related variable keys.
                  */
-                using KeySet = tbb::concurrent_unordered_set<slam::eval::StateKey, slam::eval::StateKeyHash>;
+                using KeySet = tbb::concurrent_unordered_set<slam::eval::StateKey, slam::eval::StateKeyHasher, slam::eval::StateKeyEqual>;
                 virtual void getRelatedVarKeys(KeySet &keys) const noexcept = 0;
 
                 // -----------------------------------------------------------------------------

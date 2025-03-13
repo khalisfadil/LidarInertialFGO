@@ -1,10 +1,10 @@
-#include "source/include/Trajectory/ConstAcceleration/PoseInterpolator.hpp"
+#include "Trajectory/ConstAcceleration/PoseInterpolator.hpp"
 
-#include "source/include/Evaluable/se3/Evaluables.hpp"
-#include "source/include/Evaluable/vspace/Evaluables.hpp"
-#include "source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp"
-
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
+#include "Evaluable/se3/Evaluables.hpp"
+#include "Evaluable/vspace/Evaluables.hpp"
+#include "Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.hpp"
+#include "Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.hpp"
+#include "Trajectory/ConstAcceleration/Helper.hpp"
 
 namespace slam {
     namespace traj {
@@ -27,23 +27,21 @@ namespace slam {
             PoseInterpolator::PoseInterpolator(const Time& time,
                                                const Variable::ConstPtr& knot1,
                                                const Variable::ConstPtr& knot2)
-                : knot1_(knot1), knot2_(knot2) {
+                    : knot1_(knot1), knot2_(knot2) {
                 // Calculate time constants
                 const double T = (knot2->getTime() - knot1->getTime()).seconds();
                 const double tau = (time - knot1->getTime()).seconds();
                 const double kappa = (knot2->getTime() - time).seconds();
-
                 // Q and Transition matrix
                 const Eigen::Matrix<double, 6, 1> ones = Eigen::Matrix<double, 6, 1>::Ones();
-
-                // Precompute transition and covariance matrices
+                const auto Q_tau = getQ(tau, ones);
                 const auto Qinv_T = getQinv(T, ones);
+                const auto Tran_kappa = getTran(kappa);
+                const auto Tran_tau = getTran(tau);
                 const auto Tran_T = getTran(T);
-
-                // Compute interpolation values
-                omega_ = getQ(tau, ones) * getTran(kappa).transpose() * Qinv_T;
-                lambda_ = getTran(tau) - omega_ * Tran_T;
-
+                // Calculate interpolation values
+                omega_ = (Q_tau * Tran_kappa.transpose() * Qinv_T);
+                lambda_ = (Tran_tau - omega_ * Tran_T);
             }
 
             // -----------------------------------------------------------------------------
@@ -74,30 +72,27 @@ namespace slam {
             // -----------------------------------------------------------------------------
 
             auto PoseInterpolator::value() const -> OutType {
-                // Retrieve state values from knots
                 const auto T1 = knot1_->getPose()->value();
                 const auto w1 = knot1_->getVelocity()->value();
                 const auto dw1 = knot1_->getAcceleration()->value();
                 const auto T2 = knot2_->getPose()->value();
                 const auto w2 = knot2_->getVelocity()->value();
                 const auto dw2 = knot2_->getAcceleration()->value();
-
-                // Compute the relative transformation in se(3) Lie algebra
+                // Get se3 algebra of relative matrix
                 const auto xi_21 = (T2 / T1).vec();
+                // Calculate the 6x6 associated Jacobian
                 const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
-
-                // Efficiently compute interpolated values
-                Eigen::Matrix<double, 18, 1> combined;
-                combined << w1, dw1, xi_21, J_21_inv * w2, J_21_inv * dw2;
-                
-                Eigen::Matrix<double, 6, 1> xi_i1 = lambda_.block<6, 18>(0, 0) * combined;
-                Eigen::Matrix<double, 6, 1> xi_j1 = lambda_.block<6, 18>(6, 0) * combined;
-
-                // Compute interpolated transformation matrix using Lie group exponential map
-                const liemath::se3::Transformation T_i1(xi_i1, 0);
-
-                // Compute final interpolated pose T_i0
-                return T_i1 * T1;
+                // Calculate interpolated relative se3 algebra
+                const Eigen::Matrix<double, 6, 1> xi_i1 =
+                    lambda_.block<6, 6>(0, 6) * w1 + lambda_.block<6, 6>(0, 12) * dw1 +
+                    omega_.block<6, 6>(0, 0) * xi_21 +
+                    omega_.block<6, 6>(0, 6) * J_21_inv * w2 +
+                    omega_.block<6, 6>(0, 12) *
+                        (-0.5 * liemath::se3::curlyhat(J_21_inv * w2) * w2 + J_21_inv * dw2);
+                // Calculate interpolated relative transformation matrix
+                const liemath::se3::Transformation T_i1(xi_i1,0);  // Fixed: Use xi_i1 instead of xi_21
+                OutType T_i0 = T_i1 * T1;
+                return T_i0;
             }
 
             // -----------------------------------------------------------------------------

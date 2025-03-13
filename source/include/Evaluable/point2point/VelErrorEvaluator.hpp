@@ -1,7 +1,7 @@
 #pragma once
 
 #include <Eigen/Core>
-#include "source/include/Evaluable/Evaluable.hpp"
+#include "Evaluable/Evaluable.hpp"
 
 namespace slam {
     namespace eval {
@@ -79,13 +79,10 @@ namespace slam {
                                   StateKeyJacobians& jacs) const override;
                 
                 private:
-
-                    // Evaluated state
-                    const Evaluable<InType>::ConstPtr w_iv_inv_;
-                    // Measured velocity
-                    const Eigen::Vector2d vel_meas_;
-                    // Jacobian matrix
-                    Eigen::Matrix<double, 2, 6> D_;
+                    
+                    const Eigen::Vector2d vel_meas_;    ///< Measured velocity
+                    const Evaluable<InType>::ConstPtr w_iv_inv_;    ///< Evaluated state
+                    Eigen::Matrix<double, 2, 6> D_;     ///< Jacobian matrix
             };
 
             // -----------------------------------------------------------------------------

@@ -8,7 +8,7 @@
 #include <tbb/blocked_range.h>
 #include <tbb/concurrent_priority_queue.h>
 
-#include "source/include/Solver/GaussNewtonSolver.hpp"
+#include "Solver/GaussNewtonSolver.hpp"
 
 namespace slam {
     namespace solver {

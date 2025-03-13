@@ -12,9 +12,9 @@
 #include <unordered_set>
 
 
-#include "source/include/Problem/Problem.hpp"
-#include "source/include/Problem/StateVector.hpp"
-#include "source/include/Problem/CostTerm/BaseCostTerm.hpp"
+#include "Problem/Problem.hpp"
+#include "Problem/StateVector.hpp"
+#include "Problem/CostTerm/BaseCostTerm.hpp"
 
 namespace slam {
     namespace problem {
@@ -141,14 +141,16 @@ namespace slam {
                  */
                 struct Variable {
                     explicit Variable(const slam::eval::StateVariableBase::Ptr& v, bool m)
-                        : variable(v), marginalize(m) {}
+                        : variable(v), marginalize(m) {
+                        assert(v != nullptr && "State variable pointer must not be null");
+                        }
                     slam::eval::StateVariableBase::Ptr variable = nullptr;  ///< Pointer to the state variable.
                     bool marginalize = false;  ///< Flag indicating if the variable is marked for marginalization.
                 };
 
                 // -----------------------------------------------------------------------------
                 /** @brief Maps state keys to their corresponding variables. */
-                using VariableMap = tbb::concurrent_hash_map<slam::eval::StateKey, Variable, slam::eval::StateKeyHash>;
+                using VariableMap = tbb::concurrent_hash_map<slam::eval::StateKey, Variable, slam::eval::StateKeyHashCompare>;
                 VariableMap variables_;
 
                 // -----------------------------------------------------------------------------
@@ -157,7 +159,7 @@ namespace slam {
 
                 // -----------------------------------------------------------------------------
                 /** @brief Tracks variable dependencies for marginalization. */
-                using RelatedVarKeysMap = tbb::concurrent_hash_map<slam::eval::StateKey, KeySet, slam::eval::StateKeyHash>;
+                using RelatedVarKeysMap = tbb::concurrent_hash_map<slam::eval::StateKey, KeySet, slam::eval::StateKeyHashCompare>;
                 RelatedVarKeysMap related_var_keys_;
 
                 // -----------------------------------------------------------------------------

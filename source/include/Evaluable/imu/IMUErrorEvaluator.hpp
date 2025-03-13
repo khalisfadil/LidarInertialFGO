@@ -1,8 +1,8 @@
 #pragma once
 
 #include <Eigen/Core>
-#include "source/include/LGMath/LieGroupMath.hpp"
-#include "source/include/Evaluable/Evaluable.hpp"
+#include "LGMath/LieGroupMath.hpp"
+#include "Evaluable/Evaluable.hpp"
 
 namespace slam {
     namespace eval {

@@ -1,4 +1,4 @@
-#include "source/include/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.hpp"
+#include "Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.hpp"
 
 namespace slam {
     namespace traj {
@@ -70,18 +70,33 @@ namespace slam {
             void JVelocityEvaluator::backward(const Eigen::Ref<const Eigen::MatrixXd>& lhs,
                                             const eval::Node<OutType>::Ptr& node,
                                             eval::StateKeyJacobians& jacs) const {
+                // Early exit if neither variable is active
+                if (!xi_->active() && !velocity_->active()) return;
+
+                // Retrieve child nodes
                 const auto child1 = std::static_pointer_cast<eval::Node<XiInType>>(node->getChild(0));
                 const auto child2 = std::static_pointer_cast<eval::Node<VelInType>>(node->getChild(1));
 
-                if (xi_->active()) {
-                    Eigen::MatrixXd J_xi = -0.5 * lhs * liemath::se3::curlyhat(child2->value());
-                    xi_->backward(J_xi, child1, jacs);
-                }
+                // Precompute child values
+                const auto child1_val = child1->value();
+                const auto child2_val = child2->value();
 
-                if (velocity_->active()) {
-                    Eigen::MatrixXd J_v = lhs * liemath::se3::vec2jac(child1->value());
-                    velocity_->backward(J_v, child2, jacs);
-                }
+                // Lambda-based Jacobian updates
+                std::array<std::function<void()>, 2> updates = {
+                    [&]() {
+                        if (xi_->active()) {
+                            xi_->backward(lhs * (-0.5 * liemath::se3::curlyhat(child2_val)), child1, jacs);
+                        }
+                    },
+                    [&]() {
+                        if (velocity_->active()) {
+                            velocity_->backward(lhs * liemath::se3::vec2jac(child1_val), child2, jacs);
+                        }
+                    }
+                };
+
+                // Execute updates
+                for (const auto& update : updates) update();
             }
 
             // -----------------------------------------------------------------------------

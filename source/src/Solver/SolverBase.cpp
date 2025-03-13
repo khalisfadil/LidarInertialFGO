@@ -1,7 +1,7 @@
-#include "source/include/Solver/SolverBase.hpp"
+#include "Solver/SolverBase.hpp"
 
 #include <iostream>
-#include "source/include/Common/Timer.hpp"
+#include "Common/Timer.hpp"
 
 namespace slam {
     namespace solver {

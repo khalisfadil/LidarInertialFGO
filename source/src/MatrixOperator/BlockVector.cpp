@@ -1,108 +1,74 @@
+#include "MatrixOperator/BlockVector.hpp"
 #include <stdexcept>
-#include <sstream>
-
-#include "source/include/MatrixOperator/BlockVector.hpp"
+#include <string>
 
 namespace slam {
     namespace blockmatrix {
 
-        // ----------------------------------------------------------------------------
-        // Default Constructor
-        // ----------------------------------------------------------------------------
-        
-        BlockVector::BlockVector() = default;
+        // -----------------------------------------------------------------------------
+        // Constructors
+        // -----------------------------------------------------------------------------
 
-        // ----------------------------------------------------------------------------
-        // Block size constructor
-        // ----------------------------------------------------------------------------
+        BlockVector::BlockVector(const std::vector<unsigned int>& blockRowSizes)
+            : indexing_(blockRowSizes), data_(Eigen::VectorXd::Zero(indexing_.getTotalScalarSize())) {
+            if (blockRowSizes.empty()) {
+                throw std::invalid_argument("[BlockVector] Block row sizes cannot be empty.");
+            }
+        }
 
-        BlockVector::BlockVector(const std::vector<unsigned int>& blkRowSizes)
-            : indexing_(blkRowSizes), data_(Eigen::VectorXd::Zero(indexing_.getTotalScalarSize())) {}
-
-        // ----------------------------------------------------------------------------
-        // Block size (with data) constructor
-        // ----------------------------------------------------------------------------
-
-        BlockVector::BlockVector(const std::vector<unsigned int>& blkRowSizes, const Eigen::VectorXd& v)
-            : indexing_(blkRowSizes) {
+        BlockVector::BlockVector(const std::vector<unsigned int>& blockRowSizes, const Eigen::VectorXd& v)
+            : indexing_(blockRowSizes) {
+            if (blockRowSizes.empty()) {
+                throw std::invalid_argument("[BlockVector] Block row sizes cannot be empty.");
+            }
             setFromScalar(v);
         }
 
-        // ----------------------------------------------------------------------------
-        // Set internal data (ensures size consistency)
-        // ----------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------
+        // Data Manipulation
+        // -----------------------------------------------------------------------------
 
         void BlockVector::setFromScalar(const Eigen::VectorXd& v) {
             if (indexing_.getTotalScalarSize() != static_cast<unsigned int>(v.size())) {
-                throw std::invalid_argument("[BlockVector::setFromScalar] Size mismatch. Expected " +
-                                            std::to_string(indexing_.getTotalScalarSize()) + ", but got " +
-                                            std::to_string(v.size()) + ".");
+                throw std::invalid_argument("[BlockVector::setFromScalar] Size mismatch: expected " +
+                                            std::to_string(indexing_.getTotalScalarSize()) + ", got " +
+                                            std::to_string(v.size()));
             }
             data_ = v;
         }
 
-        // ----------------------------------------------------------------------------
-        // Get indexing object
-        // ----------------------------------------------------------------------------
-
-        const BlockDimensionIndexing& BlockVector::getIndexing() const {
-            return indexing_;
-        }
-
-        // ----------------------------------------------------------------------------
-        // Adds the vector to the block entry at index 'r'
-        // ----------------------------------------------------------------------------
-
         void BlockVector::add(unsigned int r, const Eigen::VectorXd& v) {
             if (r >= indexing_.getNumBlocksEntries()) {
                 throw std::out_of_range("[BlockVector::add] Row index " + std::to_string(r) +
-                                        " out of range. Maximum allowed is " +
-                                        std::to_string(indexing_.getNumBlocksEntries() - 1) + ".");
+                                        " exceeds maximum " + std::to_string(indexing_.getNumBlocksEntries() - 1));
             }
-
-            if (v.rows() != static_cast<int>(indexing_.getBlockSizeAt(r))) {
-                throw std::invalid_argument("[BlockVector::add] Block size mismatch at index " +
-                                            std::to_string(r) + ". Expected " +
-                                            std::to_string(indexing_.getBlockSizeAt(r)) + ", but got " +
-                                            std::to_string(v.rows()) + ".");
+            if (v.size() != static_cast<int>(indexing_.getBlockSizeAt(r))) {
+                throw std::invalid_argument("[BlockVector::add] Block size mismatch at index " + std::to_string(r) +
+                                            ": expected " + std::to_string(indexing_.getBlockSizeAt(r)) +
+                                            ", got " + std::to_string(v.size()));
             }
-
             data_.segment(indexing_.getCumulativeBlockSizeAt(r), indexing_.getBlockSizeAt(r)) += v;
         }
 
-        // ----------------------------------------------------------------------------
-        // Return block vector at index 'r'
-        // ----------------------------------------------------------------------------
+        // -----------------------------------------------------------------------------
+        // Data Access
+        // -----------------------------------------------------------------------------
 
         Eigen::VectorXd BlockVector::at(unsigned int r) const {
             if (r >= indexing_.getNumBlocksEntries()) {
                 throw std::out_of_range("[BlockVector::at] Row index " + std::to_string(r) +
-                                        " out of range in at().");
+                                        " exceeds maximum " + std::to_string(indexing_.getNumBlocksEntries() - 1));
             }
-
             return data_.segment(indexing_.getCumulativeBlockSizeAt(r), indexing_.getBlockSizeAt(r));
         }
-
-        // ----------------------------------------------------------------------------
-        // Return mapped block vector at index 'r'
-        // ----------------------------------------------------------------------------
 
         Eigen::Map<Eigen::VectorXd> BlockVector::mapAt(unsigned int r) {
             if (r >= indexing_.getNumBlocksEntries()) {
                 throw std::out_of_range("[BlockVector::mapAt] Row index " + std::to_string(r) +
-                                        " out of range in mapAt().");
+                                        " exceeds maximum " + std::to_string(indexing_.getNumBlocksEntries() - 1));
             }
-
-            return Eigen::Map<Eigen::VectorXd>(&data_[indexing_.getCumulativeBlockSizeAt(r)],
-                                            indexing_.getBlockSizeAt(r), 1);
-        }
-
-        // ----------------------------------------------------------------------------
-        // Convert to Eigen dense vector format
-        // ----------------------------------------------------------------------------
-
-        const Eigen::VectorXd& BlockVector::toEigen() const {
-            return data_;
+            return Eigen::Map<Eigen::VectorXd>(data_.data() + indexing_.getCumulativeBlockSizeAt(r),
+                                            indexing_.getBlockSizeAt(r));
         }
 
     }  // namespace blockmatrix

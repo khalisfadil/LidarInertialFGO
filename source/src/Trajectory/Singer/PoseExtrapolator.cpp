@@ -1,4 +1,4 @@
-#include "source/include/Trajectory/Singer/PoseExtrapolator.hpp"
+#include "Trajectory/Singer/PoseExtrapolator.hpp"
 
 
 namespace slam {

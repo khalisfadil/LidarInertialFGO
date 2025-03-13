@@ -1,6 +1,6 @@
 #pragma once
 
-#include "source/include/Problem/LossFunc/BaseLossFunc.hpp"
+#include "Problem/LossFunc/BaseLossFunc.hpp"
 
 namespace slam {
     namespace problem {

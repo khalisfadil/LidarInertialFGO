@@ -7,9 +7,9 @@
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
 
-#include "source/include/Problem/Problem.hpp"
-#include "source/include/Problem/StateVector.hpp"
-#include "source/include/Solver/GaussNewtonSolver.hpp"
+#include "Problem/Problem.hpp"
+#include "Problem/StateVector.hpp"
+#include "Solver/GaussNewtonSolver.hpp"
 
 namespace slam {
     namespace solver {

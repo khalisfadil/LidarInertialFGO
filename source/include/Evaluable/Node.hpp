@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <typeinfo>
 
-#include "source/include/Evaluable/NodeBase.hpp"
+#include "Evaluable/NodeBase.hpp"
 
 namespace slam {
     namespace eval{

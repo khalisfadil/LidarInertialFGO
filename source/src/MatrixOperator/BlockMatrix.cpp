@@ -1,4 +1,4 @@
-#include "source/include/MatrixOperator/BlockMatrix.hpp"
+#include "MatrixOperator/BlockMatrix.hpp"
 
 namespace slam {
     namespace blockmatrix {

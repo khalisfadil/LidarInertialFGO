@@ -1,4 +1,4 @@
-#include "source/include/Problem/SlidingWindowFilter.hpp"
+#include "Problem/SlidingWindowFilter.hpp"
 
 namespace slam {
     namespace problem {
@@ -22,30 +22,31 @@ namespace slam {
             state_vector_(std::make_shared<StateVector>()) {}
 
         // -----------------------------------------------------------------------------
-        // addStateVariable
+        // addStateVariable (Single Variable)
         // -----------------------------------------------------------------------------
 
         void SlidingWindowFilter::addStateVariable(const slam::eval::StateVariableBase::Ptr& variable) {
-            addStateVariable(std::vector<slam::eval::StateVariableBase::Ptr>{variable});
+            VariableMap::accessor accessor;
+            if (!variables_.insert(accessor, {variable->key(), Variable(variable, false)})) {
+                throw std::runtime_error("[SlidingWindowFilter::addStateVariable] Duplicate variable key detected.");
+            }
+            variable_queue_.push_back(variable->key());
+            RelatedVarKeysMap::accessor rel_accessor;
+            related_var_keys_.insert(rel_accessor, variable->key());
+            rel_accessor->second.insert(variable->key());
         }
 
         // -----------------------------------------------------------------------------
-        // addStateVariable
+        // addStateVariable (Vector of Variables)
         // -----------------------------------------------------------------------------
 
         void SlidingWindowFilter::addStateVariable(const std::vector<slam::eval::StateVariableBase::Ptr>& variables) {
             for (const auto& variable : variables) {
-                // Thread-safe insertion into variables_
                 VariableMap::accessor accessor;
-                if (!variables_.insert(accessor, variable->key())) {
+                if (!variables_.insert(accessor, {variable->key(), Variable(variable, false)})) {
                     throw std::runtime_error("[SlidingWindowFilter::addStateVariable] Duplicate variable key detected.");
                 }
-                accessor->second = Variable(variable, false);  // Set variable entry
-
-                // Thread-safe append to concurrent_vector
                 variable_queue_.push_back(variable->key());
-
-                // Thread-safe insertion into related_var_keys_
                 RelatedVarKeysMap::accessor rel_accessor;
                 related_var_keys_.insert(rel_accessor, variable->key());
                 rel_accessor->second.insert(variable->key());
@@ -53,7 +54,7 @@ namespace slam {
         }
 
         // -----------------------------------------------------------------------------
-        // marginalizeVariable
+        // marginalizeVariable (Single Variable)
         // -----------------------------------------------------------------------------
 
         void SlidingWindowFilter::marginalizeVariable(const slam::eval::StateVariableBase::Ptr& variable) {
@@ -61,7 +62,7 @@ namespace slam {
         }
 
         // -----------------------------------------------------------------------------
-        // marginalizeVariable
+        // marginalizeVariable (Vector of Variables)
         // -----------------------------------------------------------------------------
 
         void SlidingWindowFilter::marginalizeVariable(const std::vector<slam::eval::StateVariableBase::Ptr>& variables) {
@@ -125,7 +126,8 @@ namespace slam {
             cost_terms_.assign(active_cost_terms.begin(), active_cost_terms.end());
 
             // Step 5: Perform marginalization (Schur Complement)
-            Eigen::MatrixXd A(A_.toEigen(false).selfadjointView<Eigen::Upper>());
+            Eigen::MatrixXd Aupper(A_.toEigen(false));
+            Eigen::MatrixXd A(Aupper.selfadjointView<Eigen::Upper>());
             Eigen::VectorXd b(b_.toEigen());
 
             if (!fixed_A_.isZero()) {
@@ -223,7 +225,7 @@ namespace slam {
         }
 
         // -----------------------------------------------------------------------------
-        // CgetNumberOfVariables
+        // getNumberOfVariables
         // -----------------------------------------------------------------------------
 
         unsigned int SlidingWindowFilter::getNumberOfVariables() const noexcept {

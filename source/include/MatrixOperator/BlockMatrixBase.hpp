@@ -1,12 +1,11 @@
 #pragma once
 
-#include <stdexcept>
 #include <vector>
 #include <Eigen/Core>
 #include <Eigen/Sparse>
 
-#include "source/include/MatrixOperator/BlockDimensionIndexing.hpp"
-#include "source/include/MatrixOperator/BlockMatrixIndexing.hpp"
+#include "MatrixOperator/BlockDimensionIndexing.hpp"
+#include "MatrixOperator/BlockMatrixIndexing.hpp"
 
 namespace slam {
     namespace blockmatrix {
@@ -14,108 +13,101 @@ namespace slam {
         // -----------------------------------------------------------------------------
         /**
          * @class BlockMatrixBase
-         * @brief Base class for managing a block matrix structure.
-         * 
-         * - Supports **rectangular and symmetric** block matrices.
-         * - Provides **block-wise access and manipulation**.
-         * - Designed for **factor graph-based optimization**.
+         * @brief Base class for managing block matrix structures in factor graph optimization.
+         *
+         * Supports both symmetric (square) and rectangular block matrices, providing block-wise access
+         * and manipulation. Derived classes must implement specific matrix operations.
          */
         class BlockMatrixBase {
-            
-            public:
-                // -----------------------------------------------------------------------------
-                /** @brief Default constructor. */
-                BlockMatrixBase() = default;
+        public:
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Constructor for symmetric block matrices (square).
-                 * @param blockSizes Vector of block sizes.
-                 * @param symmetric If true, assumes scalar-level symmetry.
-                 */
-                BlockMatrixBase(const std::vector<unsigned int>& blockSizes, bool symmetric);
+            // -----------------------------------------------------------------------------
+            /** @brief Default constructor. */
+            BlockMatrixBase() = default;
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Constructor for rectangular block matrices.
-                 * @param blockRowSizes Vector of row block sizes.
-                 * @param blockColumnSizes Vector of column block sizes.
-                 */
-                BlockMatrixBase(const std::vector<unsigned int>& blockRowSizes,
-                                const std::vector<unsigned int>& blockColumnSizes);
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Constructs a symmetric (square) block matrix.
+             * @param blockSizes Vector of block sizes (defines square matrix).
+             * @param symmetric If true, assumes scalar-level symmetry.s
+             * @throws std::invalid_argument If blockSizes is empty.
+             */
+            BlockMatrixBase(const std::vector<unsigned int>& blockSizes, bool symmetric);
 
-                // -----------------------------------------------------------------------------
-                /** @brief Virtual destructor (required for proper cleanup in derived classes). */
-                virtual ~BlockMatrixBase() = default;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Constructs a rectangular block matrix.
+             * @param blockRowSizes Vector of row block sizes.
+             * @param blockColumnSizes Vector of column block sizes.
+             * @throws std::invalid_argument If either blockRowSizes or blockColumnSizes is empty.
+             */
+            BlockMatrixBase(const std::vector<unsigned int>& blockRowSizes,
+                            const std::vector<unsigned int>& blockColumnSizes);
 
-                // -----------------------------------------------------------------------------
-                /** @brief Zero all matrix entries (must be implemented in derived class). */
-                virtual void zero() = 0;
+            // -----------------------------------------------------------------------------
+            /** @brief Virtual destructor for proper cleanup in derived classes. */
+            virtual ~BlockMatrixBase() noexcept = default;
 
-                // -----------------------------------------------------------------------------
-                /** @brief Get the block matrix indexing structure. */
-                const BlockMatrixIndexing& getIndexing() const { return indexing_; }
+            // -----------------------------------------------------------------------------
+            /** @brief Zeros all matrix entries (must be implemented by derived classes). */
+            virtual void zero() = 0;
 
-                // -----------------------------------------------------------------------------
-                /** @brief Check if the matrix is symmetric at the scalar level. */
-                bool isScalarSymmetric() const { return symmetric_; }
+            // -----------------------------------------------------------------------------
+            /** @brief Returns the block matrix indexing structure. */
+            const BlockMatrixIndexing& getIndexing() const noexcept { return indexing_; }
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Adds a matrix to the block entry at (r, c).
-                 * @param r Block row index.
-                 * @param c Block column index.
-                 * @param m Matrix to add (must match block size).
-                 */
-                virtual void add(unsigned int r, unsigned int c, const Eigen::MatrixXd& m) = 0;
+            // -----------------------------------------------------------------------------
+            /** @brief Checks if the matrix is symmetric at the scalar level. */
+            bool isScalarSymmetric() const noexcept { return symmetric_; }
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Access a reference to the matrix at (r, c).
-                 * @param r Block row index.
-                 * @param c Block column index.
-                 * @return Reference to the Eigen matrix.
-                 */
-                virtual Eigen::MatrixXd& at(unsigned int r, unsigned int c) = 0;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Adds a matrix to the block entry at (r, c).
+             * @param r Block row index.
+             * @param c Block column index.
+             * @param m Matrix to add (must match block size).
+             */
+            virtual void add(unsigned int r, unsigned int c, const Eigen::MatrixXd& m) = 0;
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Get a copy of the matrix at (r, c).
-                 * @param r Block row index.
-                 * @param c Block column index.
-                 * @return Copy of the Eigen matrix at (r, c).
-                 */
-                virtual Eigen::MatrixXd copyAt(unsigned int r, unsigned int c) const = 0;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Accesses a reference to the matrix at (r, c).
+             * @param r Block row index.
+             * @param c Block column index.
+             * @return Reference to the Eigen matrix.
+             */
+            virtual Eigen::MatrixXd& at(unsigned int r, unsigned int c) = 0;
 
-            private:
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Returns a copy of the matrix at (r, c).
+             * @param r Block row index.
+             * @param c Block column index.
+             * @return Copy of the Eigen matrix.
+             */
+            virtual Eigen::MatrixXd copyAt(unsigned int r, unsigned int c) const = 0;
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Helper function to initialize symmetric block indexing.
-                 * @param blockSizes Vector of block sizes.
-                 */
-                void initializeSymmetricIndexing(const std::vector<unsigned int>& blockSizes);
+        protected:
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Helper function to initialize rectangular block indexing.
-                 * @param blockRowSizes Vector of row block sizes.
-                 * @param blockColumnSizes Vector of column block sizes.
-                 */
-                void initializeRectangularIndexing(const std::vector<unsigned int>& blockRowSizes,
-                                                const std::vector<unsigned int>& blockColumnSizes);
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Initializes indexing for a symmetric matrix.
+             * @param blockSizes Vector of block sizes.
+             */
+            void initializeSymmetricIndexing(const std::vector<unsigned int>& blockSizes);
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief True if the matrix is symmetric at the scalar level.
-                 */
-                bool symmetric_ = false;
+            // -----------------------------------------------------------------------------
+            /**
+             * @brief Initializes indexing for a rectangular matrix.
+             * @param blockRowSizes Vector of row block sizes.
+             * @param blockColumnSizes Vector of column block sizes.
+             */
+            void initializeRectangularIndexing(const std::vector<unsigned int>& blockRowSizes,
+                                            const std::vector<unsigned int>& blockColumnSizes);
 
-                // -----------------------------------------------------------------------------
-                /**
-                 * @brief Handles block-wise indexing.
-                 */
-                BlockMatrixIndexing indexing_;
+            bool symmetric_ = false;           ///< True if the matrix is symmetric at the scalar level.
+            BlockMatrixIndexing indexing_;     ///< Manages block-wise indexing.
         };
-    } // namespace blockmatrix
-} // namespace slam
+
+    }  // namespace blockmatrix
+}  // namespace slam

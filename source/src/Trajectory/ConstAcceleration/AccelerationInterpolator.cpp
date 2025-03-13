@@ -1,8 +1,8 @@
-#include "source/include/Trajectory/ConstAcceleration/AccelerationInterpolator.hpp"
+#include "Trajectory/ConstAcceleration/AccelerationInterpolator.hpp"
 
-#include "source/include/Evaluable/se3/Evaluables.hpp"
-#include "source/include/Evaluable/vspace/Evaluables.hpp"
-#include "source/include/Trajectory/ConstAcceleration/Helper.hpp"
+#include "Evaluable/se3/Evaluables.hpp"
+#include "Evaluable/vspace/Evaluables.hpp"
+#include "Trajectory/ConstAcceleration/Helper.hpp"
 
 namespace slam {
     namespace traj {
@@ -72,26 +72,40 @@ namespace slam {
 
             auto AccelerationInterpolator::value() const -> OutType {
                 // Retrieve state values
-                const auto xi_21 = (knot2_->getPose()->value() / knot1_->getPose()->value()).vec();
-                const Eigen::Matrix<double, 6, 6> J_21_inv = slam::liemath::se3::vec2jacinv(xi_21);
+                const auto T1 = knot1_->getPose()->value();
+                const auto T2 = knot2_->getPose()->value();
+                const auto w1 = knot1_->getVelocity()->value();
+                const auto dw1 = knot1_->getAcceleration()->value();
+                const auto w2 = knot2_->getVelocity()->value();
+                const auto dw2 = knot2_->getAcceleration()->value();
+
+                // Compute relative pose and Jacobian
+                const Eigen::Matrix<double, 6, 1> xi_21 = (T2 / T1).vec();
+                const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
 
                 // Precompute reused terms
-                const auto w1 = knot1_->getVelocity()->value(), dw1 = knot1_->getAcceleration()->value();
-                const auto w2 = knot2_->getVelocity()->value(), dw2 = knot2_->getAcceleration()->value();
                 const Eigen::Matrix<double, 6, 1> xi_21_Jw2 = J_21_inv * w2;
-                const Eigen::Matrix<double, 6, 1> omega_12 = -0.5 * slam::liemath::se3::curlyhat(xi_21_Jw2) * w2 + J_21_inv * dw2;
+                const Eigen::Matrix<double, 6, 1> omega_12 = -0.5 * liemath::se3::curlyhat(xi_21_Jw2) * w2 + J_21_inv * dw2;
 
-                // Lambda function to compute xi values
-                auto compute_xi = [&](int r) {
-                    return lambda_.block<6, 6>(r, 6) * w1 + lambda_.block<6, 6>(r, 12) * dw1 +
-                        omega_.block<6, 6>(r, 0) * xi_21 + omega_.block<6, 6>(r, 6) * xi_21_Jw2 +
+                // Lambda to compute xi values efficiently
+                auto compute_xi = [&](int r) -> Eigen::Matrix<double, 6, 1> {
+                    return lambda_.block<6, 6>(r, 6) * w1 +
+                        lambda_.block<6, 6>(r, 12) * dw1 +
+                        omega_.block<6, 6>(r, 0) * xi_21 +
+                        omega_.block<6, 6>(r, 6) * xi_21_Jw2 +
                         omega_.block<6, 6>(r, 12) * omega_12;
                 };
 
                 // Compute interpolated values
-                const Eigen::Matrix<double, 6, 6> J_i1 = slam::liemath::se3::vec2jac(compute_xi(0));
-                const auto w_i = J_i1 * compute_xi(6);
-                return J_i1 * (compute_xi(12) + 0.5 * slam::liemath::se3::curlyhat(compute_xi(6)) * w_i);
+                const Eigen::Matrix<double, 6, 1> xi_i1 = compute_xi(0);
+                const Eigen::Matrix<double, 6, 1> xi_j1 = compute_xi(6);
+                const Eigen::Matrix<double, 6, 1> xi_k1 = compute_xi(12);
+
+                const Eigen::Matrix<double, 6, 6> J_i1 = liemath::se3::vec2jac(xi_i1);
+                const Eigen::Matrix<double, 6, 1> w_i = J_i1 * xi_j1;
+                const Eigen::Matrix<double, 6, 1> correction = 0.5 * liemath::se3::curlyhat(xi_j1) * w_i;
+
+                return J_i1 * (xi_k1 + correction);
             }
 
             // -----------------------------------------------------------------------------
@@ -100,38 +114,42 @@ namespace slam {
 
             auto AccelerationInterpolator::forward() const -> slam::eval::Node<OutType>::Ptr {
                 // Retrieve state values
-                const auto T1 = knot1_->getPose()->forward(), T2 = knot2_->getPose()->forward();
-                const auto w1 = knot1_->getVelocity()->forward(), dw1 = knot1_->getAcceleration()->forward();
-                const auto w2 = knot2_->getVelocity()->forward(), dw2 = knot2_->getAcceleration()->forward();
+                const auto T1 = knot1_->getPose()->forward();
+                const auto w1 = knot1_->getVelocity()->forward();
+                const auto dw1 = knot1_->getAcceleration()->forward();
+                const auto T2 = knot2_->getPose()->forward();
+                const auto w2 = knot2_->getVelocity()->forward();
+                const auto dw2 = knot2_->getAcceleration()->forward();
 
                 // Compute se(3) algebra of relative transformation and its Jacobian
-                const auto xi_21 = (T2->value() / T1->value()).vec();
+                const Eigen::Matrix<double, 6, 1> xi_21 = (T2->value() / T1->value()).vec();
                 const Eigen::Matrix<double, 6, 6> J_21_inv = slam::liemath::se3::vec2jacinv(xi_21);
 
-                // Precompute reused terms
-                const auto w1_val = w1->value(), dw1_val = dw1->value();
-                const auto w2_val = w2->value(), dw2_val = dw2->value();
+                // Precompute reused terms with explicit types
+                const Eigen::Matrix<double, 6, 1> w1_val = w1->value();
+                const Eigen::Matrix<double, 6, 1> dw1_val = dw1->value();
+                const Eigen::Matrix<double, 6, 1> w2_val = w2->value();
+                const Eigen::Matrix<double, 6, 1> dw2_val = dw2->value();
                 const Eigen::Matrix<double, 6, 1> xi_21_Jw2 = J_21_inv * w2_val;
                 const Eigen::Matrix<double, 6, 1> omega_12 = -0.5 * slam::liemath::se3::curlyhat(xi_21_Jw2) * w2_val + J_21_inv * dw2_val;
 
-                // Compute xi values using lambda function
-                auto compute_xi = [&](int r) {
+                // Compute xi values using lambda function with explicit return type
+                auto compute_xi = [&](int r) -> Eigen::Matrix<double, 6, 1> {
                     return lambda_.block<6, 6>(r, 6) * w1_val + lambda_.block<6, 6>(r, 12) * dw1_val +
                         omega_.block<6, 6>(r, 0) * xi_21 + omega_.block<6, 6>(r, 6) * xi_21_Jw2 +
                         omega_.block<6, 6>(r, 12) * omega_12;
                 };
 
-                // Compute interpolated values
+                // Compute interpolated values with explicit types
                 const Eigen::Matrix<double, 6, 6> J_i1 = slam::liemath::se3::vec2jac(compute_xi(0));
-                const auto w_i = J_i1 * compute_xi(6);
-                OutType dw_i = J_i1 * (compute_xi(12) + 0.5 * slam::liemath::se3::curlyhat(compute_xi(6)) * w_i);
+                const Eigen::Matrix<double, 6, 1> w_i = J_i1 * compute_xi(6);
+                const Eigen::Matrix<double, 6, 1> xi_k1 = compute_xi(12);
+                const Eigen::Matrix<double, 6, 1> correction = 0.5 * slam::liemath::se3::curlyhat(compute_xi(6)) * w_i;
+                const OutType dw_i = J_i1 * (xi_k1 + correction);
 
                 // Create node and add children efficiently
                 const auto node = slam::eval::Node<OutType>::MakeShared(dw_i);
-                
-                // Explicitly define an iterable type
                 std::initializer_list<slam::eval::NodeBase::Ptr> children = {T1, w1, dw1, T2, w2, dw2};
-
                 for (const auto& child : children) {
                     node->addChild(child);
                 }
@@ -149,63 +167,117 @@ namespace slam {
                 if (!active()) return;
 
                 // Retrieve state values
-                const auto T1 = knot1_->getPose()->value(), T2 = knot2_->getPose()->value();
-                const auto w1 = knot1_->getVelocity()->value(), dw1 = knot1_->getAcceleration()->value();
-                const auto w2 = knot2_->getVelocity()->value(), dw2 = knot2_->getAcceleration()->value();
+                const auto T1 = knot1_->getPose()->value();
+                const auto w1 = knot1_->getVelocity()->value();
+                const auto dw1 = knot1_->getAcceleration()->value();
+                const auto T2 = knot2_->getPose()->value();
+                const auto w2 = knot2_->getVelocity()->value();
+                const auto dw2 = knot2_->getAcceleration()->value();
 
-                // Compute se(3) algebra of relative transformation and its Jacobian
-                const auto xi_21 = (T2 / T1).vec();
-                const Eigen::Matrix<double, 6, 6> J_21_inv = slam::liemath::se3::vec2jacinv(xi_21);
+                // Compute SE(3) algebra and Jacobian
+                const Eigen::Matrix<double, 6, 1> xi_21 = (T2 / T1).vec();
+                const Eigen::Matrix<double, 6, 6> J_21_inv = liemath::se3::vec2jacinv(xi_21);
 
-                // Compute xi values using lambda_
-                Eigen::Matrix<double, 18, 1> combined;
-                combined << w1, dw1, xi_21, J_21_inv * w2, J_21_inv * dw2;
-                auto compute_xi = [&](int r) { return lambda_.block<6, 18>(r, 0) * combined; };
+                // Precompute reused terms
+                const Eigen::Matrix<double, 6, 1> J_w2 = J_21_inv * w2;
+                const Eigen::Matrix<double, 6, 1> omega_12 = -0.5 * liemath::se3::curlyhat(J_w2) * w2 + J_21_inv * dw2;
 
-                const auto xi_i1 = compute_xi(0), xi_j1 = compute_xi(6), xi_k1 = compute_xi(12);
-
-                // Compute transformation and Jacobians
-                const slam::liemath::se3::Transformation T_21_obj(xi_21, 0);
-                const Eigen::Matrix<double, 6, 6> J_i1 = slam::liemath::se3::vec2jac(xi_i1);
-                const auto w_i = J_i1 * xi_j1;
-
-                // Precompute common Jacobian expressions
-                const auto J_prep_2 = J_i1 * (-0.5 * slam::liemath::se3::curlyhat(w_i) +
-                                            0.5 * slam::liemath::se3::curlyhat(xi_j1) * J_i1);
-                const auto J_prep_3 = -0.25 * J_i1 * slam::liemath::se3::curlyhat(xi_j1) * slam::liemath::se3::curlyhat(xi_j1) -
-                                    0.5 * slam::liemath::se3::curlyhat(xi_k1 + 0.5 * slam::liemath::se3::curlyhat(xi_j1) * w_i);
-
-                // Compute partial Jacobian matrix
-                const auto w = J_i1 * (omega_.block<6, 18>(12, 0) + 
-                                    omega_.block<6, 18>(12, 6) * 0.5 * slam::liemath::se3::curlyhat(w2) + 
-                                    omega_.block<6, 18>(12, 12) * 0.5 * slam::liemath::se3::curlyhat(dw2)) * J_21_inv;
-
-                // Process Jacobians efficiently using a lambda-based approach
-                std::array<std::function<void()>, 6> jacobian_updates = {
-                    [&] { if (knot1_->getPose()->active()) 
-                            knot1_->getPose()->backward(lhs * (-w * T_21_obj.adjoint()), 
-                                std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(0)), jacs); },
-                    [&] { if (knot2_->getPose()->active()) 
-                            knot2_->getPose()->backward(lhs * w, 
-                                std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(3)), jacs); },
-                    [&] { if (knot1_->getVelocity()->active()) 
-                            knot1_->getVelocity()->backward(lhs * (J_i1 * lambda_.block<6, 6>(12, 6) +
-                                                                J_prep_2 * lambda_.block<6, 6>(6, 6) +
-                                                                J_prep_3 * lambda_.block<6, 6>(0, 6)), 
-                                std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(1)), jacs); },
-                    [&] { if (knot2_->getVelocity()->active()) 
-                            knot2_->getVelocity()->backward(lhs * (J_i1 * omega_.block<6, 6>(12, 6) * J_21_inv +
-                                                                J_prep_2 * omega_.block<6, 6>(6, 6) * J_21_inv +
-                                                                J_prep_3 * omega_.block<6, 6>(0, 6) * J_21_inv), 
-                                std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(4)), jacs); },
-                    [&] { if (knot2_->getAcceleration()->active()) 
-                            knot2_->getAcceleration()->backward(lhs * (J_i1 * omega_.block<6, 6>(12, 12) * J_21_inv +
-                                                                    J_prep_2 * omega_.block<6, 6>(6, 12) * J_21_inv +
-                                                                    J_prep_3 * omega_.block<6, 6>(0, 12) * J_21_inv), 
-                                std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(5)), jacs); }
+                // Lambda to compute xi values
+                auto compute_xi = [&](int r) -> Eigen::Matrix<double, 6, 1> {
+                    return lambda_.block<6, 6>(r, 6) * w1 + lambda_.block<6, 6>(r, 12) * dw1 +
+                        omega_.block<6, 6>(r, 0) * xi_21 + omega_.block<6, 6>(r, 6) * J_w2 +
+                        omega_.block<6, 6>(r, 12) * omega_12;
                 };
 
-                for (const auto& update : jacobian_updates) update();
+                // Compute interpolated values
+                const Eigen::Matrix<double, 6, 1> xi_i1 = compute_xi(0);
+                const Eigen::Matrix<double, 6, 1> xi_j1 = compute_xi(6);
+                const Eigen::Matrix<double, 6, 1> xi_k1 = compute_xi(12);
+
+                const Eigen::Matrix<double, 6, 6> J_i1 = liemath::se3::vec2jac(xi_i1);
+                const Eigen::Matrix<double, 6, 1> w_i = J_i1 * xi_j1;
+                const Eigen::Matrix<double, 6, 6> curly_xi_j1 = liemath::se3::curlyhat(xi_j1);
+                const Eigen::Matrix<double, 6, 1> correction = 0.5 * curly_xi_j1 * w_i;
+
+                // Precompute common Jacobian expressions
+                const Eigen::Matrix<double, 6, 6> J_prep_2 = J_i1 * (-0.5 * liemath::se3::curlyhat(w_i) + 0.5 * curly_xi_j1 * J_i1);
+                const Eigen::Matrix<double, 6, 6> J_prep_3 = -0.25 * J_i1 * curly_xi_j1 * curly_xi_j1 -
+                                                            0.5 * liemath::se3::curlyhat(xi_k1 + correction);
+
+                // Precompute terms for Jacobians
+                const Eigen::Matrix<double, 6, 6> I = Eigen::Matrix<double, 6, 6>::Identity();
+                const Eigen::Matrix<double, 6, 6> curly_w2 = liemath::se3::curlyhat(w2);
+                const Eigen::Matrix<double, 6, 6> curly_w2_sq = 0.25 * curly_w2 * curly_w2;
+                const Eigen::Matrix<double, 6, 6> curly_dw2 = 0.5 * liemath::se3::curlyhat(dw2);
+                const Eigen::Matrix<double, 6, 6> curly_diff = -0.5 * (liemath::se3::curlyhat(J_w2) - curly_w2 * J_21_inv);
+
+                const liemath::se3::Transformation T_21(xi_21,0);
+                const Eigen::Matrix<double, 6, 6> T_21_adj = T_21.adjoint();
+
+                // Precompute common Jacobian components
+                auto compute_jacobian = [&](int r0, int r6, int r12, bool use_omega, bool use_diff = false) -> Eigen::Matrix<double, 6, 6> {
+                    const auto& matrix = use_omega ? omega_ : lambda_;
+                    Eigen::Matrix<double, 6, 6> result = J_i1 * matrix.block<6, 6>(12, r12);
+                    if (use_diff) result += J_i1 * matrix.block<6, 6>(12, r6) * J_21_inv;
+                    else result = result * J_21_inv;
+                    result += J_prep_2 * matrix.block<6, 6>(6, r12) * J_21_inv +
+                            J_prep_3 * matrix.block<6, 6>(0, r12) * J_21_inv;
+                    if (use_diff) result += (J_prep_2 * matrix.block<6, 6>(6, r6) + J_prep_3 * matrix.block<6, 6>(0, r6)) * J_21_inv;
+                    return result;
+                };
+
+                const Eigen::Matrix<double, 6, 6> w = J_i1 * (omega_.block<6, 6>(12, 0) * I +
+                                                            omega_.block<6, 6>(12, 6) * 0.5 * curly_w2 +
+                                                            omega_.block<6, 6>(12, 12) * (curly_w2_sq + curly_dw2)) * J_21_inv +
+                                                    J_prep_2 * (omega_.block<6, 6>(6, 0) * I +
+                                                                omega_.block<6, 6>(6, 6) * 0.5 * curly_w2 +
+                                                                omega_.block<6, 6>(6, 12) * (curly_w2_sq + curly_dw2)) * J_21_inv +
+                                                    J_prep_3 * (omega_.block<6, 6>(0, 0) * I +
+                                                                omega_.block<6, 6>(0, 6) * 0.5 * curly_w2 +
+                                                                omega_.block<6, 6>(0, 12) * (curly_w2_sq + curly_dw2)) * J_21_inv;
+
+                // Lambda-based Jacobian updates
+                std::array<std::function<void()>, 6> updates = {
+                    [&]() {
+                        if (knot1_->getPose()->active()) {
+                            const auto T1_ = std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(0));
+                            knot1_->getPose()->backward(lhs * (-w * T_21_adj), T1_, jacs);
+                        }
+                    },
+                    [&]() {
+                        if (knot2_->getPose()->active()) {
+                            const auto T2_ = std::static_pointer_cast<slam::eval::Node<InPoseType>>(node->getChild(3));
+                            knot2_->getPose()->backward(lhs * w, T2_, jacs);
+                        }
+                    },
+                    [&]() {
+                        if (knot1_->getVelocity()->active()) {
+                            const auto w1_ = std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(1));
+                            knot1_->getVelocity()->backward(lhs * compute_jacobian(0, 6, 6, false), w1_, jacs);
+                        }
+                    },
+                    [&]() {
+                        if (knot2_->getVelocity()->active()) {
+                            const auto w2_ = std::static_pointer_cast<slam::eval::Node<InVelType>>(node->getChild(4));
+                            knot2_->getVelocity()->backward(lhs * (compute_jacobian(0, 6, 12, true, true) + J_i1 * omega_.block<6, 6>(12, 12) * curly_diff), w2_, jacs);
+                        }
+                    },
+                    [&]() {
+                        if (knot1_->getAcceleration()->active()) {
+                            const auto dw1_ = std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(2));
+                            knot1_->getAcceleration()->backward(lhs * compute_jacobian(0, 12, 12, false), dw1_, jacs);
+                        }
+                    },
+                    [&]() {
+                        if (knot2_->getAcceleration()->active()) {
+                            const auto dw2_ = std::static_pointer_cast<slam::eval::Node<InAccType>>(node->getChild(5));
+                            knot2_->getAcceleration()->backward(lhs * compute_jacobian(0, 12, 12, true), dw2_, jacs);
+                        }
+                    }
+                };
+
+                // Execute updates
+                for (const auto& update : updates) update();
             }
 
         }  // namespace const_acc

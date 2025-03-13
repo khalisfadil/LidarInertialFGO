@@ -3,7 +3,7 @@
 #include <Eigen/Core>
 #include <memory>
 
-#include "source/include/Solver/GaussNewtonSolver.hpp"
+#include "Solver/GaussNewtonSolver.hpp"
 
 namespace slam {
     namespace solver {

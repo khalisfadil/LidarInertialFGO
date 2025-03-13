@@ -1,4 +1,4 @@
-#include "source/include/LGMath/r3/Operations.hpp"
+#include "LGMath/r3/Operations.hpp"
 
 namespace slam {
     namespace liemath {

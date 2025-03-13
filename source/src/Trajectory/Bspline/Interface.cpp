@@ -1,10 +1,10 @@
-#include "source/include/Trajectory/Bspline/Interface.hpp"
+#include "Trajectory/Bspline/Interface.hpp"
 
-#include "source/include/Evaluable/se3/Evaluables.hpp"
-#include "source/include/Evaluable/vspace/Evaluables.hpp"
-#include "source/include/Problem/LossFunc/LossFunc.hpp"
-#include "source/include/Problem/NoiseModel/StaticNoiseModel.hpp"
-#include "source/include/Trajectory/Bspline/VelocityInterpolator.hpp"
+#include "Evaluable/se3/Evaluables.hpp"
+#include "Evaluable/vspace/Evaluables.hpp"
+#include "Problem/LossFunc/LossFunc.hpp"
+#include "Problem/NoiseModel/StaticNoiseModel.hpp"
+#include "Trajectory/Bspline/VelocityInterpolator.hpp"
 
 namespace slam {
     namespace traj {
