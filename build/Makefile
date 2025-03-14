@@ -211,533 +211,1661 @@ source/samples/BSplineTrajectoryExample.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/BSplineTrajectoryExample.dir/build.make CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.cpp.s
 .PHONY : source/samples/BSplineTrajectoryExample.cpp.s
 
-source/src/Evaluable/imu/AccErrorEvaluator.o: source/src/Evaluable/imu/AccErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/AccErrorEvaluator.o
+source/src/Core/Evaluable/imu/AccErrorEvaluator.o: source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/AccErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/imu/AccErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/AccErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/AccErrorEvaluator.cpp.o
+source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.o
 
-source/src/Evaluable/imu/AccErrorEvaluator.i: source/src/Evaluable/imu/AccErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/AccErrorEvaluator.i
+source/src/Core/Evaluable/imu/AccErrorEvaluator.i: source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/AccErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/imu/AccErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/AccErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/AccErrorEvaluator.cpp.i
+source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.i
 
-source/src/Evaluable/imu/AccErrorEvaluator.s: source/src/Evaluable/imu/AccErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/AccErrorEvaluator.s
+source/src/Core/Evaluable/imu/AccErrorEvaluator.s: source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/AccErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/imu/AccErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/AccErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/AccErrorEvaluator.cpp.s
+source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp.s
 
-source/src/Evaluable/imu/DmiErrorEvaluator.o: source/src/Evaluable/imu/DmiErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/DmiErrorEvaluator.o
+source/src/Core/Evaluable/imu/DmiErrorEvaluator.o: source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/DmiErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/imu/DmiErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/DmiErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/DmiErrorEvaluator.cpp.o
+source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.o
 
-source/src/Evaluable/imu/DmiErrorEvaluator.i: source/src/Evaluable/imu/DmiErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/DmiErrorEvaluator.i
+source/src/Core/Evaluable/imu/DmiErrorEvaluator.i: source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/DmiErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/imu/DmiErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/DmiErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/DmiErrorEvaluator.cpp.i
+source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.i
 
-source/src/Evaluable/imu/DmiErrorEvaluator.s: source/src/Evaluable/imu/DmiErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/DmiErrorEvaluator.s
+source/src/Core/Evaluable/imu/DmiErrorEvaluator.s: source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/DmiErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/imu/DmiErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/DmiErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/DmiErrorEvaluator.cpp.s
+source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp.s
 
-source/src/Evaluable/imu/GyroErrorEvaluator.o: source/src/Evaluable/imu/GyroErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluator.o
+source/src/Core/Evaluable/imu/GyroErrorEvaluator.o: source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/imu/GyroErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/GyroErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluator.cpp.o
+source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.o
 
-source/src/Evaluable/imu/GyroErrorEvaluator.i: source/src/Evaluable/imu/GyroErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluator.i
+source/src/Core/Evaluable/imu/GyroErrorEvaluator.i: source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/imu/GyroErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/GyroErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluator.cpp.i
+source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.i
 
-source/src/Evaluable/imu/GyroErrorEvaluator.s: source/src/Evaluable/imu/GyroErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluator.s
+source/src/Core/Evaluable/imu/GyroErrorEvaluator.s: source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/imu/GyroErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/GyroErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluator.cpp.s
+source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp.s
 
-source/src/Evaluable/imu/GyroErrorEvaluatorSE2.o: source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluatorSE2.o
+source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.o: source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.o
 
 # target to build an object file
-source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o
+source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.o
 
-source/src/Evaluable/imu/GyroErrorEvaluatorSE2.i: source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluatorSE2.i
+source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.i: source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.i
 
 # target to preprocess a source file
-source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i
+source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.i
 
-source/src/Evaluable/imu/GyroErrorEvaluatorSE2.s: source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluatorSE2.s
+source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.s: source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.s
 
 # target to generate assembly for a file
-source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s
-.PHONY : source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s
+source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp.s
 
-source/src/Evaluable/imu/IMUErrorEvaluator.o: source/src/Evaluable/imu/IMUErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/IMUErrorEvaluator.o
+source/src/Core/Evaluable/imu/IMUErrorEvaluator.o: source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/IMUErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/imu/IMUErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/IMUErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/imu/IMUErrorEvaluator.cpp.o
+source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.o
 
-source/src/Evaluable/imu/IMUErrorEvaluator.i: source/src/Evaluable/imu/IMUErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/IMUErrorEvaluator.i
+source/src/Core/Evaluable/imu/IMUErrorEvaluator.i: source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/IMUErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/imu/IMUErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/IMUErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/imu/IMUErrorEvaluator.cpp.i
+source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.i
 
-source/src/Evaluable/imu/IMUErrorEvaluator.s: source/src/Evaluable/imu/IMUErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/IMUErrorEvaluator.s
+source/src/Core/Evaluable/imu/IMUErrorEvaluator.s: source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/IMUErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/imu/IMUErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/imu/IMUErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/imu/IMUErrorEvaluator.cpp.s
+source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp.s
 
-source/src/Evaluable/point2point/VelErrorEvaluator.o: source/src/Evaluable/point2point/VelErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/VelErrorEvaluator.o
+source/src/Core/Evaluable/point2point/VelErrorEvaluator.o: source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/VelErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/point2point/VelErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/VelErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/VelErrorEvaluator.cpp.o
+source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.o
 
-source/src/Evaluable/point2point/VelErrorEvaluator.i: source/src/Evaluable/point2point/VelErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/VelErrorEvaluator.i
+source/src/Core/Evaluable/point2point/VelErrorEvaluator.i: source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/VelErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/point2point/VelErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/VelErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/VelErrorEvaluator.cpp.i
+source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.i
 
-source/src/Evaluable/point2point/VelErrorEvaluator.s: source/src/Evaluable/point2point/VelErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/VelErrorEvaluator.s
+source/src/Core/Evaluable/point2point/VelErrorEvaluator.s: source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/VelErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/point2point/VelErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/VelErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/VelErrorEvaluator.cpp.s
+source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp.s
 
-source/src/Evaluable/point2point/YawErrorEvaluator.o: source/src/Evaluable/point2point/YawErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/YawErrorEvaluator.o
+source/src/Core/Evaluable/point2point/YawErrorEvaluator.o: source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/YawErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/point2point/YawErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/YawErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/YawErrorEvaluator.cpp.o
+source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.o
 
-source/src/Evaluable/point2point/YawErrorEvaluator.i: source/src/Evaluable/point2point/YawErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/YawErrorEvaluator.i
+source/src/Core/Evaluable/point2point/YawErrorEvaluator.i: source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/YawErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/point2point/YawErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/YawErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/YawErrorEvaluator.cpp.i
+source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.i
 
-source/src/Evaluable/point2point/YawErrorEvaluator.s: source/src/Evaluable/point2point/YawErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/YawErrorEvaluator.s
+source/src/Core/Evaluable/point2point/YawErrorEvaluator.s: source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/YawErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/point2point/YawErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/YawErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/YawErrorEvaluator.cpp.s
+source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp.s
 
-source/src/Evaluable/point2point/YawVelErrorEvaluator.o: source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/YawVelErrorEvaluator.o
+source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.o: source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.o
+source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.o
 
-source/src/Evaluable/point2point/YawVelErrorEvaluator.i: source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/YawVelErrorEvaluator.i
+source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.i: source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.i
+source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.i
 
-source/src/Evaluable/point2point/YawVelErrorEvaluator.s: source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/YawVelErrorEvaluator.s
+source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.s: source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp.s
+source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp.s
 
-source/src/Evaluable/point2point/p2pErrorEvaluator.o: source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/p2pErrorEvaluator.o
+source/src/Core/Evaluable/point2point/p2pErrorEvaluator.o: source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/p2pErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.o
+source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.o
 
-source/src/Evaluable/point2point/p2pErrorEvaluator.i: source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/p2pErrorEvaluator.i
+source/src/Core/Evaluable/point2point/p2pErrorEvaluator.i: source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/p2pErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.i
+source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.i
 
-source/src/Evaluable/point2point/p2pErrorEvaluator.s: source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/p2pErrorEvaluator.s
+source/src/Core/Evaluable/point2point/p2pErrorEvaluator.s: source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/p2pErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/p2pErrorEvaluator.cpp.s
+source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp.s
 
-source/src/Evaluable/point2point/p2planeErrorEvaluator.o: source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/p2planeErrorEvaluator.o
+source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.o: source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.o
+source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.o
 
-source/src/Evaluable/point2point/p2planeErrorEvaluator.i: source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/p2planeErrorEvaluator.i
+source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.i: source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.i
+source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.i
 
-source/src/Evaluable/point2point/p2planeErrorEvaluator.s: source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/p2planeErrorEvaluator.s
+source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.s: source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp.s
+source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp.s
 
-source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.o: source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.o
+source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.o: source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o
-.PHONY : source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o
+source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.o
 
-source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.i: source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.i
+source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.i: source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i
-.PHONY : source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i
+source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.i
 
-source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.s: source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.s
+source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.s: source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s
-.PHONY : source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s
+source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp.s
 
-source/src/Evaluable/se3/ComposeEvaluator.o: source/src/Evaluable/se3/ComposeEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ComposeEvaluator.o
+source/src/Core/Evaluable/se3/ComposeEvaluator.o: source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ComposeEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/ComposeEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ComposeEvaluator.cpp.o
+source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.o
 
-source/src/Evaluable/se3/ComposeEvaluator.i: source/src/Evaluable/se3/ComposeEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ComposeEvaluator.i
+source/src/Core/Evaluable/se3/ComposeEvaluator.i: source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ComposeEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/ComposeEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ComposeEvaluator.cpp.i
+source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.i
 
-source/src/Evaluable/se3/ComposeEvaluator.s: source/src/Evaluable/se3/ComposeEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ComposeEvaluator.s
+source/src/Core/Evaluable/se3/ComposeEvaluator.s: source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ComposeEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/ComposeEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ComposeEvaluator.cpp.s
+source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ComposeEvaluator.cpp.s
 
-source/src/Evaluable/se3/ComposeInverseEvaluator.o: source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ComposeInverseEvaluator.o
+source/src/Core/Evaluable/se3/ComposeInverseEvaluator.o: source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ComposeInverseEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.o
+source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.o
 
-source/src/Evaluable/se3/ComposeInverseEvaluator.i: source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ComposeInverseEvaluator.i
+source/src/Core/Evaluable/se3/ComposeInverseEvaluator.i: source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ComposeInverseEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.i
+source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.i
 
-source/src/Evaluable/se3/ComposeInverseEvaluator.s: source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ComposeInverseEvaluator.s
+source/src/Core/Evaluable/se3/ComposeInverseEvaluator.s: source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ComposeInverseEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ComposeInverseEvaluator.cpp.s
+source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp.s
 
-source/src/Evaluable/se3/ComposeVelocityEvaluator.o: source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ComposeVelocityEvaluator.o
+source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.o: source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.o
+source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.o
 
-source/src/Evaluable/se3/ComposeVelocityEvaluator.i: source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ComposeVelocityEvaluator.i
+source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.i: source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.i
+source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.i
 
-source/src/Evaluable/se3/ComposeVelocityEvaluator.s: source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ComposeVelocityEvaluator.s
+source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.s: source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp.s
+source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp.s
 
-source/src/Evaluable/se3/ExpMapEvaluator.o: source/src/Evaluable/se3/ExpMapEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ExpMapEvaluator.o
+source/src/Core/Evaluable/se3/ExpMapEvaluator.o: source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ExpMapEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/ExpMapEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ExpMapEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/ExpMapEvaluator.cpp.o
+source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.o
 
-source/src/Evaluable/se3/ExpMapEvaluator.i: source/src/Evaluable/se3/ExpMapEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ExpMapEvaluator.i
+source/src/Core/Evaluable/se3/ExpMapEvaluator.i: source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ExpMapEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/ExpMapEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ExpMapEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/ExpMapEvaluator.cpp.i
+source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.i
 
-source/src/Evaluable/se3/ExpMapEvaluator.s: source/src/Evaluable/se3/ExpMapEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ExpMapEvaluator.s
+source/src/Core/Evaluable/se3/ExpMapEvaluator.s: source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ExpMapEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/ExpMapEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/ExpMapEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/ExpMapEvaluator.cpp.s
+source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp.s
 
-source/src/Evaluable/se3/InverseEvaluator.o: source/src/Evaluable/se3/InverseEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/InverseEvaluator.o
+source/src/Core/Evaluable/se3/InverseEvaluator.o: source/src/Core/Evaluable/se3/InverseEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/InverseEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/InverseEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/InverseEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/InverseEvaluator.cpp.o
+source/src/Core/Evaluable/se3/InverseEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/InverseEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/InverseEvaluator.cpp.o
 
-source/src/Evaluable/se3/InverseEvaluator.i: source/src/Evaluable/se3/InverseEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/InverseEvaluator.i
+source/src/Core/Evaluable/se3/InverseEvaluator.i: source/src/Core/Evaluable/se3/InverseEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/InverseEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/InverseEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/InverseEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/InverseEvaluator.cpp.i
+source/src/Core/Evaluable/se3/InverseEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/InverseEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/InverseEvaluator.cpp.i
 
-source/src/Evaluable/se3/InverseEvaluator.s: source/src/Evaluable/se3/InverseEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/InverseEvaluator.s
+source/src/Core/Evaluable/se3/InverseEvaluator.s: source/src/Core/Evaluable/se3/InverseEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/InverseEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/InverseEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/InverseEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/InverseEvaluator.cpp.s
+source/src/Core/Evaluable/se3/InverseEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/InverseEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/InverseEvaluator.cpp.s
 
-source/src/Evaluable/se3/LogMapEvaluator.o: source/src/Evaluable/se3/LogMapEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/LogMapEvaluator.o
+source/src/Core/Evaluable/se3/LogMapEvaluator.o: source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/LogMapEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/LogMapEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/LogMapEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/LogMapEvaluator.cpp.o
+source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.o
 
-source/src/Evaluable/se3/LogMapEvaluator.i: source/src/Evaluable/se3/LogMapEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/LogMapEvaluator.i
+source/src/Core/Evaluable/se3/LogMapEvaluator.i: source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/LogMapEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/LogMapEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/LogMapEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/LogMapEvaluator.cpp.i
+source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.i
 
-source/src/Evaluable/se3/LogMapEvaluator.s: source/src/Evaluable/se3/LogMapEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/LogMapEvaluator.s
+source/src/Core/Evaluable/se3/LogMapEvaluator.s: source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/LogMapEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/LogMapEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/LogMapEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/LogMapEvaluator.cpp.s
+source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/LogMapEvaluator.cpp.s
 
-source/src/Evaluable/se3/PoseInterpolator.o: source/src/Evaluable/se3/PoseInterpolator.cpp.o
-.PHONY : source/src/Evaluable/se3/PoseInterpolator.o
+source/src/Core/Evaluable/se3/PoseInterpolator.o: source/src/Core/Evaluable/se3/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/PoseInterpolator.o
 
 # target to build an object file
-source/src/Evaluable/se3/PoseInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/PoseInterpolator.cpp.o
-.PHONY : source/src/Evaluable/se3/PoseInterpolator.cpp.o
+source/src/Core/Evaluable/se3/PoseInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/PoseInterpolator.cpp.o
 
-source/src/Evaluable/se3/PoseInterpolator.i: source/src/Evaluable/se3/PoseInterpolator.cpp.i
-.PHONY : source/src/Evaluable/se3/PoseInterpolator.i
+source/src/Core/Evaluable/se3/PoseInterpolator.i: source/src/Core/Evaluable/se3/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/PoseInterpolator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/PoseInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/PoseInterpolator.cpp.i
-.PHONY : source/src/Evaluable/se3/PoseInterpolator.cpp.i
+source/src/Core/Evaluable/se3/PoseInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/PoseInterpolator.cpp.i
 
-source/src/Evaluable/se3/PoseInterpolator.s: source/src/Evaluable/se3/PoseInterpolator.cpp.s
-.PHONY : source/src/Evaluable/se3/PoseInterpolator.s
+source/src/Core/Evaluable/se3/PoseInterpolator.s: source/src/Core/Evaluable/se3/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/PoseInterpolator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/PoseInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/PoseInterpolator.cpp.s
-.PHONY : source/src/Evaluable/se3/PoseInterpolator.cpp.s
+source/src/Core/Evaluable/se3/PoseInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/PoseInterpolator.cpp.s
 
-source/src/Evaluable/se3/Se3ErrorEvaluator.o: source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3ErrorEvaluator.o
+source/src/Core/Evaluable/se3/Se3ErrorEvaluator.o: source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.o
+source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.o
 
-source/src/Evaluable/se3/Se3ErrorEvaluator.i: source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3ErrorEvaluator.i
+source/src/Core/Evaluable/se3/Se3ErrorEvaluator.i: source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.i
+source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.i
 
-source/src/Evaluable/se3/Se3ErrorEvaluator.s: source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3ErrorEvaluator.s
+source/src/Core/Evaluable/se3/Se3ErrorEvaluator.s: source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3ErrorEvaluator.cpp.s
+source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp.s
 
-source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.o: source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.o
+source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.o: source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.o
 
 # target to build an object file
-source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o
+source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.o
 
-source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.i: source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.i
+source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.i: source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i
+source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.i
 
-source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.s: source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.s
+source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.s: source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s
+source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp.s
 
-source/src/Evaluable/se3/Se3StateVariable.o: source/src/Evaluable/se3/Se3StateVariable.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3StateVariable.o
+source/src/Core/Evaluable/se3/Se3StateVariable.o: source/src/Core/Evaluable/se3/Se3StateVariable.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariable.o
 
 # target to build an object file
-source/src/Evaluable/se3/Se3StateVariable.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3StateVariable.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3StateVariable.cpp.o
+source/src/Core/Evaluable/se3/Se3StateVariable.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3StateVariable.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariable.cpp.o
 
-source/src/Evaluable/se3/Se3StateVariable.i: source/src/Evaluable/se3/Se3StateVariable.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3StateVariable.i
+source/src/Core/Evaluable/se3/Se3StateVariable.i: source/src/Core/Evaluable/se3/Se3StateVariable.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariable.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/Se3StateVariable.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3StateVariable.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3StateVariable.cpp.i
+source/src/Core/Evaluable/se3/Se3StateVariable.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3StateVariable.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariable.cpp.i
 
-source/src/Evaluable/se3/Se3StateVariable.s: source/src/Evaluable/se3/Se3StateVariable.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3StateVariable.s
+source/src/Core/Evaluable/se3/Se3StateVariable.s: source/src/Core/Evaluable/se3/Se3StateVariable.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariable.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/Se3StateVariable.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3StateVariable.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3StateVariable.cpp.s
+source/src/Core/Evaluable/se3/Se3StateVariable.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3StateVariable.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariable.cpp.s
 
-source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.o: source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.o
+source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.o: source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.o
 
 # target to build an object file
-source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o
-.PHONY : source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o
+source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.o
 
-source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.i: source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.i
+source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.i: source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.i
 
 # target to preprocess a source file
-source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i
-.PHONY : source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i
+source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.i
 
-source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.s: source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.s
+source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.s: source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.s
 
 # target to generate assembly for a file
-source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s
-.PHONY : source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s
+source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s
+.PHONY : source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp.s
+
+source/src/Core/MatrixOperator/BlockDimensionIndexing.o: source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockDimensionIndexing.o
+
+# target to build an object file
+source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.o
+
+source/src/Core/MatrixOperator/BlockDimensionIndexing.i: source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockDimensionIndexing.i
+
+# target to preprocess a source file
+source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.i
+
+source/src/Core/MatrixOperator/BlockDimensionIndexing.s: source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockDimensionIndexing.s
+
+# target to generate assembly for a file
+source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp.s
+
+source/src/Core/MatrixOperator/BlockMatrix.o: source/src/Core/MatrixOperator/BlockMatrix.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockMatrix.o
+
+# target to build an object file
+source/src/Core/MatrixOperator/BlockMatrix.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrix.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockMatrix.cpp.o
+
+source/src/Core/MatrixOperator/BlockMatrix.i: source/src/Core/MatrixOperator/BlockMatrix.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockMatrix.i
+
+# target to preprocess a source file
+source/src/Core/MatrixOperator/BlockMatrix.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrix.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockMatrix.cpp.i
+
+source/src/Core/MatrixOperator/BlockMatrix.s: source/src/Core/MatrixOperator/BlockMatrix.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockMatrix.s
+
+# target to generate assembly for a file
+source/src/Core/MatrixOperator/BlockMatrix.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrix.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockMatrix.cpp.s
+
+source/src/Core/MatrixOperator/BlockMatrixBase.o: source/src/Core/MatrixOperator/BlockMatrixBase.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixBase.o
+
+# target to build an object file
+source/src/Core/MatrixOperator/BlockMatrixBase.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrixBase.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixBase.cpp.o
+
+source/src/Core/MatrixOperator/BlockMatrixBase.i: source/src/Core/MatrixOperator/BlockMatrixBase.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixBase.i
+
+# target to preprocess a source file
+source/src/Core/MatrixOperator/BlockMatrixBase.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrixBase.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixBase.cpp.i
+
+source/src/Core/MatrixOperator/BlockMatrixBase.s: source/src/Core/MatrixOperator/BlockMatrixBase.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixBase.s
+
+# target to generate assembly for a file
+source/src/Core/MatrixOperator/BlockMatrixBase.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrixBase.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixBase.cpp.s
+
+source/src/Core/MatrixOperator/BlockMatrixIndexing.o: source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixIndexing.o
+
+# target to build an object file
+source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.o
+
+source/src/Core/MatrixOperator/BlockMatrixIndexing.i: source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixIndexing.i
+
+# target to preprocess a source file
+source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.i
+
+source/src/Core/MatrixOperator/BlockMatrixIndexing.s: source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixIndexing.s
+
+# target to generate assembly for a file
+source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp.s
+
+source/src/Core/MatrixOperator/BlockSparseMatrix.o: source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockSparseMatrix.o
+
+# target to build an object file
+source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.o
+
+source/src/Core/MatrixOperator/BlockSparseMatrix.i: source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockSparseMatrix.i
+
+# target to preprocess a source file
+source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.i
+
+source/src/Core/MatrixOperator/BlockSparseMatrix.s: source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockSparseMatrix.s
+
+# target to generate assembly for a file
+source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockSparseMatrix.cpp.s
+
+source/src/Core/MatrixOperator/BlockVector.o: source/src/Core/MatrixOperator/BlockVector.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockVector.o
+
+# target to build an object file
+source/src/Core/MatrixOperator/BlockVector.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockVector.cpp.o
+.PHONY : source/src/Core/MatrixOperator/BlockVector.cpp.o
+
+source/src/Core/MatrixOperator/BlockVector.i: source/src/Core/MatrixOperator/BlockVector.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockVector.i
+
+# target to preprocess a source file
+source/src/Core/MatrixOperator/BlockVector.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockVector.cpp.i
+.PHONY : source/src/Core/MatrixOperator/BlockVector.cpp.i
+
+source/src/Core/MatrixOperator/BlockVector.s: source/src/Core/MatrixOperator/BlockVector.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockVector.s
+
+# target to generate assembly for a file
+source/src/Core/MatrixOperator/BlockVector.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/MatrixOperator/BlockVector.cpp.s
+.PHONY : source/src/Core/MatrixOperator/BlockVector.cpp.s
+
+source/src/Core/Problem/CostTerm/GyroSuperCostTerm.o: source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.o
+.PHONY : source/src/Core/Problem/CostTerm/GyroSuperCostTerm.o
+
+# target to build an object file
+source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.o
+.PHONY : source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.o
+
+source/src/Core/Problem/CostTerm/GyroSuperCostTerm.i: source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.i
+.PHONY : source/src/Core/Problem/CostTerm/GyroSuperCostTerm.i
+
+# target to preprocess a source file
+source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.i
+.PHONY : source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.i
+
+source/src/Core/Problem/CostTerm/GyroSuperCostTerm.s: source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.s
+.PHONY : source/src/Core/Problem/CostTerm/GyroSuperCostTerm.s
+
+# target to generate assembly for a file
+source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.s
+.PHONY : source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp.s
+
+source/src/Core/Problem/CostTerm/IMUSuperCostTerm.o: source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.o
+.PHONY : source/src/Core/Problem/CostTerm/IMUSuperCostTerm.o
+
+# target to build an object file
+source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.o
+.PHONY : source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.o
+
+source/src/Core/Problem/CostTerm/IMUSuperCostTerm.i: source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.i
+.PHONY : source/src/Core/Problem/CostTerm/IMUSuperCostTerm.i
+
+# target to preprocess a source file
+source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.i
+.PHONY : source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.i
+
+source/src/Core/Problem/CostTerm/IMUSuperCostTerm.s: source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.s
+.PHONY : source/src/Core/Problem/CostTerm/IMUSuperCostTerm.s
+
+# target to generate assembly for a file
+source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.s
+.PHONY : source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp.s
+
+source/src/Core/Problem/OptimizationProblem.o: source/src/Core/Problem/OptimizationProblem.cpp.o
+.PHONY : source/src/Core/Problem/OptimizationProblem.o
+
+# target to build an object file
+source/src/Core/Problem/OptimizationProblem.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/OptimizationProblem.cpp.o
+.PHONY : source/src/Core/Problem/OptimizationProblem.cpp.o
+
+source/src/Core/Problem/OptimizationProblem.i: source/src/Core/Problem/OptimizationProblem.cpp.i
+.PHONY : source/src/Core/Problem/OptimizationProblem.i
+
+# target to preprocess a source file
+source/src/Core/Problem/OptimizationProblem.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/OptimizationProblem.cpp.i
+.PHONY : source/src/Core/Problem/OptimizationProblem.cpp.i
+
+source/src/Core/Problem/OptimizationProblem.s: source/src/Core/Problem/OptimizationProblem.cpp.s
+.PHONY : source/src/Core/Problem/OptimizationProblem.s
+
+# target to generate assembly for a file
+source/src/Core/Problem/OptimizationProblem.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/OptimizationProblem.cpp.s
+.PHONY : source/src/Core/Problem/OptimizationProblem.cpp.s
+
+source/src/Core/Problem/SlidingWindowFilter.o: source/src/Core/Problem/SlidingWindowFilter.cpp.o
+.PHONY : source/src/Core/Problem/SlidingWindowFilter.o
+
+# target to build an object file
+source/src/Core/Problem/SlidingWindowFilter.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/SlidingWindowFilter.cpp.o
+.PHONY : source/src/Core/Problem/SlidingWindowFilter.cpp.o
+
+source/src/Core/Problem/SlidingWindowFilter.i: source/src/Core/Problem/SlidingWindowFilter.cpp.i
+.PHONY : source/src/Core/Problem/SlidingWindowFilter.i
+
+# target to preprocess a source file
+source/src/Core/Problem/SlidingWindowFilter.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/SlidingWindowFilter.cpp.i
+.PHONY : source/src/Core/Problem/SlidingWindowFilter.cpp.i
+
+source/src/Core/Problem/SlidingWindowFilter.s: source/src/Core/Problem/SlidingWindowFilter.cpp.s
+.PHONY : source/src/Core/Problem/SlidingWindowFilter.s
+
+# target to generate assembly for a file
+source/src/Core/Problem/SlidingWindowFilter.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/SlidingWindowFilter.cpp.s
+.PHONY : source/src/Core/Problem/SlidingWindowFilter.cpp.s
+
+source/src/Core/Problem/StateVector.o: source/src/Core/Problem/StateVector.cpp.o
+.PHONY : source/src/Core/Problem/StateVector.o
+
+# target to build an object file
+source/src/Core/Problem/StateVector.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/StateVector.cpp.o
+.PHONY : source/src/Core/Problem/StateVector.cpp.o
+
+source/src/Core/Problem/StateVector.i: source/src/Core/Problem/StateVector.cpp.i
+.PHONY : source/src/Core/Problem/StateVector.i
+
+# target to preprocess a source file
+source/src/Core/Problem/StateVector.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/StateVector.cpp.i
+.PHONY : source/src/Core/Problem/StateVector.cpp.i
+
+source/src/Core/Problem/StateVector.s: source/src/Core/Problem/StateVector.cpp.s
+.PHONY : source/src/Core/Problem/StateVector.s
+
+# target to generate assembly for a file
+source/src/Core/Problem/StateVector.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Problem/StateVector.cpp.s
+.PHONY : source/src/Core/Problem/StateVector.cpp.s
+
+source/src/Core/Solver/Covariance.o: source/src/Core/Solver/Covariance.cpp.o
+.PHONY : source/src/Core/Solver/Covariance.o
+
+# target to build an object file
+source/src/Core/Solver/Covariance.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/Covariance.cpp.o
+.PHONY : source/src/Core/Solver/Covariance.cpp.o
+
+source/src/Core/Solver/Covariance.i: source/src/Core/Solver/Covariance.cpp.i
+.PHONY : source/src/Core/Solver/Covariance.i
+
+# target to preprocess a source file
+source/src/Core/Solver/Covariance.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/Covariance.cpp.i
+.PHONY : source/src/Core/Solver/Covariance.cpp.i
+
+source/src/Core/Solver/Covariance.s: source/src/Core/Solver/Covariance.cpp.s
+.PHONY : source/src/Core/Solver/Covariance.s
+
+# target to generate assembly for a file
+source/src/Core/Solver/Covariance.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/Covariance.cpp.s
+.PHONY : source/src/Core/Solver/Covariance.cpp.s
+
+source/src/Core/Solver/DoglegGaussNewtonSolver.o: source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/DoglegGaussNewtonSolver.o
+
+# target to build an object file
+source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.o
+
+source/src/Core/Solver/DoglegGaussNewtonSolver.i: source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/DoglegGaussNewtonSolver.i
+
+# target to preprocess a source file
+source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.i
+
+source/src/Core/Solver/DoglegGaussNewtonSolver.s: source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/DoglegGaussNewtonSolver.s
+
+# target to generate assembly for a file
+source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/DoglegGaussNewtonSolver.cpp.s
+
+source/src/Core/Solver/GaussNewtonSolver.o: source/src/Core/Solver/GaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/GaussNewtonSolver.o
+
+# target to build an object file
+source/src/Core/Solver/GaussNewtonSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/GaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/GaussNewtonSolver.cpp.o
+
+source/src/Core/Solver/GaussNewtonSolver.i: source/src/Core/Solver/GaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/GaussNewtonSolver.i
+
+# target to preprocess a source file
+source/src/Core/Solver/GaussNewtonSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/GaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/GaussNewtonSolver.cpp.i
+
+source/src/Core/Solver/GaussNewtonSolver.s: source/src/Core/Solver/GaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/GaussNewtonSolver.s
+
+# target to generate assembly for a file
+source/src/Core/Solver/GaussNewtonSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/GaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/GaussNewtonSolver.cpp.s
+
+source/src/Core/Solver/GaussNewtonSolverNVA.o: source/src/Core/Solver/GaussNewtonSolverNVA.cpp.o
+.PHONY : source/src/Core/Solver/GaussNewtonSolverNVA.o
+
+# target to build an object file
+source/src/Core/Solver/GaussNewtonSolverNVA.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/GaussNewtonSolverNVA.cpp.o
+.PHONY : source/src/Core/Solver/GaussNewtonSolverNVA.cpp.o
+
+source/src/Core/Solver/GaussNewtonSolverNVA.i: source/src/Core/Solver/GaussNewtonSolverNVA.cpp.i
+.PHONY : source/src/Core/Solver/GaussNewtonSolverNVA.i
+
+# target to preprocess a source file
+source/src/Core/Solver/GaussNewtonSolverNVA.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/GaussNewtonSolverNVA.cpp.i
+.PHONY : source/src/Core/Solver/GaussNewtonSolverNVA.cpp.i
+
+source/src/Core/Solver/GaussNewtonSolverNVA.s: source/src/Core/Solver/GaussNewtonSolverNVA.cpp.s
+.PHONY : source/src/Core/Solver/GaussNewtonSolverNVA.s
+
+# target to generate assembly for a file
+source/src/Core/Solver/GaussNewtonSolverNVA.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/GaussNewtonSolverNVA.cpp.s
+.PHONY : source/src/Core/Solver/GaussNewtonSolverNVA.cpp.s
+
+source/src/Core/Solver/LevMarqGaussNewtonSolver.o: source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/LevMarqGaussNewtonSolver.o
+
+# target to build an object file
+source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.o
+
+source/src/Core/Solver/LevMarqGaussNewtonSolver.i: source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/LevMarqGaussNewtonSolver.i
+
+# target to preprocess a source file
+source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.i
+
+source/src/Core/Solver/LevMarqGaussNewtonSolver.s: source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/LevMarqGaussNewtonSolver.s
+
+# target to generate assembly for a file
+source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp.s
+
+source/src/Core/Solver/LineSearchGaussNewtonSolver.o: source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/LineSearchGaussNewtonSolver.o
+
+# target to build an object file
+source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.o
+.PHONY : source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.o
+
+source/src/Core/Solver/LineSearchGaussNewtonSolver.i: source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/LineSearchGaussNewtonSolver.i
+
+# target to preprocess a source file
+source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.i
+.PHONY : source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.i
+
+source/src/Core/Solver/LineSearchGaussNewtonSolver.s: source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/LineSearchGaussNewtonSolver.s
+
+# target to generate assembly for a file
+source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.s
+.PHONY : source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp.s
+
+source/src/Core/Solver/SolverBase.o: source/src/Core/Solver/SolverBase.cpp.o
+.PHONY : source/src/Core/Solver/SolverBase.o
+
+# target to build an object file
+source/src/Core/Solver/SolverBase.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/SolverBase.cpp.o
+.PHONY : source/src/Core/Solver/SolverBase.cpp.o
+
+source/src/Core/Solver/SolverBase.i: source/src/Core/Solver/SolverBase.cpp.i
+.PHONY : source/src/Core/Solver/SolverBase.i
+
+# target to preprocess a source file
+source/src/Core/Solver/SolverBase.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/SolverBase.cpp.i
+.PHONY : source/src/Core/Solver/SolverBase.cpp.i
+
+source/src/Core/Solver/SolverBase.s: source/src/Core/Solver/SolverBase.cpp.s
+.PHONY : source/src/Core/Solver/SolverBase.s
+
+# target to generate assembly for a file
+source/src/Core/Solver/SolverBase.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Solver/SolverBase.cpp.s
+.PHONY : source/src/Core/Solver/SolverBase.cpp.s
+
+source/src/Core/Trajectory/Bspline/Interface.o: source/src/Core/Trajectory/Bspline/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/Bspline/Interface.o
+
+# target to build an object file
+source/src/Core/Trajectory/Bspline/Interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Bspline/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/Bspline/Interface.cpp.o
+
+source/src/Core/Trajectory/Bspline/Interface.i: source/src/Core/Trajectory/Bspline/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/Bspline/Interface.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Bspline/Interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Bspline/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/Bspline/Interface.cpp.i
+
+source/src/Core/Trajectory/Bspline/Interface.s: source/src/Core/Trajectory/Bspline/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/Bspline/Interface.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Bspline/Interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Bspline/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/Bspline/Interface.cpp.s
+
+source/src/Core/Trajectory/Bspline/VelocityInterpolator.o: source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Bspline/VelocityInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.o
+
+source/src/Core/Trajectory/Bspline/VelocityInterpolator.i: source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Bspline/VelocityInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.i
+
+source/src/Core/Trajectory/Bspline/VelocityInterpolator.s: source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Bspline/VelocityInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.o: source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.i: source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.s: source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.o: source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.i: source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.s: source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.o: source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.i: source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.s: source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/Interface.o: source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Interface.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/Interface.i: source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Interface.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/Interface.s: source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Interface.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Interface.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.o: source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.i: source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.s: source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.o: source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.i: source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.s: source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/PriorFactor.o: source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PriorFactor.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/PriorFactor.i: source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PriorFactor.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/PriorFactor.s: source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PriorFactor.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/Variables.o: source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Variables.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/Variables.i: source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Variables.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/Variables.s: source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Variables.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/Variables.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.o: source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.i: source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.s: source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s
+
+source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.o: source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o
+
+source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.i: source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i
+
+source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.s: source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.o: source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.i: source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.s: source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.o: source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.i: source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.s: source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/Interface.o: source/src/Core/Trajectory/ConstVelocity/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Interface.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/Interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Interface.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/Interface.i: source/src/Core/Trajectory/ConstVelocity/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Interface.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/Interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Interface.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/Interface.s: source/src/Core/Trajectory/ConstVelocity/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Interface.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/Interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Interface.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.o: source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.i: source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.s: source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.o: source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.i: source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.s: source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/PriorFactor.o: source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PriorFactor.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/PriorFactor.i: source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PriorFactor.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/PriorFactor.s: source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PriorFactor.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/Variables.o: source/src/Core/Trajectory/ConstVelocity/Variables.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Variables.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/Variables.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Variables.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Variables.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/Variables.i: source/src/Core/Trajectory/ConstVelocity/Variables.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Variables.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/Variables.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Variables.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Variables.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/Variables.s: source/src/Core/Trajectory/ConstVelocity/Variables.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Variables.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/Variables.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/Variables.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/Variables.cpp.s
+
+source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.o: source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o
+
+source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.i: source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i
+
+source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.s: source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s
+
+source/src/Core/Trajectory/Singer/AccelerationExtrapolator.o: source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationExtrapolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.o
+
+source/src/Core/Trajectory/Singer/AccelerationExtrapolator.i: source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationExtrapolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.i
+
+source/src/Core/Trajectory/Singer/AccelerationExtrapolator.s: source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationExtrapolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp.s
+
+source/src/Core/Trajectory/Singer/AccelerationInterpolator.o: source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.o
+
+source/src/Core/Trajectory/Singer/AccelerationInterpolator.i: source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.i
+
+source/src/Core/Trajectory/Singer/AccelerationInterpolator.s: source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp.s
+
+source/src/Core/Trajectory/Singer/Interface.o: source/src/Core/Trajectory/Singer/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/Interface.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/Interface.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/Interface.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/Interface.cpp.o
+
+source/src/Core/Trajectory/Singer/Interface.i: source/src/Core/Trajectory/Singer/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/Interface.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/Interface.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/Interface.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/Interface.cpp.i
+
+source/src/Core/Trajectory/Singer/Interface.s: source/src/Core/Trajectory/Singer/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/Interface.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/Interface.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/Interface.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/Interface.cpp.s
+
+source/src/Core/Trajectory/Singer/PoseExtrapolator.o: source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/PoseExtrapolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.o
+
+source/src/Core/Trajectory/Singer/PoseExtrapolator.i: source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/PoseExtrapolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.i
+
+source/src/Core/Trajectory/Singer/PoseExtrapolator.s: source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/PoseExtrapolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp.s
+
+source/src/Core/Trajectory/Singer/PoseInterpolator.o: source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/PoseInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.o
+
+source/src/Core/Trajectory/Singer/PoseInterpolator.i: source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/PoseInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.i
+
+source/src/Core/Trajectory/Singer/PoseInterpolator.s: source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/PoseInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/PoseInterpolator.cpp.s
+
+source/src/Core/Trajectory/Singer/PriorFactor.o: source/src/Core/Trajectory/Singer/PriorFactor.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/PriorFactor.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/PriorFactor.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PriorFactor.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/PriorFactor.cpp.o
+
+source/src/Core/Trajectory/Singer/PriorFactor.i: source/src/Core/Trajectory/Singer/PriorFactor.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/PriorFactor.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/PriorFactor.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PriorFactor.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/PriorFactor.cpp.i
+
+source/src/Core/Trajectory/Singer/PriorFactor.s: source/src/Core/Trajectory/Singer/PriorFactor.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/PriorFactor.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/PriorFactor.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/PriorFactor.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/PriorFactor.cpp.s
+
+source/src/Core/Trajectory/Singer/VelocityExtrapolator.o: source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/VelocityExtrapolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.o
+
+source/src/Core/Trajectory/Singer/VelocityExtrapolator.i: source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/VelocityExtrapolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.i
+
+source/src/Core/Trajectory/Singer/VelocityExtrapolator.s: source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/VelocityExtrapolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp.s
+
+source/src/Core/Trajectory/Singer/VelocityInterpolator.o: source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/VelocityInterpolator.o
+
+# target to build an object file
+source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.o
+.PHONY : source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.o
+
+source/src/Core/Trajectory/Singer/VelocityInterpolator.i: source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/VelocityInterpolator.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.i
+.PHONY : source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.i
+
+source/src/Core/Trajectory/Singer/VelocityInterpolator.s: source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/VelocityInterpolator.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.s
+.PHONY : source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp.s
+
+source/src/Core/Trajectory/Time.o: source/src/Core/Trajectory/Time.cpp.o
+.PHONY : source/src/Core/Trajectory/Time.o
+
+# target to build an object file
+source/src/Core/Trajectory/Time.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Time.cpp.o
+.PHONY : source/src/Core/Trajectory/Time.cpp.o
+
+source/src/Core/Trajectory/Time.i: source/src/Core/Trajectory/Time.cpp.i
+.PHONY : source/src/Core/Trajectory/Time.i
+
+# target to preprocess a source file
+source/src/Core/Trajectory/Time.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Time.cpp.i
+.PHONY : source/src/Core/Trajectory/Time.cpp.i
+
+source/src/Core/Trajectory/Time.s: source/src/Core/Trajectory/Time.cpp.s
+.PHONY : source/src/Core/Trajectory/Time.s
+
+# target to generate assembly for a file
+source/src/Core/Trajectory/Time.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Core/Trajectory/Time.cpp.s
+.PHONY : source/src/Core/Trajectory/Time.cpp.s
 
 source/src/LGMath/CommonMath.o: source/src/LGMath/CommonMath.cpp.o
 .PHONY : source/src/LGMath/CommonMath.o
@@ -907,1134 +2035,6 @@ source/src/LGMath/so3/Rotations.cpp.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/LGMath/so3/Rotations.cpp.s
 .PHONY : source/src/LGMath/so3/Rotations.cpp.s
 
-source/src/MatrixOperator/BlockDimensionIndexing.o: source/src/MatrixOperator/BlockDimensionIndexing.cpp.o
-.PHONY : source/src/MatrixOperator/BlockDimensionIndexing.o
-
-# target to build an object file
-source/src/MatrixOperator/BlockDimensionIndexing.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockDimensionIndexing.cpp.o
-.PHONY : source/src/MatrixOperator/BlockDimensionIndexing.cpp.o
-
-source/src/MatrixOperator/BlockDimensionIndexing.i: source/src/MatrixOperator/BlockDimensionIndexing.cpp.i
-.PHONY : source/src/MatrixOperator/BlockDimensionIndexing.i
-
-# target to preprocess a source file
-source/src/MatrixOperator/BlockDimensionIndexing.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockDimensionIndexing.cpp.i
-.PHONY : source/src/MatrixOperator/BlockDimensionIndexing.cpp.i
-
-source/src/MatrixOperator/BlockDimensionIndexing.s: source/src/MatrixOperator/BlockDimensionIndexing.cpp.s
-.PHONY : source/src/MatrixOperator/BlockDimensionIndexing.s
-
-# target to generate assembly for a file
-source/src/MatrixOperator/BlockDimensionIndexing.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockDimensionIndexing.cpp.s
-.PHONY : source/src/MatrixOperator/BlockDimensionIndexing.cpp.s
-
-source/src/MatrixOperator/BlockMatrix.o: source/src/MatrixOperator/BlockMatrix.cpp.o
-.PHONY : source/src/MatrixOperator/BlockMatrix.o
-
-# target to build an object file
-source/src/MatrixOperator/BlockMatrix.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrix.cpp.o
-.PHONY : source/src/MatrixOperator/BlockMatrix.cpp.o
-
-source/src/MatrixOperator/BlockMatrix.i: source/src/MatrixOperator/BlockMatrix.cpp.i
-.PHONY : source/src/MatrixOperator/BlockMatrix.i
-
-# target to preprocess a source file
-source/src/MatrixOperator/BlockMatrix.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrix.cpp.i
-.PHONY : source/src/MatrixOperator/BlockMatrix.cpp.i
-
-source/src/MatrixOperator/BlockMatrix.s: source/src/MatrixOperator/BlockMatrix.cpp.s
-.PHONY : source/src/MatrixOperator/BlockMatrix.s
-
-# target to generate assembly for a file
-source/src/MatrixOperator/BlockMatrix.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrix.cpp.s
-.PHONY : source/src/MatrixOperator/BlockMatrix.cpp.s
-
-source/src/MatrixOperator/BlockMatrixBase.o: source/src/MatrixOperator/BlockMatrixBase.cpp.o
-.PHONY : source/src/MatrixOperator/BlockMatrixBase.o
-
-# target to build an object file
-source/src/MatrixOperator/BlockMatrixBase.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrixBase.cpp.o
-.PHONY : source/src/MatrixOperator/BlockMatrixBase.cpp.o
-
-source/src/MatrixOperator/BlockMatrixBase.i: source/src/MatrixOperator/BlockMatrixBase.cpp.i
-.PHONY : source/src/MatrixOperator/BlockMatrixBase.i
-
-# target to preprocess a source file
-source/src/MatrixOperator/BlockMatrixBase.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrixBase.cpp.i
-.PHONY : source/src/MatrixOperator/BlockMatrixBase.cpp.i
-
-source/src/MatrixOperator/BlockMatrixBase.s: source/src/MatrixOperator/BlockMatrixBase.cpp.s
-.PHONY : source/src/MatrixOperator/BlockMatrixBase.s
-
-# target to generate assembly for a file
-source/src/MatrixOperator/BlockMatrixBase.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrixBase.cpp.s
-.PHONY : source/src/MatrixOperator/BlockMatrixBase.cpp.s
-
-source/src/MatrixOperator/BlockMatrixIndexing.o: source/src/MatrixOperator/BlockMatrixIndexing.cpp.o
-.PHONY : source/src/MatrixOperator/BlockMatrixIndexing.o
-
-# target to build an object file
-source/src/MatrixOperator/BlockMatrixIndexing.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrixIndexing.cpp.o
-.PHONY : source/src/MatrixOperator/BlockMatrixIndexing.cpp.o
-
-source/src/MatrixOperator/BlockMatrixIndexing.i: source/src/MatrixOperator/BlockMatrixIndexing.cpp.i
-.PHONY : source/src/MatrixOperator/BlockMatrixIndexing.i
-
-# target to preprocess a source file
-source/src/MatrixOperator/BlockMatrixIndexing.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrixIndexing.cpp.i
-.PHONY : source/src/MatrixOperator/BlockMatrixIndexing.cpp.i
-
-source/src/MatrixOperator/BlockMatrixIndexing.s: source/src/MatrixOperator/BlockMatrixIndexing.cpp.s
-.PHONY : source/src/MatrixOperator/BlockMatrixIndexing.s
-
-# target to generate assembly for a file
-source/src/MatrixOperator/BlockMatrixIndexing.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockMatrixIndexing.cpp.s
-.PHONY : source/src/MatrixOperator/BlockMatrixIndexing.cpp.s
-
-source/src/MatrixOperator/BlockSparseMatrix.o: source/src/MatrixOperator/BlockSparseMatrix.cpp.o
-.PHONY : source/src/MatrixOperator/BlockSparseMatrix.o
-
-# target to build an object file
-source/src/MatrixOperator/BlockSparseMatrix.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockSparseMatrix.cpp.o
-.PHONY : source/src/MatrixOperator/BlockSparseMatrix.cpp.o
-
-source/src/MatrixOperator/BlockSparseMatrix.i: source/src/MatrixOperator/BlockSparseMatrix.cpp.i
-.PHONY : source/src/MatrixOperator/BlockSparseMatrix.i
-
-# target to preprocess a source file
-source/src/MatrixOperator/BlockSparseMatrix.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockSparseMatrix.cpp.i
-.PHONY : source/src/MatrixOperator/BlockSparseMatrix.cpp.i
-
-source/src/MatrixOperator/BlockSparseMatrix.s: source/src/MatrixOperator/BlockSparseMatrix.cpp.s
-.PHONY : source/src/MatrixOperator/BlockSparseMatrix.s
-
-# target to generate assembly for a file
-source/src/MatrixOperator/BlockSparseMatrix.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockSparseMatrix.cpp.s
-.PHONY : source/src/MatrixOperator/BlockSparseMatrix.cpp.s
-
-source/src/MatrixOperator/BlockVector.o: source/src/MatrixOperator/BlockVector.cpp.o
-.PHONY : source/src/MatrixOperator/BlockVector.o
-
-# target to build an object file
-source/src/MatrixOperator/BlockVector.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockVector.cpp.o
-.PHONY : source/src/MatrixOperator/BlockVector.cpp.o
-
-source/src/MatrixOperator/BlockVector.i: source/src/MatrixOperator/BlockVector.cpp.i
-.PHONY : source/src/MatrixOperator/BlockVector.i
-
-# target to preprocess a source file
-source/src/MatrixOperator/BlockVector.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockVector.cpp.i
-.PHONY : source/src/MatrixOperator/BlockVector.cpp.i
-
-source/src/MatrixOperator/BlockVector.s: source/src/MatrixOperator/BlockVector.cpp.s
-.PHONY : source/src/MatrixOperator/BlockVector.s
-
-# target to generate assembly for a file
-source/src/MatrixOperator/BlockVector.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/MatrixOperator/BlockVector.cpp.s
-.PHONY : source/src/MatrixOperator/BlockVector.cpp.s
-
-source/src/Problem/CostTerm/GyroSuperCostTerm.o: source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.o
-.PHONY : source/src/Problem/CostTerm/GyroSuperCostTerm.o
-
-# target to build an object file
-source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.o
-.PHONY : source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.o
-
-source/src/Problem/CostTerm/GyroSuperCostTerm.i: source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.i
-.PHONY : source/src/Problem/CostTerm/GyroSuperCostTerm.i
-
-# target to preprocess a source file
-source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.i
-.PHONY : source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.i
-
-source/src/Problem/CostTerm/GyroSuperCostTerm.s: source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.s
-.PHONY : source/src/Problem/CostTerm/GyroSuperCostTerm.s
-
-# target to generate assembly for a file
-source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.s
-.PHONY : source/src/Problem/CostTerm/GyroSuperCostTerm.cpp.s
-
-source/src/Problem/CostTerm/IMUSuperCostTerm.o: source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.o
-.PHONY : source/src/Problem/CostTerm/IMUSuperCostTerm.o
-
-# target to build an object file
-source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.o
-.PHONY : source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.o
-
-source/src/Problem/CostTerm/IMUSuperCostTerm.i: source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.i
-.PHONY : source/src/Problem/CostTerm/IMUSuperCostTerm.i
-
-# target to preprocess a source file
-source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.i
-.PHONY : source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.i
-
-source/src/Problem/CostTerm/IMUSuperCostTerm.s: source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.s
-.PHONY : source/src/Problem/CostTerm/IMUSuperCostTerm.s
-
-# target to generate assembly for a file
-source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.s
-.PHONY : source/src/Problem/CostTerm/IMUSuperCostTerm.cpp.s
-
-source/src/Problem/OptimizationProblem.o: source/src/Problem/OptimizationProblem.cpp.o
-.PHONY : source/src/Problem/OptimizationProblem.o
-
-# target to build an object file
-source/src/Problem/OptimizationProblem.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/OptimizationProblem.cpp.o
-.PHONY : source/src/Problem/OptimizationProblem.cpp.o
-
-source/src/Problem/OptimizationProblem.i: source/src/Problem/OptimizationProblem.cpp.i
-.PHONY : source/src/Problem/OptimizationProblem.i
-
-# target to preprocess a source file
-source/src/Problem/OptimizationProblem.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/OptimizationProblem.cpp.i
-.PHONY : source/src/Problem/OptimizationProblem.cpp.i
-
-source/src/Problem/OptimizationProblem.s: source/src/Problem/OptimizationProblem.cpp.s
-.PHONY : source/src/Problem/OptimizationProblem.s
-
-# target to generate assembly for a file
-source/src/Problem/OptimizationProblem.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/OptimizationProblem.cpp.s
-.PHONY : source/src/Problem/OptimizationProblem.cpp.s
-
-source/src/Problem/SlidingWindowFilter.o: source/src/Problem/SlidingWindowFilter.cpp.o
-.PHONY : source/src/Problem/SlidingWindowFilter.o
-
-# target to build an object file
-source/src/Problem/SlidingWindowFilter.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/SlidingWindowFilter.cpp.o
-.PHONY : source/src/Problem/SlidingWindowFilter.cpp.o
-
-source/src/Problem/SlidingWindowFilter.i: source/src/Problem/SlidingWindowFilter.cpp.i
-.PHONY : source/src/Problem/SlidingWindowFilter.i
-
-# target to preprocess a source file
-source/src/Problem/SlidingWindowFilter.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/SlidingWindowFilter.cpp.i
-.PHONY : source/src/Problem/SlidingWindowFilter.cpp.i
-
-source/src/Problem/SlidingWindowFilter.s: source/src/Problem/SlidingWindowFilter.cpp.s
-.PHONY : source/src/Problem/SlidingWindowFilter.s
-
-# target to generate assembly for a file
-source/src/Problem/SlidingWindowFilter.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/SlidingWindowFilter.cpp.s
-.PHONY : source/src/Problem/SlidingWindowFilter.cpp.s
-
-source/src/Problem/StateVector.o: source/src/Problem/StateVector.cpp.o
-.PHONY : source/src/Problem/StateVector.o
-
-# target to build an object file
-source/src/Problem/StateVector.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/StateVector.cpp.o
-.PHONY : source/src/Problem/StateVector.cpp.o
-
-source/src/Problem/StateVector.i: source/src/Problem/StateVector.cpp.i
-.PHONY : source/src/Problem/StateVector.i
-
-# target to preprocess a source file
-source/src/Problem/StateVector.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/StateVector.cpp.i
-.PHONY : source/src/Problem/StateVector.cpp.i
-
-source/src/Problem/StateVector.s: source/src/Problem/StateVector.cpp.s
-.PHONY : source/src/Problem/StateVector.s
-
-# target to generate assembly for a file
-source/src/Problem/StateVector.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Problem/StateVector.cpp.s
-.PHONY : source/src/Problem/StateVector.cpp.s
-
-source/src/Solver/Covariance.o: source/src/Solver/Covariance.cpp.o
-.PHONY : source/src/Solver/Covariance.o
-
-# target to build an object file
-source/src/Solver/Covariance.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/Covariance.cpp.o
-.PHONY : source/src/Solver/Covariance.cpp.o
-
-source/src/Solver/Covariance.i: source/src/Solver/Covariance.cpp.i
-.PHONY : source/src/Solver/Covariance.i
-
-# target to preprocess a source file
-source/src/Solver/Covariance.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/Covariance.cpp.i
-.PHONY : source/src/Solver/Covariance.cpp.i
-
-source/src/Solver/Covariance.s: source/src/Solver/Covariance.cpp.s
-.PHONY : source/src/Solver/Covariance.s
-
-# target to generate assembly for a file
-source/src/Solver/Covariance.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/Covariance.cpp.s
-.PHONY : source/src/Solver/Covariance.cpp.s
-
-source/src/Solver/DoglegGaussNewtonSolver.o: source/src/Solver/DoglegGaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/DoglegGaussNewtonSolver.o
-
-# target to build an object file
-source/src/Solver/DoglegGaussNewtonSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/DoglegGaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/DoglegGaussNewtonSolver.cpp.o
-
-source/src/Solver/DoglegGaussNewtonSolver.i: source/src/Solver/DoglegGaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/DoglegGaussNewtonSolver.i
-
-# target to preprocess a source file
-source/src/Solver/DoglegGaussNewtonSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/DoglegGaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/DoglegGaussNewtonSolver.cpp.i
-
-source/src/Solver/DoglegGaussNewtonSolver.s: source/src/Solver/DoglegGaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/DoglegGaussNewtonSolver.s
-
-# target to generate assembly for a file
-source/src/Solver/DoglegGaussNewtonSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/DoglegGaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/DoglegGaussNewtonSolver.cpp.s
-
-source/src/Solver/GaussNewtonSolver.o: source/src/Solver/GaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/GaussNewtonSolver.o
-
-# target to build an object file
-source/src/Solver/GaussNewtonSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/GaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/GaussNewtonSolver.cpp.o
-
-source/src/Solver/GaussNewtonSolver.i: source/src/Solver/GaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/GaussNewtonSolver.i
-
-# target to preprocess a source file
-source/src/Solver/GaussNewtonSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/GaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/GaussNewtonSolver.cpp.i
-
-source/src/Solver/GaussNewtonSolver.s: source/src/Solver/GaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/GaussNewtonSolver.s
-
-# target to generate assembly for a file
-source/src/Solver/GaussNewtonSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/GaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/GaussNewtonSolver.cpp.s
-
-source/src/Solver/GaussNewtonSolverNVA.o: source/src/Solver/GaussNewtonSolverNVA.cpp.o
-.PHONY : source/src/Solver/GaussNewtonSolverNVA.o
-
-# target to build an object file
-source/src/Solver/GaussNewtonSolverNVA.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/GaussNewtonSolverNVA.cpp.o
-.PHONY : source/src/Solver/GaussNewtonSolverNVA.cpp.o
-
-source/src/Solver/GaussNewtonSolverNVA.i: source/src/Solver/GaussNewtonSolverNVA.cpp.i
-.PHONY : source/src/Solver/GaussNewtonSolverNVA.i
-
-# target to preprocess a source file
-source/src/Solver/GaussNewtonSolverNVA.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/GaussNewtonSolverNVA.cpp.i
-.PHONY : source/src/Solver/GaussNewtonSolverNVA.cpp.i
-
-source/src/Solver/GaussNewtonSolverNVA.s: source/src/Solver/GaussNewtonSolverNVA.cpp.s
-.PHONY : source/src/Solver/GaussNewtonSolverNVA.s
-
-# target to generate assembly for a file
-source/src/Solver/GaussNewtonSolverNVA.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/GaussNewtonSolverNVA.cpp.s
-.PHONY : source/src/Solver/GaussNewtonSolverNVA.cpp.s
-
-source/src/Solver/LevMarqGaussNewtonSolver.o: source/src/Solver/LevMarqGaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/LevMarqGaussNewtonSolver.o
-
-# target to build an object file
-source/src/Solver/LevMarqGaussNewtonSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/LevMarqGaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/LevMarqGaussNewtonSolver.cpp.o
-
-source/src/Solver/LevMarqGaussNewtonSolver.i: source/src/Solver/LevMarqGaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/LevMarqGaussNewtonSolver.i
-
-# target to preprocess a source file
-source/src/Solver/LevMarqGaussNewtonSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/LevMarqGaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/LevMarqGaussNewtonSolver.cpp.i
-
-source/src/Solver/LevMarqGaussNewtonSolver.s: source/src/Solver/LevMarqGaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/LevMarqGaussNewtonSolver.s
-
-# target to generate assembly for a file
-source/src/Solver/LevMarqGaussNewtonSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/LevMarqGaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/LevMarqGaussNewtonSolver.cpp.s
-
-source/src/Solver/LineSearchGaussNewtonSolver.o: source/src/Solver/LineSearchGaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/LineSearchGaussNewtonSolver.o
-
-# target to build an object file
-source/src/Solver/LineSearchGaussNewtonSolver.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/LineSearchGaussNewtonSolver.cpp.o
-.PHONY : source/src/Solver/LineSearchGaussNewtonSolver.cpp.o
-
-source/src/Solver/LineSearchGaussNewtonSolver.i: source/src/Solver/LineSearchGaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/LineSearchGaussNewtonSolver.i
-
-# target to preprocess a source file
-source/src/Solver/LineSearchGaussNewtonSolver.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/LineSearchGaussNewtonSolver.cpp.i
-.PHONY : source/src/Solver/LineSearchGaussNewtonSolver.cpp.i
-
-source/src/Solver/LineSearchGaussNewtonSolver.s: source/src/Solver/LineSearchGaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/LineSearchGaussNewtonSolver.s
-
-# target to generate assembly for a file
-source/src/Solver/LineSearchGaussNewtonSolver.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/LineSearchGaussNewtonSolver.cpp.s
-.PHONY : source/src/Solver/LineSearchGaussNewtonSolver.cpp.s
-
-source/src/Solver/SolverBase.o: source/src/Solver/SolverBase.cpp.o
-.PHONY : source/src/Solver/SolverBase.o
-
-# target to build an object file
-source/src/Solver/SolverBase.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/SolverBase.cpp.o
-.PHONY : source/src/Solver/SolverBase.cpp.o
-
-source/src/Solver/SolverBase.i: source/src/Solver/SolverBase.cpp.i
-.PHONY : source/src/Solver/SolverBase.i
-
-# target to preprocess a source file
-source/src/Solver/SolverBase.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/SolverBase.cpp.i
-.PHONY : source/src/Solver/SolverBase.cpp.i
-
-source/src/Solver/SolverBase.s: source/src/Solver/SolverBase.cpp.s
-.PHONY : source/src/Solver/SolverBase.s
-
-# target to generate assembly for a file
-source/src/Solver/SolverBase.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Solver/SolverBase.cpp.s
-.PHONY : source/src/Solver/SolverBase.cpp.s
-
-source/src/Trajectory/Bspline/Interface.o: source/src/Trajectory/Bspline/Interface.cpp.o
-.PHONY : source/src/Trajectory/Bspline/Interface.o
-
-# target to build an object file
-source/src/Trajectory/Bspline/Interface.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Bspline/Interface.cpp.o
-.PHONY : source/src/Trajectory/Bspline/Interface.cpp.o
-
-source/src/Trajectory/Bspline/Interface.i: source/src/Trajectory/Bspline/Interface.cpp.i
-.PHONY : source/src/Trajectory/Bspline/Interface.i
-
-# target to preprocess a source file
-source/src/Trajectory/Bspline/Interface.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Bspline/Interface.cpp.i
-.PHONY : source/src/Trajectory/Bspline/Interface.cpp.i
-
-source/src/Trajectory/Bspline/Interface.s: source/src/Trajectory/Bspline/Interface.cpp.s
-.PHONY : source/src/Trajectory/Bspline/Interface.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Bspline/Interface.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Bspline/Interface.cpp.s
-.PHONY : source/src/Trajectory/Bspline/Interface.cpp.s
-
-source/src/Trajectory/Bspline/VelocityInterpolator.o: source/src/Trajectory/Bspline/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Bspline/VelocityInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/Bspline/VelocityInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Bspline/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Bspline/VelocityInterpolator.cpp.o
-
-source/src/Trajectory/Bspline/VelocityInterpolator.i: source/src/Trajectory/Bspline/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Bspline/VelocityInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/Bspline/VelocityInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Bspline/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Bspline/VelocityInterpolator.cpp.i
-
-source/src/Trajectory/Bspline/VelocityInterpolator.s: source/src/Trajectory/Bspline/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Bspline/VelocityInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Bspline/VelocityInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Bspline/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Bspline/VelocityInterpolator.cpp.s
-
-source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.o: source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.o
-
-source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.i: source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.i
-
-source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.s: source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp.s
-
-source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.o: source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.o
-
-source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.i: source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.i
-
-source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.s: source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp.s
-
-source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.o: source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.o
-
-source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.i: source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.i
-
-source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.s: source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp.s
-
-source/src/Trajectory/ConstAcceleration/Interface.o: source/src/Trajectory/ConstAcceleration/Interface.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/Interface.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/Interface.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Interface.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/Interface.cpp.o
-
-source/src/Trajectory/ConstAcceleration/Interface.i: source/src/Trajectory/ConstAcceleration/Interface.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/Interface.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/Interface.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Interface.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/Interface.cpp.i
-
-source/src/Trajectory/ConstAcceleration/Interface.s: source/src/Trajectory/ConstAcceleration/Interface.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/Interface.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/Interface.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Interface.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/Interface.cpp.s
-
-source/src/Trajectory/ConstAcceleration/PoseExtrapolator.o: source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseExtrapolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.o
-
-source/src/Trajectory/ConstAcceleration/PoseExtrapolator.i: source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseExtrapolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.i
-
-source/src/Trajectory/ConstAcceleration/PoseExtrapolator.s: source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseExtrapolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp.s
-
-source/src/Trajectory/ConstAcceleration/PoseInterpolator.o: source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.o
-
-source/src/Trajectory/ConstAcceleration/PoseInterpolator.i: source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.i
-
-source/src/Trajectory/ConstAcceleration/PoseInterpolator.s: source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp.s
-
-source/src/Trajectory/ConstAcceleration/PriorFactor.o: source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/PriorFactor.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.o
-
-source/src/Trajectory/ConstAcceleration/PriorFactor.i: source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/PriorFactor.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.i
-
-source/src/Trajectory/ConstAcceleration/PriorFactor.s: source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/PriorFactor.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/PriorFactor.cpp.s
-
-source/src/Trajectory/ConstAcceleration/Variables.o: source/src/Trajectory/ConstAcceleration/Variables.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/Variables.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/Variables.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Variables.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/Variables.cpp.o
-
-source/src/Trajectory/ConstAcceleration/Variables.i: source/src/Trajectory/ConstAcceleration/Variables.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/Variables.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/Variables.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Variables.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/Variables.cpp.i
-
-source/src/Trajectory/ConstAcceleration/Variables.s: source/src/Trajectory/ConstAcceleration/Variables.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/Variables.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/Variables.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/Variables.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/Variables.cpp.s
-
-source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.o: source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.o
-
-source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.i: source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.i
-
-source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.s: source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp.s
-
-source/src/Trajectory/ConstAcceleration/VelocityInterpolator.o: source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.o
-
-source/src/Trajectory/ConstAcceleration/VelocityInterpolator.i: source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.i
-
-source/src/Trajectory/ConstAcceleration/VelocityInterpolator.s: source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp.s
-
-source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.o: source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.o
-
-source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.i: source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.i
-
-source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.s: source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp.s
-
-source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.o: source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.o
-
-source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.i: source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.i
-
-source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.s: source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp.s
-
-source/src/Trajectory/ConstVelocity/Interface.o: source/src/Trajectory/ConstVelocity/Interface.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Interface.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/Interface.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Interface.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Interface.cpp.o
-
-source/src/Trajectory/ConstVelocity/Interface.i: source/src/Trajectory/ConstVelocity/Interface.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Interface.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/Interface.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Interface.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Interface.cpp.i
-
-source/src/Trajectory/ConstVelocity/Interface.s: source/src/Trajectory/ConstVelocity/Interface.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Interface.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/Interface.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Interface.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Interface.cpp.s
-
-source/src/Trajectory/ConstVelocity/PoseExtrapolator.o: source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/PoseExtrapolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.o
-
-source/src/Trajectory/ConstVelocity/PoseExtrapolator.i: source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/PoseExtrapolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.i
-
-source/src/Trajectory/ConstVelocity/PoseExtrapolator.s: source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/PoseExtrapolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp.s
-
-source/src/Trajectory/ConstVelocity/PoseInterpolator.o: source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/PoseInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.o
-
-source/src/Trajectory/ConstVelocity/PoseInterpolator.i: source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/PoseInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.i
-
-source/src/Trajectory/ConstVelocity/PoseInterpolator.s: source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/PoseInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp.s
-
-source/src/Trajectory/ConstVelocity/PriorFactor.o: source/src/Trajectory/ConstVelocity/PriorFactor.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/PriorFactor.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/PriorFactor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PriorFactor.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/PriorFactor.cpp.o
-
-source/src/Trajectory/ConstVelocity/PriorFactor.i: source/src/Trajectory/ConstVelocity/PriorFactor.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/PriorFactor.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/PriorFactor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PriorFactor.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/PriorFactor.cpp.i
-
-source/src/Trajectory/ConstVelocity/PriorFactor.s: source/src/Trajectory/ConstVelocity/PriorFactor.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/PriorFactor.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/PriorFactor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/PriorFactor.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/PriorFactor.cpp.s
-
-source/src/Trajectory/ConstVelocity/Variables.o: source/src/Trajectory/ConstVelocity/Variables.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Variables.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/Variables.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Variables.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/Variables.cpp.o
-
-source/src/Trajectory/ConstVelocity/Variables.i: source/src/Trajectory/ConstVelocity/Variables.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Variables.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/Variables.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Variables.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/Variables.cpp.i
-
-source/src/Trajectory/ConstVelocity/Variables.s: source/src/Trajectory/ConstVelocity/Variables.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Variables.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/Variables.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/Variables.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/Variables.cpp.s
-
-source/src/Trajectory/ConstVelocity/VelocityInterpolator.o: source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/VelocityInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.o
-
-source/src/Trajectory/ConstVelocity/VelocityInterpolator.i: source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/VelocityInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.i
-
-source/src/Trajectory/ConstVelocity/VelocityInterpolator.s: source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/VelocityInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp.s
-
-source/src/Trajectory/Singer/AccelerationExtrapolator.o: source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/AccelerationExtrapolator.o
-
-# target to build an object file
-source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.o
-
-source/src/Trajectory/Singer/AccelerationExtrapolator.i: source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/AccelerationExtrapolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.i
-
-source/src/Trajectory/Singer/AccelerationExtrapolator.s: source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/AccelerationExtrapolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/AccelerationExtrapolator.cpp.s
-
-source/src/Trajectory/Singer/AccelerationInterpolator.o: source/src/Trajectory/Singer/AccelerationInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/AccelerationInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/Singer/AccelerationInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/AccelerationInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/AccelerationInterpolator.cpp.o
-
-source/src/Trajectory/Singer/AccelerationInterpolator.i: source/src/Trajectory/Singer/AccelerationInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/AccelerationInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/AccelerationInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/AccelerationInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/AccelerationInterpolator.cpp.i
-
-source/src/Trajectory/Singer/AccelerationInterpolator.s: source/src/Trajectory/Singer/AccelerationInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/AccelerationInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/AccelerationInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/AccelerationInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/AccelerationInterpolator.cpp.s
-
-source/src/Trajectory/Singer/Interface.o: source/src/Trajectory/Singer/Interface.cpp.o
-.PHONY : source/src/Trajectory/Singer/Interface.o
-
-# target to build an object file
-source/src/Trajectory/Singer/Interface.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/Interface.cpp.o
-.PHONY : source/src/Trajectory/Singer/Interface.cpp.o
-
-source/src/Trajectory/Singer/Interface.i: source/src/Trajectory/Singer/Interface.cpp.i
-.PHONY : source/src/Trajectory/Singer/Interface.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/Interface.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/Interface.cpp.i
-.PHONY : source/src/Trajectory/Singer/Interface.cpp.i
-
-source/src/Trajectory/Singer/Interface.s: source/src/Trajectory/Singer/Interface.cpp.s
-.PHONY : source/src/Trajectory/Singer/Interface.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/Interface.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/Interface.cpp.s
-.PHONY : source/src/Trajectory/Singer/Interface.cpp.s
-
-source/src/Trajectory/Singer/PoseExtrapolator.o: source/src/Trajectory/Singer/PoseExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/PoseExtrapolator.o
-
-# target to build an object file
-source/src/Trajectory/Singer/PoseExtrapolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PoseExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/PoseExtrapolator.cpp.o
-
-source/src/Trajectory/Singer/PoseExtrapolator.i: source/src/Trajectory/Singer/PoseExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/PoseExtrapolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/PoseExtrapolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PoseExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/PoseExtrapolator.cpp.i
-
-source/src/Trajectory/Singer/PoseExtrapolator.s: source/src/Trajectory/Singer/PoseExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/PoseExtrapolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/PoseExtrapolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PoseExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/PoseExtrapolator.cpp.s
-
-source/src/Trajectory/Singer/PoseInterpolator.o: source/src/Trajectory/Singer/PoseInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/PoseInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/Singer/PoseInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PoseInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/PoseInterpolator.cpp.o
-
-source/src/Trajectory/Singer/PoseInterpolator.i: source/src/Trajectory/Singer/PoseInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/PoseInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/PoseInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PoseInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/PoseInterpolator.cpp.i
-
-source/src/Trajectory/Singer/PoseInterpolator.s: source/src/Trajectory/Singer/PoseInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/PoseInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/PoseInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PoseInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/PoseInterpolator.cpp.s
-
-source/src/Trajectory/Singer/PriorFactor.o: source/src/Trajectory/Singer/PriorFactor.cpp.o
-.PHONY : source/src/Trajectory/Singer/PriorFactor.o
-
-# target to build an object file
-source/src/Trajectory/Singer/PriorFactor.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PriorFactor.cpp.o
-.PHONY : source/src/Trajectory/Singer/PriorFactor.cpp.o
-
-source/src/Trajectory/Singer/PriorFactor.i: source/src/Trajectory/Singer/PriorFactor.cpp.i
-.PHONY : source/src/Trajectory/Singer/PriorFactor.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/PriorFactor.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PriorFactor.cpp.i
-.PHONY : source/src/Trajectory/Singer/PriorFactor.cpp.i
-
-source/src/Trajectory/Singer/PriorFactor.s: source/src/Trajectory/Singer/PriorFactor.cpp.s
-.PHONY : source/src/Trajectory/Singer/PriorFactor.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/PriorFactor.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/PriorFactor.cpp.s
-.PHONY : source/src/Trajectory/Singer/PriorFactor.cpp.s
-
-source/src/Trajectory/Singer/VelocityExtrapolator.o: source/src/Trajectory/Singer/VelocityExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/VelocityExtrapolator.o
-
-# target to build an object file
-source/src/Trajectory/Singer/VelocityExtrapolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/VelocityExtrapolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/VelocityExtrapolator.cpp.o
-
-source/src/Trajectory/Singer/VelocityExtrapolator.i: source/src/Trajectory/Singer/VelocityExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/VelocityExtrapolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/VelocityExtrapolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/VelocityExtrapolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/VelocityExtrapolator.cpp.i
-
-source/src/Trajectory/Singer/VelocityExtrapolator.s: source/src/Trajectory/Singer/VelocityExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/VelocityExtrapolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/VelocityExtrapolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/VelocityExtrapolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/VelocityExtrapolator.cpp.s
-
-source/src/Trajectory/Singer/VelocityInterpolator.o: source/src/Trajectory/Singer/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/VelocityInterpolator.o
-
-# target to build an object file
-source/src/Trajectory/Singer/VelocityInterpolator.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/VelocityInterpolator.cpp.o
-.PHONY : source/src/Trajectory/Singer/VelocityInterpolator.cpp.o
-
-source/src/Trajectory/Singer/VelocityInterpolator.i: source/src/Trajectory/Singer/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/VelocityInterpolator.i
-
-# target to preprocess a source file
-source/src/Trajectory/Singer/VelocityInterpolator.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/VelocityInterpolator.cpp.i
-.PHONY : source/src/Trajectory/Singer/VelocityInterpolator.cpp.i
-
-source/src/Trajectory/Singer/VelocityInterpolator.s: source/src/Trajectory/Singer/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/VelocityInterpolator.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Singer/VelocityInterpolator.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Singer/VelocityInterpolator.cpp.s
-.PHONY : source/src/Trajectory/Singer/VelocityInterpolator.cpp.s
-
-source/src/Trajectory/Time.o: source/src/Trajectory/Time.cpp.o
-.PHONY : source/src/Trajectory/Time.o
-
-# target to build an object file
-source/src/Trajectory/Time.cpp.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Time.cpp.o
-.PHONY : source/src/Trajectory/Time.cpp.o
-
-source/src/Trajectory/Time.i: source/src/Trajectory/Time.cpp.i
-.PHONY : source/src/Trajectory/Time.i
-
-# target to preprocess a source file
-source/src/Trajectory/Time.cpp.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Time.cpp.i
-.PHONY : source/src/Trajectory/Time.cpp.i
-
-source/src/Trajectory/Time.s: source/src/Trajectory/Time.cpp.s
-.PHONY : source/src/Trajectory/Time.s
-
-# target to generate assembly for a file
-source/src/Trajectory/Time.cpp.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/core.dir/build.make CMakeFiles/core.dir/source/src/Trajectory/Time.cpp.s
-.PHONY : source/src/Trajectory/Time.cpp.s
-
 # Help Target
 help:
 	@echo "The following are some of the valid targets for this Makefile:"
@@ -2052,72 +2052,213 @@ help:
 	@echo "... source/samples/BSplineTrajectoryExample.o"
 	@echo "... source/samples/BSplineTrajectoryExample.i"
 	@echo "... source/samples/BSplineTrajectoryExample.s"
-	@echo "... source/src/Evaluable/imu/AccErrorEvaluator.o"
-	@echo "... source/src/Evaluable/imu/AccErrorEvaluator.i"
-	@echo "... source/src/Evaluable/imu/AccErrorEvaluator.s"
-	@echo "... source/src/Evaluable/imu/DmiErrorEvaluator.o"
-	@echo "... source/src/Evaluable/imu/DmiErrorEvaluator.i"
-	@echo "... source/src/Evaluable/imu/DmiErrorEvaluator.s"
-	@echo "... source/src/Evaluable/imu/GyroErrorEvaluator.o"
-	@echo "... source/src/Evaluable/imu/GyroErrorEvaluator.i"
-	@echo "... source/src/Evaluable/imu/GyroErrorEvaluator.s"
-	@echo "... source/src/Evaluable/imu/GyroErrorEvaluatorSE2.o"
-	@echo "... source/src/Evaluable/imu/GyroErrorEvaluatorSE2.i"
-	@echo "... source/src/Evaluable/imu/GyroErrorEvaluatorSE2.s"
-	@echo "... source/src/Evaluable/imu/IMUErrorEvaluator.o"
-	@echo "... source/src/Evaluable/imu/IMUErrorEvaluator.i"
-	@echo "... source/src/Evaluable/imu/IMUErrorEvaluator.s"
-	@echo "... source/src/Evaluable/point2point/VelErrorEvaluator.o"
-	@echo "... source/src/Evaluable/point2point/VelErrorEvaluator.i"
-	@echo "... source/src/Evaluable/point2point/VelErrorEvaluator.s"
-	@echo "... source/src/Evaluable/point2point/YawErrorEvaluator.o"
-	@echo "... source/src/Evaluable/point2point/YawErrorEvaluator.i"
-	@echo "... source/src/Evaluable/point2point/YawErrorEvaluator.s"
-	@echo "... source/src/Evaluable/point2point/YawVelErrorEvaluator.o"
-	@echo "... source/src/Evaluable/point2point/YawVelErrorEvaluator.i"
-	@echo "... source/src/Evaluable/point2point/YawVelErrorEvaluator.s"
-	@echo "... source/src/Evaluable/point2point/p2pErrorEvaluator.o"
-	@echo "... source/src/Evaluable/point2point/p2pErrorEvaluator.i"
-	@echo "... source/src/Evaluable/point2point/p2pErrorEvaluator.s"
-	@echo "... source/src/Evaluable/point2point/p2planeErrorEvaluator.o"
-	@echo "... source/src/Evaluable/point2point/p2planeErrorEvaluator.i"
-	@echo "... source/src/Evaluable/point2point/p2planeErrorEvaluator.s"
-	@echo "... source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.o"
-	@echo "... source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.i"
-	@echo "... source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.s"
-	@echo "... source/src/Evaluable/se3/ComposeEvaluator.o"
-	@echo "... source/src/Evaluable/se3/ComposeEvaluator.i"
-	@echo "... source/src/Evaluable/se3/ComposeEvaluator.s"
-	@echo "... source/src/Evaluable/se3/ComposeInverseEvaluator.o"
-	@echo "... source/src/Evaluable/se3/ComposeInverseEvaluator.i"
-	@echo "... source/src/Evaluable/se3/ComposeInverseEvaluator.s"
-	@echo "... source/src/Evaluable/se3/ComposeVelocityEvaluator.o"
-	@echo "... source/src/Evaluable/se3/ComposeVelocityEvaluator.i"
-	@echo "... source/src/Evaluable/se3/ComposeVelocityEvaluator.s"
-	@echo "... source/src/Evaluable/se3/ExpMapEvaluator.o"
-	@echo "... source/src/Evaluable/se3/ExpMapEvaluator.i"
-	@echo "... source/src/Evaluable/se3/ExpMapEvaluator.s"
-	@echo "... source/src/Evaluable/se3/InverseEvaluator.o"
-	@echo "... source/src/Evaluable/se3/InverseEvaluator.i"
-	@echo "... source/src/Evaluable/se3/InverseEvaluator.s"
-	@echo "... source/src/Evaluable/se3/LogMapEvaluator.o"
-	@echo "... source/src/Evaluable/se3/LogMapEvaluator.i"
-	@echo "... source/src/Evaluable/se3/LogMapEvaluator.s"
-	@echo "... source/src/Evaluable/se3/PoseInterpolator.o"
-	@echo "... source/src/Evaluable/se3/PoseInterpolator.i"
-	@echo "... source/src/Evaluable/se3/PoseInterpolator.s"
-	@echo "... source/src/Evaluable/se3/Se3ErrorEvaluator.o"
-	@echo "... source/src/Evaluable/se3/Se3ErrorEvaluator.i"
-	@echo "... source/src/Evaluable/se3/Se3ErrorEvaluator.s"
-	@echo "... source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.o"
-	@echo "... source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.i"
-	@echo "... source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.s"
-	@echo "... source/src/Evaluable/se3/Se3StateVariable.o"
-	@echo "... source/src/Evaluable/se3/Se3StateVariable.i"
-	@echo "... source/src/Evaluable/se3/Se3StateVariable.s"
-	@echo "... source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.o"
-	@echo "... source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.i"
-	@echo "... source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.s"
+	@echo "... source/src/Core/Evaluable/imu/AccErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/imu/AccErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/imu/AccErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/imu/DmiErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/imu/DmiErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/imu/DmiErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/imu/GyroErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/imu/GyroErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/imu/GyroErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.o"
+	@echo "... source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.i"
+	@echo "... source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.s"
+	@echo "... source/src/Core/Evaluable/imu/IMUErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/imu/IMUErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/imu/IMUErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/point2point/VelErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/point2point/VelErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/point2point/VelErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/point2point/YawErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/point2point/YawErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/point2point/YawErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/point2point/p2pErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/point2point/p2pErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/point2point/p2pErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.o"
+	@echo "... source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.i"
+	@echo "... source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/ComposeEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/ComposeEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/ComposeEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/ComposeInverseEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/ComposeInverseEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/ComposeInverseEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/ExpMapEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/ExpMapEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/ExpMapEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/InverseEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/InverseEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/InverseEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/LogMapEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/LogMapEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/LogMapEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/PoseInterpolator.o"
+	@echo "... source/src/Core/Evaluable/se3/PoseInterpolator.i"
+	@echo "... source/src/Core/Evaluable/se3/PoseInterpolator.s"
+	@echo "... source/src/Core/Evaluable/se3/Se3ErrorEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/Se3ErrorEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/Se3ErrorEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.o"
+	@echo "... source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.i"
+	@echo "... source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.s"
+	@echo "... source/src/Core/Evaluable/se3/Se3StateVariable.o"
+	@echo "... source/src/Core/Evaluable/se3/Se3StateVariable.i"
+	@echo "... source/src/Core/Evaluable/se3/Se3StateVariable.s"
+	@echo "... source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.o"
+	@echo "... source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.i"
+	@echo "... source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.s"
+	@echo "... source/src/Core/MatrixOperator/BlockDimensionIndexing.o"
+	@echo "... source/src/Core/MatrixOperator/BlockDimensionIndexing.i"
+	@echo "... source/src/Core/MatrixOperator/BlockDimensionIndexing.s"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrix.o"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrix.i"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrix.s"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrixBase.o"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrixBase.i"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrixBase.s"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrixIndexing.o"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrixIndexing.i"
+	@echo "... source/src/Core/MatrixOperator/BlockMatrixIndexing.s"
+	@echo "... source/src/Core/MatrixOperator/BlockSparseMatrix.o"
+	@echo "... source/src/Core/MatrixOperator/BlockSparseMatrix.i"
+	@echo "... source/src/Core/MatrixOperator/BlockSparseMatrix.s"
+	@echo "... source/src/Core/MatrixOperator/BlockVector.o"
+	@echo "... source/src/Core/MatrixOperator/BlockVector.i"
+	@echo "... source/src/Core/MatrixOperator/BlockVector.s"
+	@echo "... source/src/Core/Problem/CostTerm/GyroSuperCostTerm.o"
+	@echo "... source/src/Core/Problem/CostTerm/GyroSuperCostTerm.i"
+	@echo "... source/src/Core/Problem/CostTerm/GyroSuperCostTerm.s"
+	@echo "... source/src/Core/Problem/CostTerm/IMUSuperCostTerm.o"
+	@echo "... source/src/Core/Problem/CostTerm/IMUSuperCostTerm.i"
+	@echo "... source/src/Core/Problem/CostTerm/IMUSuperCostTerm.s"
+	@echo "... source/src/Core/Problem/OptimizationProblem.o"
+	@echo "... source/src/Core/Problem/OptimizationProblem.i"
+	@echo "... source/src/Core/Problem/OptimizationProblem.s"
+	@echo "... source/src/Core/Problem/SlidingWindowFilter.o"
+	@echo "... source/src/Core/Problem/SlidingWindowFilter.i"
+	@echo "... source/src/Core/Problem/SlidingWindowFilter.s"
+	@echo "... source/src/Core/Problem/StateVector.o"
+	@echo "... source/src/Core/Problem/StateVector.i"
+	@echo "... source/src/Core/Problem/StateVector.s"
+	@echo "... source/src/Core/Solver/Covariance.o"
+	@echo "... source/src/Core/Solver/Covariance.i"
+	@echo "... source/src/Core/Solver/Covariance.s"
+	@echo "... source/src/Core/Solver/DoglegGaussNewtonSolver.o"
+	@echo "... source/src/Core/Solver/DoglegGaussNewtonSolver.i"
+	@echo "... source/src/Core/Solver/DoglegGaussNewtonSolver.s"
+	@echo "... source/src/Core/Solver/GaussNewtonSolver.o"
+	@echo "... source/src/Core/Solver/GaussNewtonSolver.i"
+	@echo "... source/src/Core/Solver/GaussNewtonSolver.s"
+	@echo "... source/src/Core/Solver/GaussNewtonSolverNVA.o"
+	@echo "... source/src/Core/Solver/GaussNewtonSolverNVA.i"
+	@echo "... source/src/Core/Solver/GaussNewtonSolverNVA.s"
+	@echo "... source/src/Core/Solver/LevMarqGaussNewtonSolver.o"
+	@echo "... source/src/Core/Solver/LevMarqGaussNewtonSolver.i"
+	@echo "... source/src/Core/Solver/LevMarqGaussNewtonSolver.s"
+	@echo "... source/src/Core/Solver/LineSearchGaussNewtonSolver.o"
+	@echo "... source/src/Core/Solver/LineSearchGaussNewtonSolver.i"
+	@echo "... source/src/Core/Solver/LineSearchGaussNewtonSolver.s"
+	@echo "... source/src/Core/Solver/SolverBase.o"
+	@echo "... source/src/Core/Solver/SolverBase.i"
+	@echo "... source/src/Core/Solver/SolverBase.s"
+	@echo "... source/src/Core/Trajectory/Bspline/Interface.o"
+	@echo "... source/src/Core/Trajectory/Bspline/Interface.i"
+	@echo "... source/src/Core/Trajectory/Bspline/Interface.s"
+	@echo "... source/src/Core/Trajectory/Bspline/VelocityInterpolator.o"
+	@echo "... source/src/Core/Trajectory/Bspline/VelocityInterpolator.i"
+	@echo "... source/src/Core/Trajectory/Bspline/VelocityInterpolator.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Interface.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Interface.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Interface.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PriorFactor.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PriorFactor.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/PriorFactor.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Variables.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Variables.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/Variables.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.s"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.o"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.i"
+	@echo "... source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Interface.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Interface.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Interface.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PriorFactor.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PriorFactor.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/PriorFactor.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Variables.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Variables.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/Variables.s"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.o"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.i"
+	@echo "... source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.s"
+	@echo "... source/src/Core/Trajectory/Singer/AccelerationExtrapolator.o"
+	@echo "... source/src/Core/Trajectory/Singer/AccelerationExtrapolator.i"
+	@echo "... source/src/Core/Trajectory/Singer/AccelerationExtrapolator.s"
+	@echo "... source/src/Core/Trajectory/Singer/AccelerationInterpolator.o"
+	@echo "... source/src/Core/Trajectory/Singer/AccelerationInterpolator.i"
+	@echo "... source/src/Core/Trajectory/Singer/AccelerationInterpolator.s"
+	@echo "... source/src/Core/Trajectory/Singer/Interface.o"
+	@echo "... source/src/Core/Trajectory/Singer/Interface.i"
+	@echo "... source/src/Core/Trajectory/Singer/Interface.s"
+	@echo "... source/src/Core/Trajectory/Singer/PoseExtrapolator.o"
+	@echo "... source/src/Core/Trajectory/Singer/PoseExtrapolator.i"
+	@echo "... source/src/Core/Trajectory/Singer/PoseExtrapolator.s"
+	@echo "... source/src/Core/Trajectory/Singer/PoseInterpolator.o"
+	@echo "... source/src/Core/Trajectory/Singer/PoseInterpolator.i"
+	@echo "... source/src/Core/Trajectory/Singer/PoseInterpolator.s"
+	@echo "... source/src/Core/Trajectory/Singer/PriorFactor.o"
+	@echo "... source/src/Core/Trajectory/Singer/PriorFactor.i"
+	@echo "... source/src/Core/Trajectory/Singer/PriorFactor.s"
+	@echo "... source/src/Core/Trajectory/Singer/VelocityExtrapolator.o"
+	@echo "... source/src/Core/Trajectory/Singer/VelocityExtrapolator.i"
+	@echo "... source/src/Core/Trajectory/Singer/VelocityExtrapolator.s"
+	@echo "... source/src/Core/Trajectory/Singer/VelocityInterpolator.o"
+	@echo "... source/src/Core/Trajectory/Singer/VelocityInterpolator.i"
+	@echo "... source/src/Core/Trajectory/Singer/VelocityInterpolator.s"
+	@echo "... source/src/Core/Trajectory/Time.o"
+	@echo "... source/src/Core/Trajectory/Time.i"
+	@echo "... source/src/Core/Trajectory/Time.s"
 	@echo "... source/src/LGMath/CommonMath.o"
 	@echo "... source/src/LGMath/CommonMath.i"
 	@echo "... source/src/LGMath/CommonMath.s"
@@ -2139,147 +2280,6 @@ help:
 	@echo "... source/src/LGMath/so3/Rotations.o"
 	@echo "... source/src/LGMath/so3/Rotations.i"
 	@echo "... source/src/LGMath/so3/Rotations.s"
-	@echo "... source/src/MatrixOperator/BlockDimensionIndexing.o"
-	@echo "... source/src/MatrixOperator/BlockDimensionIndexing.i"
-	@echo "... source/src/MatrixOperator/BlockDimensionIndexing.s"
-	@echo "... source/src/MatrixOperator/BlockMatrix.o"
-	@echo "... source/src/MatrixOperator/BlockMatrix.i"
-	@echo "... source/src/MatrixOperator/BlockMatrix.s"
-	@echo "... source/src/MatrixOperator/BlockMatrixBase.o"
-	@echo "... source/src/MatrixOperator/BlockMatrixBase.i"
-	@echo "... source/src/MatrixOperator/BlockMatrixBase.s"
-	@echo "... source/src/MatrixOperator/BlockMatrixIndexing.o"
-	@echo "... source/src/MatrixOperator/BlockMatrixIndexing.i"
-	@echo "... source/src/MatrixOperator/BlockMatrixIndexing.s"
-	@echo "... source/src/MatrixOperator/BlockSparseMatrix.o"
-	@echo "... source/src/MatrixOperator/BlockSparseMatrix.i"
-	@echo "... source/src/MatrixOperator/BlockSparseMatrix.s"
-	@echo "... source/src/MatrixOperator/BlockVector.o"
-	@echo "... source/src/MatrixOperator/BlockVector.i"
-	@echo "... source/src/MatrixOperator/BlockVector.s"
-	@echo "... source/src/Problem/CostTerm/GyroSuperCostTerm.o"
-	@echo "... source/src/Problem/CostTerm/GyroSuperCostTerm.i"
-	@echo "... source/src/Problem/CostTerm/GyroSuperCostTerm.s"
-	@echo "... source/src/Problem/CostTerm/IMUSuperCostTerm.o"
-	@echo "... source/src/Problem/CostTerm/IMUSuperCostTerm.i"
-	@echo "... source/src/Problem/CostTerm/IMUSuperCostTerm.s"
-	@echo "... source/src/Problem/OptimizationProblem.o"
-	@echo "... source/src/Problem/OptimizationProblem.i"
-	@echo "... source/src/Problem/OptimizationProblem.s"
-	@echo "... source/src/Problem/SlidingWindowFilter.o"
-	@echo "... source/src/Problem/SlidingWindowFilter.i"
-	@echo "... source/src/Problem/SlidingWindowFilter.s"
-	@echo "... source/src/Problem/StateVector.o"
-	@echo "... source/src/Problem/StateVector.i"
-	@echo "... source/src/Problem/StateVector.s"
-	@echo "... source/src/Solver/Covariance.o"
-	@echo "... source/src/Solver/Covariance.i"
-	@echo "... source/src/Solver/Covariance.s"
-	@echo "... source/src/Solver/DoglegGaussNewtonSolver.o"
-	@echo "... source/src/Solver/DoglegGaussNewtonSolver.i"
-	@echo "... source/src/Solver/DoglegGaussNewtonSolver.s"
-	@echo "... source/src/Solver/GaussNewtonSolver.o"
-	@echo "... source/src/Solver/GaussNewtonSolver.i"
-	@echo "... source/src/Solver/GaussNewtonSolver.s"
-	@echo "... source/src/Solver/GaussNewtonSolverNVA.o"
-	@echo "... source/src/Solver/GaussNewtonSolverNVA.i"
-	@echo "... source/src/Solver/GaussNewtonSolverNVA.s"
-	@echo "... source/src/Solver/LevMarqGaussNewtonSolver.o"
-	@echo "... source/src/Solver/LevMarqGaussNewtonSolver.i"
-	@echo "... source/src/Solver/LevMarqGaussNewtonSolver.s"
-	@echo "... source/src/Solver/LineSearchGaussNewtonSolver.o"
-	@echo "... source/src/Solver/LineSearchGaussNewtonSolver.i"
-	@echo "... source/src/Solver/LineSearchGaussNewtonSolver.s"
-	@echo "... source/src/Solver/SolverBase.o"
-	@echo "... source/src/Solver/SolverBase.i"
-	@echo "... source/src/Solver/SolverBase.s"
-	@echo "... source/src/Trajectory/Bspline/Interface.o"
-	@echo "... source/src/Trajectory/Bspline/Interface.i"
-	@echo "... source/src/Trajectory/Bspline/Interface.s"
-	@echo "... source/src/Trajectory/Bspline/VelocityInterpolator.o"
-	@echo "... source/src/Trajectory/Bspline/VelocityInterpolator.i"
-	@echo "... source/src/Trajectory/Bspline/VelocityInterpolator.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/Interface.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/Interface.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/Interface.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/PoseExtrapolator.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/PoseExtrapolator.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/PoseExtrapolator.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/PoseInterpolator.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/PoseInterpolator.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/PoseInterpolator.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/PriorFactor.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/PriorFactor.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/PriorFactor.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/Variables.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/Variables.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/Variables.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.s"
-	@echo "... source/src/Trajectory/ConstAcceleration/VelocityInterpolator.o"
-	@echo "... source/src/Trajectory/ConstAcceleration/VelocityInterpolator.i"
-	@echo "... source/src/Trajectory/ConstAcceleration/VelocityInterpolator.s"
-	@echo "... source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.o"
-	@echo "... source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.i"
-	@echo "... source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.s"
-	@echo "... source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.o"
-	@echo "... source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.i"
-	@echo "... source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.s"
-	@echo "... source/src/Trajectory/ConstVelocity/Interface.o"
-	@echo "... source/src/Trajectory/ConstVelocity/Interface.i"
-	@echo "... source/src/Trajectory/ConstVelocity/Interface.s"
-	@echo "... source/src/Trajectory/ConstVelocity/PoseExtrapolator.o"
-	@echo "... source/src/Trajectory/ConstVelocity/PoseExtrapolator.i"
-	@echo "... source/src/Trajectory/ConstVelocity/PoseExtrapolator.s"
-	@echo "... source/src/Trajectory/ConstVelocity/PoseInterpolator.o"
-	@echo "... source/src/Trajectory/ConstVelocity/PoseInterpolator.i"
-	@echo "... source/src/Trajectory/ConstVelocity/PoseInterpolator.s"
-	@echo "... source/src/Trajectory/ConstVelocity/PriorFactor.o"
-	@echo "... source/src/Trajectory/ConstVelocity/PriorFactor.i"
-	@echo "... source/src/Trajectory/ConstVelocity/PriorFactor.s"
-	@echo "... source/src/Trajectory/ConstVelocity/Variables.o"
-	@echo "... source/src/Trajectory/ConstVelocity/Variables.i"
-	@echo "... source/src/Trajectory/ConstVelocity/Variables.s"
-	@echo "... source/src/Trajectory/ConstVelocity/VelocityInterpolator.o"
-	@echo "... source/src/Trajectory/ConstVelocity/VelocityInterpolator.i"
-	@echo "... source/src/Trajectory/ConstVelocity/VelocityInterpolator.s"
-	@echo "... source/src/Trajectory/Singer/AccelerationExtrapolator.o"
-	@echo "... source/src/Trajectory/Singer/AccelerationExtrapolator.i"
-	@echo "... source/src/Trajectory/Singer/AccelerationExtrapolator.s"
-	@echo "... source/src/Trajectory/Singer/AccelerationInterpolator.o"
-	@echo "... source/src/Trajectory/Singer/AccelerationInterpolator.i"
-	@echo "... source/src/Trajectory/Singer/AccelerationInterpolator.s"
-	@echo "... source/src/Trajectory/Singer/Interface.o"
-	@echo "... source/src/Trajectory/Singer/Interface.i"
-	@echo "... source/src/Trajectory/Singer/Interface.s"
-	@echo "... source/src/Trajectory/Singer/PoseExtrapolator.o"
-	@echo "... source/src/Trajectory/Singer/PoseExtrapolator.i"
-	@echo "... source/src/Trajectory/Singer/PoseExtrapolator.s"
-	@echo "... source/src/Trajectory/Singer/PoseInterpolator.o"
-	@echo "... source/src/Trajectory/Singer/PoseInterpolator.i"
-	@echo "... source/src/Trajectory/Singer/PoseInterpolator.s"
-	@echo "... source/src/Trajectory/Singer/PriorFactor.o"
-	@echo "... source/src/Trajectory/Singer/PriorFactor.i"
-	@echo "... source/src/Trajectory/Singer/PriorFactor.s"
-	@echo "... source/src/Trajectory/Singer/VelocityExtrapolator.o"
-	@echo "... source/src/Trajectory/Singer/VelocityExtrapolator.i"
-	@echo "... source/src/Trajectory/Singer/VelocityExtrapolator.s"
-	@echo "... source/src/Trajectory/Singer/VelocityInterpolator.o"
-	@echo "... source/src/Trajectory/Singer/VelocityInterpolator.i"
-	@echo "... source/src/Trajectory/Singer/VelocityInterpolator.s"
-	@echo "... source/src/Trajectory/Time.o"
-	@echo "... source/src/Trajectory/Time.i"
-	@echo "... source/src/Trajectory/Time.s"
 .PHONY : help
 
 

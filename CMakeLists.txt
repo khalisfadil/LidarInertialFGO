@@ -27,30 +27,30 @@ set(INCLUDE_DIRECTORIES ${CMAKE_SOURCE_DIR}/source/include)
 
 # Core library
 add_library(core STATIC
-    source/src/Evaluable/imu/AccErrorEvaluator.cpp
-    source/src/Evaluable/imu/DmiErrorEvaluator.cpp
-    source/src/Evaluable/imu/GyroErrorEvaluator.cpp
-    source/src/Evaluable/imu/GyroErrorEvaluatorSE2.cpp
-    source/src/Evaluable/imu/IMUErrorEvaluator.cpp
+    source/src/Core/Evaluable/imu/AccErrorEvaluator.cpp
+    source/src/Core/Evaluable/imu/DmiErrorEvaluator.cpp
+    source/src/Core/Evaluable/imu/GyroErrorEvaluator.cpp
+    source/src/Core/Evaluable/imu/GyroErrorEvaluatorSE2.cpp
+    source/src/Core/Evaluable/imu/IMUErrorEvaluator.cpp
 
-    source/src/Evaluable/point2point/p2pErrorEvaluator.cpp
-    source/src/Evaluable/point2point/p2planeErrorEvaluator.cpp
-    source/src/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp
-    source/src/Evaluable/point2point/VelErrorEvaluator.cpp
-    source/src/Evaluable/point2point/YawErrorEvaluator.cpp
-    source/src/Evaluable/point2point/YawVelErrorEvaluator.cpp
+    source/src/Core/Evaluable/point2point/p2pErrorEvaluator.cpp
+    source/src/Core/Evaluable/point2point/p2planeErrorEvaluator.cpp
+    source/src/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.cpp
+    source/src/Core/Evaluable/point2point/VelErrorEvaluator.cpp
+    source/src/Core/Evaluable/point2point/YawErrorEvaluator.cpp
+    source/src/Core/Evaluable/point2point/YawVelErrorEvaluator.cpp
 
-    source/src/Evaluable/se3/ComposeEvaluator.cpp
-    source/src/Evaluable/se3/ComposeInverseEvaluator.cpp
-    source/src/Evaluable/se3/ComposeVelocityEvaluator.cpp
-    source/src/Evaluable/se3/ExpMapEvaluator.cpp
-    source/src/Evaluable/se3/InverseEvaluator.cpp
-    source/src/Evaluable/se3/LogMapEvaluator.cpp
-    source/src/Evaluable/se3/PoseInterpolator.cpp
-    source/src/Evaluable/se3/Se3ErrorEvaluator.cpp
-    source/src/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp
-    source/src/Evaluable/se3/Se3StateVariable.cpp
-    source/src/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp
+    source/src/Core/Evaluable/se3/ComposeEvaluator.cpp
+    source/src/Core/Evaluable/se3/ComposeInverseEvaluator.cpp
+    source/src/Core/Evaluable/se3/ComposeVelocityEvaluator.cpp
+    source/src/Core/Evaluable/se3/ExpMapEvaluator.cpp
+    source/src/Core/Evaluable/se3/InverseEvaluator.cpp
+    source/src/Core/Evaluable/se3/LogMapEvaluator.cpp
+    source/src/Core/Evaluable/se3/PoseInterpolator.cpp
+    source/src/Core/Evaluable/se3/Se3ErrorEvaluator.cpp
+    source/src/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.cpp
+    source/src/Core/Evaluable/se3/Se3StateVariable.cpp
+    source/src/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.cpp
 
     source/src/LGMath/r3/Operations.cpp
     source/src/LGMath/se3/Operations.cpp
@@ -60,59 +60,59 @@ add_library(core STATIC
     source/src/LGMath/so3/Rotations.cpp
     source/src/LGMath/CommonMath.cpp
 
-    source/src/MatrixOperator/BlockDimensionIndexing.cpp
-    source/src/MatrixOperator/BlockMatrix.cpp
-    source/src/MatrixOperator/BlockMatrixBase.cpp
-    source/src/MatrixOperator/BlockMatrixIndexing.cpp
-    source/src/MatrixOperator/BlockSparseMatrix.cpp
-    source/src/MatrixOperator/BlockVector.cpp
+    source/src/Core/MatrixOperator/BlockDimensionIndexing.cpp
+    source/src/Core/MatrixOperator/BlockMatrix.cpp
+    source/src/Core/MatrixOperator/BlockMatrixBase.cpp
+    source/src/Core/MatrixOperator/BlockMatrixIndexing.cpp
+    source/src/Core/MatrixOperator/BlockSparseMatrix.cpp
+    source/src/Core/MatrixOperator/BlockVector.cpp
 
-    source/src/Problem/CostTerm/GyroSuperCostTerm.cpp
-    source/src/Problem/CostTerm/IMUSuperCostTerm.cpp
-    source/src/Problem/OptimizationProblem.cpp
-    source/src/Problem/SlidingWindowFilter.cpp
-    source/src/Problem/StateVector.cpp
+    source/src/Core/Problem/CostTerm/GyroSuperCostTerm.cpp
+    source/src/Core/Problem/CostTerm/IMUSuperCostTerm.cpp
+    source/src/Core/Problem/OptimizationProblem.cpp
+    source/src/Core/Problem/SlidingWindowFilter.cpp
+    source/src/Core/Problem/StateVector.cpp
 
-    source/src/Solver/Covariance.cpp
-    source/src/Solver/DoglegGaussNewtonSolver.cpp
-    source/src/Solver/GaussNewtonSolver.cpp
-    source/src/Solver/GaussNewtonSolverNVA.cpp
-    source/src/Solver/LevMarqGaussNewtonSolver.cpp
-    source/src/Solver/LineSearchGaussNewtonSolver.cpp
-    source/src/Solver/SolverBase.cpp
+    source/src/Core/Solver/Covariance.cpp
+    source/src/Core/Solver/DoglegGaussNewtonSolver.cpp
+    source/src/Core/Solver/GaussNewtonSolver.cpp
+    source/src/Core/Solver/GaussNewtonSolverNVA.cpp
+    source/src/Core/Solver/LevMarqGaussNewtonSolver.cpp
+    source/src/Core/Solver/LineSearchGaussNewtonSolver.cpp
+    source/src/Core/Solver/SolverBase.cpp
 
-    source/src/Trajectory/Bspline/Interface.cpp
-    source/src/Trajectory/Bspline/VelocityInterpolator.cpp
+    source/src/Core/Trajectory/Bspline/Interface.cpp
+    source/src/Core/Trajectory/Bspline/VelocityInterpolator.cpp
 
-    source/src/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp
-    source/src/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp
-    source/src/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp
-    source/src/Trajectory/ConstAcceleration/Interface.cpp
-    source/src/Trajectory/ConstAcceleration/PoseExtrapolator.cpp
-    source/src/Trajectory/ConstAcceleration/PoseInterpolator.cpp
-    source/src/Trajectory/ConstAcceleration/PriorFactor.cpp
-    source/src/Trajectory/ConstAcceleration/Variables.cpp
-    source/src/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp
-    source/src/Trajectory/ConstAcceleration/VelocityInterpolator.cpp
+    source/src/Core/Trajectory/ConstAcceleration/Evaluable/composeCurlyhatEvaluator.cpp
+    source/src/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.cpp
+    source/src/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.cpp
+    source/src/Core/Trajectory/ConstAcceleration/Interface.cpp
+    source/src/Core/Trajectory/ConstAcceleration/PoseExtrapolator.cpp
+    source/src/Core/Trajectory/ConstAcceleration/PoseInterpolator.cpp
+    source/src/Core/Trajectory/ConstAcceleration/PriorFactor.cpp
+    source/src/Core/Trajectory/ConstAcceleration/Variables.cpp
+    source/src/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.cpp
+    source/src/Core/Trajectory/ConstAcceleration/VelocityInterpolator.cpp
 
-    source/src/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp
-    source/src/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp
-    source/src/Trajectory/ConstVelocity/Interface.cpp
-    source/src/Trajectory/ConstVelocity/PoseExtrapolator.cpp
-    source/src/Trajectory/ConstVelocity/PoseInterpolator.cpp
-    source/src/Trajectory/ConstVelocity/PriorFactor.cpp
-    source/src/Trajectory/ConstVelocity/Variables.cpp
-    source/src/Trajectory/ConstVelocity/VelocityInterpolator.cpp
+    source/src/Core/Trajectory/ConstVelocity/Evaluable/JinvVelocityEvaluator.cpp
+    source/src/Core/Trajectory/ConstVelocity/Evaluable/JVelocityEvaluator.cpp
+    source/src/Core/Trajectory/ConstVelocity/Interface.cpp
+    source/src/Core/Trajectory/ConstVelocity/PoseExtrapolator.cpp
+    source/src/Core/Trajectory/ConstVelocity/PoseInterpolator.cpp
+    source/src/Core/Trajectory/ConstVelocity/PriorFactor.cpp
+    source/src/Core/Trajectory/ConstVelocity/Variables.cpp
+    source/src/Core/Trajectory/ConstVelocity/VelocityInterpolator.cpp
 
-    source/src/Trajectory/Singer/AccelerationExtrapolator.cpp
-    source/src/Trajectory/Singer/AccelerationInterpolator.cpp
-    source/src/Trajectory/Singer/Interface.cpp
-    source/src/Trajectory/Singer/PoseExtrapolator.cpp
-    source/src/Trajectory/Singer/PoseInterpolator.cpp
-    source/src/Trajectory/Singer/PriorFactor.cpp
-    source/src/Trajectory/Singer/VelocityExtrapolator.cpp
-    source/src/Trajectory/Singer/VelocityInterpolator.cpp
-    source/src/Trajectory/Time.cpp
+    source/src/Core/Trajectory/Singer/AccelerationExtrapolator.cpp
+    source/src/Core/Trajectory/Singer/AccelerationInterpolator.cpp
+    source/src/Core/Trajectory/Singer/Interface.cpp
+    source/src/Core/Trajectory/Singer/PoseExtrapolator.cpp
+    source/src/Core/Trajectory/Singer/PoseInterpolator.cpp
+    source/src/Core/Trajectory/Singer/PriorFactor.cpp
+    source/src/Core/Trajectory/Singer/VelocityExtrapolator.cpp
+    source/src/Core/Trajectory/Singer/VelocityInterpolator.cpp
+    source/src/Core/Trajectory/Time.cpp
 )
 
 # Include directories for the core library

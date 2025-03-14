@@ -4,7 +4,7 @@
 #include <vector>
 #include <Eigen/Dense>
 #include "LGMath/LieGroupMath.hpp"
-#include "slam.hpp"
+#include "Core/slam.hpp"
 
 using namespace slam;
 

@@ -531,8 +531,8 @@ CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.
  /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/LGMath/se3/TransformationWithCovariance.hpp \
  /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/LGMath/r3/Operations.hpp \
  /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/LGMath/r3/Types.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/slam.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/MatrixOperator/BlockMatrix.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/slam.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/MatrixOperator/BlockMatrix.hpp \
  /usr/include/tbb/parallel_for.h /usr/include/oneapi/tbb/parallel_for.h \
  /usr/include/oneapi/tbb/detail/_config.h /usr/include/c++/13/version \
  /usr/include/oneapi/tbb/detail/_export.h \
@@ -583,7 +583,7 @@ CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.
  /usr/include/oneapi/tbb/blocked_range.h \
  /usr/include/oneapi/tbb/version.h /usr/include/tbb/blocked_range2d.h \
  /usr/include/oneapi/tbb/blocked_range2d.h \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/MatrixOperator/BlockMatrixBase.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/MatrixOperator/BlockMatrixBase.hpp \
  /usr/include/eigen3/Eigen/Sparse /usr/include/eigen3/Eigen/SparseCore \
  /usr/include/c++/13/map /usr/include/c++/13/bits/stl_tree.h \
  /usr/include/c++/13/bits/stl_map.h \
@@ -661,9 +661,9 @@ CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.
  /usr/include/eigen3/Eigen/src/IterativeLinearSolvers/IncompleteCholesky.h \
  /usr/include/c++/13/list /usr/include/c++/13/bits/stl_list.h \
  /usr/include/c++/13/bits/list.tcc \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/MatrixOperator/BlockDimensionIndexing.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/MatrixOperator/BlockMatrixIndexing.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/MatrixOperator/BlockSparseMatrix.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/MatrixOperator/BlockDimensionIndexing.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/MatrixOperator/BlockMatrixIndexing.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/MatrixOperator/BlockSparseMatrix.hpp \
  /usr/include/tbb/concurrent_hash_map.h \
  /usr/include/oneapi/tbb/concurrent_hash_map.h \
  /usr/include/oneapi/tbb/detail/_allocator_traits.h \
@@ -680,10 +680,10 @@ CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.
  /usr/include/oneapi/tbb/spin_rw_mutex.h \
  /usr/include/tbb/parallel_reduce.h \
  /usr/include/oneapi/tbb/parallel_reduce.h \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/MatrixOperator/BlockVector.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Common/Timer.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/MatrixOperator/BlockVector.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Common/Timer.hpp \
  /usr/include/c++/13/chrono \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/Evaluable.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/Evaluable.hpp \
  /usr/include/c++/13/optional /usr/include/tbb/concurrent_unordered_set.h \
  /usr/include/oneapi/tbb/concurrent_unordered_set.h \
  /usr/include/oneapi/tbb/detail/_concurrent_unordered_base.h \
@@ -692,63 +692,63 @@ CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.
  /usr/include/oneapi/tbb/detail/_exception.h \
  /usr/include/oneapi/tbb/detail/_hash_compare.h \
  /usr/include/oneapi/tbb/detail/_node_handle.h \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/StateKeyJacobians.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/StateKey.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/Node.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/NodeBase.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/StateVariable.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/StateVariableBase.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/imu/Evaluables.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/ComposeEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/ComposeInverseEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/ComposeVelocityEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/ExpMapEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/InverseEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/LogMapEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/PoseInterpolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Time.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/Se3ErrorEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/Se3StateVariable.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/Se3StateVariableGlobalPerturb.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/point2point/Evaluables.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/point2point/p2pErrorEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/point2point/p2planeErrorEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/point2point/p2planeGlobalPerturbEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/point2point/VelErrorEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/point2point/YawErrorEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/point2point/YawVelErrorEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/se3/Evaluables.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/Evaluables.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/AdditionEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/MatrixMultEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/MergeEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/NegationEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/PreIntVelocityStateVar.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/ScalarMultEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/VSpaceErrorEvaluator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/VSpaceInterpolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Evaluable/vspace/VSpaceStateVar.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/CostTerm/WeightLeastSqCostTerm.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/StateKeyJacobians.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/StateKey.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/Node.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/NodeBase.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/StateVariable.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/StateVariableBase.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/imu/Evaluables.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/ComposeEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/ComposeInverseEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/ComposeVelocityEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/ExpMapEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/InverseEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/LogMapEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/PoseInterpolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Time.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/Se3ErrorEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/Se3ErrorGlobalPerturbEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/Se3StateVariable.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/Se3StateVariableGlobalPerturb.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/point2point/Evaluables.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/point2point/p2pErrorEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/point2point/p2planeErrorEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/point2point/p2planeGlobalPerturbEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/point2point/VelErrorEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/point2point/YawErrorEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/point2point/YawVelErrorEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/se3/Evaluables.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/Evaluables.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/AdditionEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/MatrixMultEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/MergeEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/NegationEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/PreIntVelocityStateVar.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/ScalarMultEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/VSpaceErrorEvaluator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/VSpaceInterpolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Evaluable/vspace/VSpaceStateVar.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/CostTerm/WeightLeastSqCostTerm.hpp \
  /usr/include/tbb/spin_mutex.h /usr/include/oneapi/tbb/spin_mutex.h \
  /usr/include/oneapi/tbb/detail/_rtm_mutex.h \
  /usr/include/oneapi/tbb/spin_mutex.h \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/CostTerm/BaseCostTerm.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/StateVector.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/BaseLossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/NoiseModel/BaseNoiseModel.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/LossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/CauchyLossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/DynCovScalingLossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/GemanMcClureLossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/HuberLossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/L1LossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/LossFunc/L2LossFunc.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/NoiseModel/StaticNoiseModel.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/NoiseModel/DynamicNoiseModel.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/OptimizationProblem.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/Problem.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Problem/SlidingWindowFilter.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/CostTerm/BaseCostTerm.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/StateVector.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/BaseLossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/NoiseModel/BaseNoiseModel.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/LossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/CauchyLossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/DynCovScalingLossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/GemanMcClureLossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/HuberLossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/L1LossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/LossFunc/L2LossFunc.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/NoiseModel/StaticNoiseModel.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/NoiseModel/DynamicNoiseModel.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/OptimizationProblem.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/Problem.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Problem/SlidingWindowFilter.hpp \
  /usr/include/c++/13/deque /usr/include/c++/13/bits/stl_deque.h \
  /usr/include/c++/13/bits/deque.tcc /usr/include/tbb/concurrent_vector.h \
  /usr/include/oneapi/tbb/concurrent_vector.h \
@@ -757,37 +757,37 @@ CMakeFiles/BSplineTrajectoryExample.dir/source/samples/BSplineTrajectoryExample.
  /usr/include/oneapi/tbb/parallel_invoke.h \
  /usr/include/c++/13/unordered_set \
  /usr/include/c++/13/bits/unordered_set.h \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Solver/Covariance.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Solver/Covariance.hpp \
  /usr/include/tbb/blocked_range.h /usr/include/oneapi/tbb/blocked_range.h \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Solver/GaussNewtonSolver.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Solver/SolverBase.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Solver/DoglegGaussNewtonSolver.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Solver/GaussNewtonSolver.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Solver/SolverBase.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Solver/DoglegGaussNewtonSolver.hpp \
  /usr/include/eigen3/Eigen/Cholesky \
  /usr/include/tbb/concurrent_priority_queue.h \
  /usr/include/oneapi/tbb/concurrent_priority_queue.h \
  /usr/include/oneapi/tbb/detail/_aggregator.h \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Solver/LevMarqGaussNewtonSolver.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Solver/LineSearchGaussNewtonSolver.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Bspline/Interface.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Bspline/Variable.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Interface.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/Interface.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/Variables.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstVelocity/Interface.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstVelocity/Variables.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/Interface.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/AccelerationExtrapolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/AccelerationExtrapolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/Helper.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/AccelerationInterpolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/AccelerationInterpolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/PoseExtrapolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/PoseExtrapolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/PoseInterpolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/PoseInterpolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/PriorFactor.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/PriorFactor.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/VelocityExtrapolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/VelocityExtrapolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/Singer/VelocityInterpolator.hpp \
- /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Trajectory/ConstAcceleration/VelocityInterpolator.hpp
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Solver/LevMarqGaussNewtonSolver.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Solver/LineSearchGaussNewtonSolver.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Bspline/Interface.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Bspline/Variable.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Interface.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/Interface.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/Variables.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstVelocity/Interface.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstVelocity/Variables.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/Interface.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/AccelerationExtrapolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/AccelerationExtrapolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/Helper.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/AccelerationInterpolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/AccelerationInterpolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/PoseExtrapolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/PoseExtrapolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/PoseInterpolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/PoseInterpolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/PriorFactor.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/PriorFactor.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/VelocityExtrapolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/VelocityExtrapolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/Singer/VelocityInterpolator.hpp \
+ /home/khalis/Sync/SensorSOW/Arbeitspakete/MATLAB/Developement/021_LidarInertialFGO/source/include/Core/Trajectory/ConstAcceleration/VelocityInterpolator.hpp
