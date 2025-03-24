@@ -69,8 +69,8 @@ namespace slam {
                     uint32_t temp_numInput;
                     std::memcpy(&temp_numInput, &data[69], sizeof(uint32_t)); // Bytes 69 to 72
 
-                    
-
+                    std::cout << "[temp_frameID]: " << temp_frameID << "\n";
+                    std::cout << "[frameID_]: " << frameID_ << "\n";
                     if (temp_frameID != frameID_) {
                         std::cout << "[maxNumSegment_]: " << maxNumSegment_ << "\n";
                         std::cout << "[currSegmIdx_ - 1]: " << currSegmIdx_ - 1 << "\n";
