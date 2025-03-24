@@ -330,7 +330,7 @@ namespace slam {
                                         uint32_t bufferSize,
                                         const std::vector<int>& allowedCores) noexcept {
         setThreadAffinity(allowedCores);
-
+        std::cout << "[startPointsListener]: " << port << "\n";
         if (host.empty() || port == 0) {
             std::ostringstream oss;
             oss << "[PointsListener] Invalid host or port: host='" << host << "', port=" << port << '\n';

@@ -119,7 +119,7 @@ namespace slam {
                 }
 
                 receivedNumInput_ = temp_offset + temp_numInput;
-                std::cout << "[startPointsListener]: " << receivedNumInput_ << "\n";
+                // std::cout << "[startPointsListener]: " << receivedNumInput_ << "\n";
             }
 
         private:
