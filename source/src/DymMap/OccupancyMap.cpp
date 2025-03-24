@@ -4,7 +4,7 @@ namespace slam {
     namespace occmap {
         
         // -----------------------------------------------------------------------------
-        // Section: assignVoxelColorsRed
+        // Section: OccupancyMap
         // -----------------------------------------------------------------------------
 
         OccupancyMap::OccupancyMap(double resolution, 
@@ -20,7 +20,7 @@ namespace slam {
         }
 
         // -----------------------------------------------------------------------------
-        // Section: assignVoxelColorsRed
+        // Section: occupancyMap
         // -----------------------------------------------------------------------------
 
         void OccupancyMap::occupancyMap(const OccupancyMapDataFrame& frame) {
@@ -31,7 +31,7 @@ namespace slam {
         }
 
         // -----------------------------------------------------------------------------
-        // Section: assignVoxelColorsRed
+        // Section: occupancyMapBase
         // -----------------------------------------------------------------------------
 
         void OccupancyMap::occupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp) {
@@ -92,7 +92,7 @@ namespace slam {
         }
 
         // -----------------------------------------------------------------------------
-        // Section: assignVoxelColorsRed
+        // Section: clearUnwantedVoxel
         // -----------------------------------------------------------------------------
 
         void OccupancyMap::clearUnwantedVoxel(Eigen::Vector3d vehiclePosition) {
@@ -134,7 +134,7 @@ namespace slam {
         }
 
         // -----------------------------------------------------------------------------
-        // Section: assignVoxelColorsRed
+        // Section: performRaycast
         // -----------------------------------------------------------------------------
 
         std::vector<CellKey> OccupancyMap::performRaycast(const CellKey& start, const CellKey& end) const {

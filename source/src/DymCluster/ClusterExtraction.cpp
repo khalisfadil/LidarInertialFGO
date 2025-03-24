@@ -10,6 +10,7 @@ namespace slam {
         // -----------------------------------------------------------------------------
 
         ClusterExtraction::ClusterExtraction(double resolution, 
+                                            Eigen::Vector3d mapOrigin, 
                                             double tolerance,
                                             size_t min_size, 
                                             size_t max_size,
@@ -17,6 +18,7 @@ namespace slam {
                                             unsigned int maxPointsPerVoxel,
                                             ColorMode colorMode)
             : resolution_(resolution),
+            mapOrigin_(mapOrigin),
             cluster_tolerance_(tolerance),
             min_cluster_size_(min_size),
             max_cluster_size_(max_size),

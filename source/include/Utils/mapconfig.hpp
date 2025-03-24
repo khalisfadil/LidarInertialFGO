@@ -17,7 +17,6 @@ namespace slam {
         size_t min_size = 3;
         size_t max_size = 1000;
         size_t max_frames = 5;
-        unsigned int maxPointsPerVoxel = 20;
 
     };
 

@@ -7,6 +7,7 @@
 #include <unordered_map>
 #include <deque>
 #include <map>
+#include <numeric>
 
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
@@ -62,15 +63,13 @@ namespace slam {
         class ClusterExtraction {
         public:
             ClusterExtraction(double resolution = 0.1,
+                              Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero(), 
                               double tolerance = 0.1,
                               size_t min_size = 3,
                               size_t max_size = 1000,
                               size_t max_frames = 5,
                               unsigned int maxPointsPerVoxel = 20,
-                              ColorMode colorMode = ColorMode::Occupancy)
-                : resolution_(resolution), cluster_tolerance_(tolerance), min_cluster_size_(min_size),
-                  max_cluster_size_(max_size), max_frames_(max_frames), mapOrigin_(Eigen::Vector3d::Zero()),
-                  maxPointsPerVoxel_(maxPointsPerVoxel), colorMode_(colorMode) {}
+                              ColorMode colorMode = ColorMode::Occupancy);
 
             void extractClusters(const ClusterExtractorDataFrame& frame);
 
@@ -98,17 +97,19 @@ namespace slam {
             GridType occupancyMap_;
 
             double resolution_;
+            const Eigen::Vector3d mapOrigin_;
             double cluster_tolerance_;
             size_t min_cluster_size_;
             size_t max_cluster_size_;
             size_t max_frames_;
+            const unsigned int maxPointsPerVoxel_;
+            const ColorMode colorMode_;
+
             std::vector<slam::Cluster3D> clusters_;
             std::deque<std::vector<slam::Cluster3D>> prevClusters_;
             double max_distance_threshold_ = 2.0;
             std::vector<slam::Point3D> dynamic_points_;
-            const Eigen::Vector3d mapOrigin_;
-            const unsigned int maxPointsPerVoxel_;
-            const ColorMode colorMode_;
+            
         };
     }  // namespace cluster
 }  // namespace slam

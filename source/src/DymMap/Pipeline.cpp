@@ -58,7 +58,7 @@ namespace slam {
 
         if (!clusterExtractionInstance) {
             clusterExtractionInstance = std::make_unique<cluster::ClusterExtraction>(
-                mapConfig_.resolution, mapConfig_.tolerance, mapConfig_.min_size, mapConfig_.max_size,
+                mapConfig_.resolution, mapConfig_.mapOrigin, mapConfig_.tolerance, mapConfig_.min_size, mapConfig_.max_size,
                 mapConfig_.max_frames, mapConfig_.maxPointsPerVoxel, mapConfig_.colorMode);
         }
 
@@ -255,7 +255,11 @@ namespace slam {
 
             constexpr const char* message = "[signalHandler] Shutting down...\n";
             constexpr size_t messageLen = sizeof(message) - 1;
-            write(STDOUT_FILENO, message, messageLen);
+            ssize_t result = write(STDOUT_FILENO, message, messageLen);
+            if (result == -1) {
+                // Handle error (e.g., silently ignore or log elsewhere if possible)
+                // Note: Avoid complex operations in signal handlers
+            }
         }
     }
 
@@ -516,7 +520,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) {
+    void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) noexcept {
         setThreadAffinity(allowedCores);
 
         constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
@@ -581,7 +585,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
+    void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) noexcept {                       
         setThreadAffinity(allowedCores);
 
         constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
@@ -650,7 +654,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {  
+    void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) noexcept {  
 
         setThreadAffinity(allowedCores);
 
@@ -680,7 +684,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
+    bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) noexcept {
         bool updated = false;
 
         // Process Occupancy Map Voxels

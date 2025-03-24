@@ -398,6 +398,8 @@ CMAKE_UNAME:INTERNAL=/usr/bin/uname
 CMAKE_VERBOSE_MAKEFILE-ADVANCED:INTERNAL=1
 //Details about finding Boost
 FIND_PACKAGE_MESSAGE_DETAILS_Boost:INTERNAL=[/usr/lib/x86_64-linux-gnu/cmake/Boost-1.83.0/BoostConfig.cmake][cfound components: system ][v1.83.0(1.83)]
+//Details about finding Open3D
+FIND_PACKAGE_MESSAGE_DETAILS_Open3D:INTERNAL=[/usr/local/lib/cmake/Open3D/Open3DConfig.cmake][v0.18.0()]
 //linker supports push/pop state
 _CMAKE_LINKER_PUSHPOP_STATE_SUPPORTED:INTERNAL=TRUE
 //ADVANCED property for variable: boost_headers_DIR
