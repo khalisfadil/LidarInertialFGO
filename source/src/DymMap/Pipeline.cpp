@@ -22,8 +22,13 @@ namespace slam {
     boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferExtCls;
     
     boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<1024>> Pipeline::logQueue;
+    boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> Pipeline::reportOccupancyMapQueue;
+    boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> Pipeline::reportExtractClusterQueue;
+
     std::atomic<bool> Pipeline::running{true};
     std::atomic<int> Pipeline::droppedLogs{0};
+    std::atomic<int> Pipeline::droppedOccupancyMapReports{0};
+    std::atomic<int> Pipeline::droppedExtractClusterReports{0};
     std::condition_variable Pipeline::globalCV;
     std::thread Pipeline::logThread_; // Static definition
 
@@ -60,7 +65,7 @@ namespace slam {
     }
 
     // -----------------------------------------------------------------------------
-    // Section: assignVoxelColorsRed
+    // Section: processLogQueue
     // -----------------------------------------------------------------------------
 
     void Pipeline::processLogQueue(const std::vector<int>& allowedCores) noexcept {
@@ -92,32 +97,167 @@ namespace slam {
     }
 
     // -----------------------------------------------------------------------------
-    // Section: assignVoxelColorsRed
+    // Section: processLogQueue
+    // -----------------------------------------------------------------------------
+
+    void Pipeline::processReportQueueOccMap(const std::string& filename, const std::vector<int>& allowedCores) noexcept {
+        setThreadAffinity(allowedCores);
+
+        std::ofstream outfile(filename);
+        if (!outfile.is_open()) {
+            std::ostringstream oss;
+            oss << "[ReportWriter] Error: Failed to open file " << filename << " for writing.\n";
+            if (!logQueue.push(oss.str())) {
+                droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            }
+            return;
+        }
+
+        outfile << "# Report Data\n";
+        outfile << "# " << std::left << std::setw(10) << "FrameID" 
+                << std::setw(20) << "Timestamp" 
+                << std::setw(20) << "ElapsedTime" 
+                << std::setw(15) << "NumPoints" 
+                << std::setw(15) << "OccMapSize" << "\n";
+
+        ReportDataFrame data;
+        int lastReportedDrops = 0;
+
+        while (running.load(std::memory_order_acquire)) {
+            if (reportOccupancyMapQueue.pop(data)) {
+                outfile << std::left << std::setw(10) << data.frameID
+                        << std::fixed << std::setprecision(6) 
+                        << std::setw(20) << data.timestamp
+                        << std::setw(20) << data.elapsedTime
+                        << std::setw(15) << data.numpoint
+                        << std::setw(15) << data.occmapsize << "\n";
+
+                int currentDrops = droppedOccupancyMapReports.load(std::memory_order_relaxed);
+                if (currentDrops > lastReportedDrops && (currentDrops - lastReportedDrops) >= 100) {
+                    std::ostringstream oss;
+                    oss << "[ReportWriter] Warning: " << (currentDrops - lastReportedDrops) 
+                        << " occupancy map report entries dropped due to queue overflow.\n";
+                    if (!logQueue.push(oss.str())) {
+                        droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    }
+                    lastReportedDrops = currentDrops;
+                }
+            } else {
+                std::this_thread::yield();
+            }
+        }
+
+        while (reportOccupancyMapQueue.pop(data)) {
+            outfile << std::left << std::setw(10) << data.frameID
+                    << std::fixed << std::setprecision(6) 
+                    << std::setw(20) << data.timestamp
+                    << std::setw(20) << data.elapsedTime
+                    << std::setw(15) << data.numpoint
+                    << std::setw(15) << data.occmapsize << "\n";
+        }
+
+        int finalDrops = droppedOccupancyMapReports.load(std::memory_order_relaxed);
+        if (finalDrops > lastReportedDrops) {
+            std::ostringstream oss;
+            oss << "[ReportWriter] Final report: " << (finalDrops - lastReportedDrops) 
+                << " occupancy map report entries dropped.\n";
+            if (!logQueue.push(oss.str())) {
+                droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            }
+        }
+
+        outfile.flush(); // Ensure data is written
+        outfile.close();
+    }
+
+    // -----------------------------------------------------------------------------
+    // Section: processLogQueue
+    // -----------------------------------------------------------------------------
+
+    void Pipeline::processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) noexcept {
+        setThreadAffinity(allowedCores);
+
+        std::ofstream outfile(filename);
+        if (!outfile.is_open()) {
+            std::ostringstream oss;
+            oss << "[ReportWriter] Error: Failed to open file " << filename << " for writing.\n";
+            if (!logQueue.push(oss.str())) {
+                droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            }
+            return;
+        }
+
+        outfile << "# Report Data\n";
+        outfile << "# " << std::left << std::setw(10) << "FrameID" 
+                << std::setw(20) << "Timestamp" 
+                << std::setw(20) << "ElapsedTime" 
+                << std::setw(15) << "NumPoints" 
+                << std::setw(15) << "OccMapSize" << "\n";
+
+        ReportDataFrame data;
+        int lastReportedDrops = 0;
+
+        while (running.load(std::memory_order_acquire)) {
+            if (reportExtractClusterQueue.pop(data)) {
+                outfile << std::left << std::setw(10) << data.frameID
+                        << std::fixed << std::setprecision(6) 
+                        << std::setw(20) << data.timestamp
+                        << std::setw(20) << data.elapsedTime
+                        << std::setw(15) << data.numpoint
+                        << std::setw(15) << data.occmapsize << "\n";
+
+                int currentDrops = droppedExtractClusterReports.load(std::memory_order_relaxed);
+                if (currentDrops > lastReportedDrops && (currentDrops - lastReportedDrops) >= 100) {
+                    std::ostringstream oss;
+                    oss << "[ReportWriter] Warning: " << (currentDrops - lastReportedDrops) 
+                        << " cluster extraction report entries dropped due to queue overflow.\n";
+                    if (!logQueue.push(oss.str())) {
+                        droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    }
+                    lastReportedDrops = currentDrops;
+                }
+            } else {
+                std::this_thread::yield();
+            }
+        }
+
+        while (reportExtractClusterQueue.pop(data)) {
+            outfile << std::left << std::setw(10) << data.frameID
+                    << std::fixed << std::setprecision(6) 
+                    << std::setw(20) << data.timestamp
+                    << std::setw(20) << data.elapsedTime
+                    << std::setw(15) << data.numpoint
+                    << std::setw(15) << data.occmapsize << "\n";
+        }
+
+        int finalDrops = droppedExtractClusterReports.load(std::memory_order_relaxed);
+        if (finalDrops > lastReportedDrops) {
+            std::ostringstream oss;
+            oss << "[ReportWriter] Final report: " << (finalDrops - lastReportedDrops) 
+                << " cluster extraction report entries dropped.\n";
+            if (!logQueue.push(oss.str())) {
+                droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            }
+        }
+
+        outfile.flush(); // Ensure data is written
+        outfile.close();
+    }
+
+    // -----------------------------------------------------------------------------
+    // Section: signalHandler
     // -----------------------------------------------------------------------------
 
     void Pipeline::signalHandler(int signal) noexcept {
         if (signal == SIGINT || signal == SIGTERM) {
             running.store(false, std::memory_order_release);
             globalCV.notify_all();
-            if (logThread_.joinable()) {
-                logThread_.join(); // Now works since logThread_ is static
-            }
+
             constexpr const char* message = "[signalHandler] Shutting down...\n";
             constexpr size_t messageLen = sizeof(message) - 1;
             write(STDOUT_FILENO, message, messageLen);
         }
     }
-
-    void Pipeline::signalHandler(int signal) noexcept {
-    if (signal == SIGINT || signal == SIGTERM) {
-        running.store(false, std::memory_order_release);
-        globalCV.notify_all();
-
-        constexpr const char* message = "[signalHandler] Shutting down...\n";
-        constexpr size_t messageLen = sizeof(message) - 1;
-        write(STDOUT_FILENO, message, messageLen);
-    }
-}
 
     // -----------------------------------------------------------------------------
     // Section: assignVoxelColorsRed
@@ -178,10 +318,10 @@ namespace slam {
     // -----------------------------------------------------------------------------
 
     void Pipeline::startPointsListener(boost::asio::io_context& ioContext,
-                                    std::string_view host,
-                                    uint16_t port,
-                                    uint32_t bufferSize,
-                                    const std::vector<int>& allowedCores) noexcept {
+                                        std::string_view host,
+                                        uint16_t port,
+                                        uint32_t bufferSize,
+                                        const std::vector<int>& allowedCores) noexcept {
         setThreadAffinity(allowedCores);
 
         if (host.empty() || port == 0) {
@@ -204,35 +344,46 @@ namespace slam {
                     callbackPointsProcessor.process(data, decodedPoints);
 
                     if (decodedPoints.frameID != 0 && decodedPoints.numInput > 0) {
-                        // Downsampling and filtering parameters
                         const Eigen::Vector3d vehiclePosition = decodedPoints.NED;
+                        const uint32_t parallelThreshold = 1000; // Define threshold here, can be adjusted
 
-                        // Grid for downsampling and filtering (store first point per voxel)
-                        using GridType = tbb::concurrent_unordered_map<CellKey, std::pair<Eigen::Vector3d, Eigen::Vector3d>, CellKeyHash>;
-                        GridType grid;
-
-                        // Parallel downsampling and filtering (keep first point)
-                        tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
-                            [&](const tbb::blocked_range<uint32_t>& range) {
-                                for (uint32_t i = range.begin(); i != range.end(); ++i) {
-                                    const Eigen::Vector3d& point = decodedPoints.pt[i];
-                                    double distance = (point - vehiclePosition).norm();
-                                    if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
-                                        CellKey key = CellKey::fromPoint(point, processConfig_.mapOrigin, processConfig_.resolution);
-                                        grid.insert({key, std::make_pair(point, decodedPoints.att[i])});
-                                    }
-                                }
-                            });
-
-                        // Convert grid to filtered, downsampled point cloud (first point per voxel)
+                        // Use regular vectors since we'll handle parallel/serial separately
                         std::vector<Eigen::Vector3d> filteredPt;
                         std::vector<Eigen::Vector3d> filteredAtt;
-                        filteredPt.reserve(grid.size());
-                        filteredAtt.reserve(grid.size());
+                        
+                        filteredPt.reserve(decodedPoints.numInput);
+                        filteredAtt.reserve(decodedPoints.numInput);
 
-                        for (const auto& [key, value] : grid) {
-                            filteredPt.push_back(value.first);  // First position
-                            filteredAtt.push_back(value.second); // First attitude
+                        // Filter points with threshold-based parallel/serial execution
+                        if (decodedPoints.numInput >= parallelThreshold) {
+                            tbb::concurrent_vector<Eigen::Vector3d> tempPt;
+                            tbb::concurrent_vector<Eigen::Vector3d> tempAtt;
+                            tempPt.reserve(decodedPoints.numInput);
+                            tempAtt.reserve(decodedPoints.numInput);
+
+                            tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
+                                [&](const tbb::blocked_range<uint32_t>& range) {
+                                    for (uint32_t i = range.begin(); i != range.end(); ++i) {
+                                        const Eigen::Vector3d& point = decodedPoints.pt[i];
+                                        double distance = (point - vehiclePosition).norm();
+                                        if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
+                                            tempPt.push_back(point);
+                                            tempAtt.push_back(decodedPoints.att[i]);
+                                        }
+                                    }
+                                });
+
+                            filteredPt = std::vector<Eigen::Vector3d>(tempPt.begin(), tempPt.end());
+                            filteredAtt = std::vector<Eigen::Vector3d>(tempAtt.begin(), tempAtt.end());
+                        } else {
+                            for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
+                                const Eigen::Vector3d& point = decodedPoints.pt[i];
+                                double distance = (point - vehiclePosition).norm();
+                                if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
+                                    filteredPt.push_back(point);
+                                    filteredAtt.push_back(decodedPoints.att[i]);
+                                }
+                            }
                         }
 
                         // Update decodedPoints
@@ -246,9 +397,6 @@ namespace slam {
                         OccupancyMapDataFrame occMapFrame;
                         ClusterExtractorDataFrame extClsFrame;
                         VehiclePoseDataFrame vehPose;
-
-                        // Threshold for switching to parallel copy
-                        const uint32_t parallelThreshold = 1000;
 
                         // Parallel transformation into the new structures
                         tbb::parallel_invoke(
@@ -378,10 +526,11 @@ namespace slam {
 
         while (running.load(std::memory_order_acquire)) {
             auto cycleStartTime = std::chrono::steady_clock::now();
+            OccupancyMapDataFrame localMapDataFrame;
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
             if (itemsToProcess > 0) {
-                OccupancyMapDataFrame localMapDataFrame;
+                
                 for (size_t i = 0; i < itemsToProcess; ++i) {
                     if (pointsRingBufferOccMap.pop(localMapDataFrame)) {
                         // Keep updating localPoints with the latest current item
@@ -394,6 +543,23 @@ namespace slam {
                     if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
                     }
+                }
+
+                // Create and populate report
+                ReportDataFrame reportOccupancyMap;
+                reportOccupancyMap.frameID = localMapDataFrame.frameID;
+                reportOccupancyMap.timestamp = localMapDataFrame.timestamp;
+                reportOccupancyMap.numpoint = localMapDataFrame.pointcloud.size();
+                reportOccupancyMap.occmapsize = occMapVoxels.size();
+                reportOccupancyMap.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
+                    std::chrono::steady_clock::now() - cycleStartTime).count();
+
+                // Push report to the queue
+                if (!reportExtractClusterQueue.push(reportOccupancyMap)) {
+                    if (!logQueue.push("[OccupancyMapPipeline] Report queue full; data dropped!\n")) {
+                        droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    }
+                    droppedOccupancyMapReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
                 }
             }
 
@@ -425,32 +591,54 @@ namespace slam {
 
         while (running.load(std::memory_order_acquire)) {
             auto cycleStartTime = std::chrono::steady_clock::now();
+            ClusterExtractorDataFrame localExtractorDataFrame;
 
             size_t itemsToProcess = pointsRingBufferExtCls.read_available();
             if (itemsToProcess > 0) {
-                ClusterExtractorDataFrame localExtractorDataFrame;
                 for (size_t i = 0; i < itemsToProcess; ++i) {
                     if (pointsRingBufferExtCls.pop(localExtractorDataFrame)) {
-                        // Keep updating localPoints with the latest current item
+                        // Process each frame (assuming this is intended)
+                        // If you want to accumulate points, modify this logic
                     }
                 }
+                // Extract clusters from the last popped frame
                 clusterExtractionInstance->extractClusters(localExtractorDataFrame);
                 ExtClsVoxels = clusterExtractionInstance->getOccupiedVoxel();
 
+                // Push voxels to the ring buffer
                 if (!voxelsRingBufferExtCls.push(std::move(ExtClsVoxels))) {
                     if (!logQueue.push("[ClusterExtractionPipeline] Voxel buffer full; data dropped!\n")) {
                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
                     }
                 }
+
+                // Create and populate report
+                ReportDataFrame reportClusterExtractor;
+                reportClusterExtractor.frameID = localExtractorDataFrame.frameID;
+                reportClusterExtractor.timestamp = localExtractorDataFrame.timestamp;
+                reportClusterExtractor.numpoint = localExtractorDataFrame.pointcloud.size();
+                reportClusterExtractor.occmapsize = ExtClsVoxels.size();
+                reportClusterExtractor.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
+                    std::chrono::steady_clock::now() - cycleStartTime).count();
+
+                // Push report to the queue
+                if (!reportExtractClusterQueue.push(reportClusterExtractor)) {
+                    if (!logQueue.push("[ClusterExtractionPipeline] Report queue full; data dropped!\n")) {
+                        droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    }
+                    droppedExtractClusterReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
+                }
             }
 
             auto cycleEndTime = std::chrono::steady_clock::now();
             auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
+
             if (elapsedTime < targetCycleDuration) {
                 std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
             } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
                 std::ostringstream oss;
-                oss << "Warning: [ClusterExtractionPipeline] Processing exceeded target by " << (elapsedTime - targetCycleDuration).count() << " ms\n";
+                oss << "Warning: [ClusterExtractionPipeline] Processing exceeded target by " 
+                    << (elapsedTime - targetCycleDuration).count() << " ms\n";
                 if (!logQueue.push(oss.str())) {
                     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                 }

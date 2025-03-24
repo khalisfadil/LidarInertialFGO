@@ -35,4 +35,12 @@ namespace slam {
         Eigen::Vector3d RPY = Eigen::Vector3d::Zero();       // Vehicle position for this frame
     };
 
+    struct ReportDataFrame {
+        unsigned int frameID = std::numeric_limits<unsigned int>::max(); // Frame identifier
+        double timestamp = 0.0;                                          // Frame timestamp
+        double elapsedTime = 0.0;
+        unsigned int numpoint = std::numeric_limits<unsigned int>::min();
+        unsigned int occmapsize = std::numeric_limits<unsigned int>::min();
+    };
+
 }  // namespace slam

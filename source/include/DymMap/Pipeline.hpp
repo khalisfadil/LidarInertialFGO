@@ -5,6 +5,9 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+
+#include <fstream>
+
 #include <condition_variable>
 #include <boost/asio.hpp>
 #include <boost/lockfree/spsc_queue.hpp>
@@ -34,8 +37,13 @@ namespace slam { // Opening namespace brace
         static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferOccMap;
         static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferExtCls;
         static boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<1024>> logQueue;
+        static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> reportOccupancyMapQueue;
+        static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> reportExtractClusterQueue;
+
         static std::atomic<bool> running;
         static std::atomic<int> droppedLogs;
+        static std::atomic<int> droppedOccupancyMapReports;
+        static std::atomic<int> droppedExtractClusterReports;
         static std::condition_variable globalCV;
 
         static void signalHandler(int signal) noexcept;
@@ -50,6 +58,8 @@ namespace slam { // Opening namespace brace
         void runVizualizationPipeline(const std::vector<int>& allowedCores) noexcept;
         bool updateVisualization(open3d::visualization::Visualizer* vis) noexcept;
         void processLogQueue(const std::vector<int>& allowedCores) noexcept;
+        void processReportQueueOccMap(const std::string& filename, const std::vector<int>& allowedCores) noexcept;
+        void processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) noexcept;
 
     private:
         Pipeline();
