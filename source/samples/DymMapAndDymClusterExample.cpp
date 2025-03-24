@@ -5,7 +5,7 @@
 
 using namespace slam;
 
-int main(int argc, char** argv) {
+int main() {
     // Get the singleton instance of Pipeline
     // Pipeline& pipeline = Pipeline::getInstance();
 
@@ -38,7 +38,7 @@ int main(int argc, char** argv) {
                                              pointsHost,
                                              pointsPort,
                                              bufferSize,
-                                             std::vector<int>{12, 13, 14, 15});
+                                             std::vector<int>{12});
             }
         );
 

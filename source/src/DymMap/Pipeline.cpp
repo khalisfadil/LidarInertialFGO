@@ -251,7 +251,7 @@ namespace slam {
     // Section: signalHandler
     // -----------------------------------------------------------------------------
 
-    void Pipeline::signalHandler(int signal) noexcept {
+    void Pipeline::signalHandler(int signal) {
         if (signal == SIGINT || signal == SIGTERM) {
             running.store(false, std::memory_order_release);
             globalCV.notify_all();
@@ -270,11 +270,11 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::setThreadAffinity(const std::vector<int>& coreIDs) noexcept {
+    void Pipeline::setThreadAffinity(const std::vector<int>& coreIDs) {
         if (coreIDs.empty()) {
-            if (!logQueue.push("Warning: [ThreadAffinity] No core IDs provided.\n")) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // if (!logQueue.push("Warning: [ThreadAffinity] No core IDs provided.\n")) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
             return;
         }
 
@@ -291,32 +291,32 @@ namespace slam {
         }
 
         if (!validCores) {
-            if (!logQueue.push("Error: [ThreadAffinity] No valid core IDs provided.\n")) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // if (!logQueue.push("Error: [ThreadAffinity] No valid core IDs provided.\n")) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
             return;
         }
 
         if (sched_setaffinity(0, sizeof(cpu_set_t), &cpuset) != 0) {
-            std::ostringstream oss;
-            oss << "Fatal: [ThreadAffinity] Failed to set affinity: " << strerror(errno) << "\n";
-            if (!logQueue.push(oss.str())) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // std::ostringstream oss;
+            // oss << "Fatal: [ThreadAffinity] Failed to set affinity: " << strerror(errno) << "\n";
+            // if (!logQueue.push(oss.str())) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
             running.store(false); // Optionally terminate
         }
 
-        std::ostringstream oss;
-        oss << "Thread restricted to cores: ";
-        for (int coreID : coreIDs) {
-            if (CPU_ISSET(coreID, &cpuset)) {
-                oss << coreID << " ";
-            }
-        }
-        oss << "\n";
-        if (!logQueue.push(oss.str())) {
-            droppedLogs.fetch_add(1, std::memory_order_relaxed);
-        }
+        // std::ostringstream oss;
+        // oss << "Thread restricted to cores: ";
+        // for (int coreID : coreIDs) {
+        //     if (CPU_ISSET(coreID, &cpuset)) {
+        //         oss << coreID << " ";
+        //     }
+        // }
+        // oss << "\n";
+        // if (!logQueue.push(oss.str())) {
+        //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+        // }
 
     }
 
@@ -328,23 +328,23 @@ namespace slam {
                                         std::string_view host,
                                         uint16_t port,
                                         uint32_t bufferSize,
-                                        const std::vector<int>& allowedCores) noexcept {
+                                        const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         if (host.empty() || port == 0) {
-            std::ostringstream oss;
-            oss << "[PointsListener] Invalid host or port: host='" << host << "', port=" << port << '\n';
-            if (!logQueue.push(oss.str())) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // std::ostringstream oss;
+            // oss << "[PointsListener] Invalid host or port: host='" << host << "', port=" << port << '\n';
+            // if (!logQueue.push(oss.str())) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
             return;
         }
 
-        std::string hostPortStr = std::string(host) + ":" + std::to_string(port);
+        // std::string hostPortStr = std::string(host) + ":" + std::to_string(port);
 
         try {
             UDPSocket listener(ioContext, std::string(host), port,
-                [this](const std::vector<uint8_t>& data) noexcept {
+                [this](const std::vector<uint8_t>& data) {
                     CallbackPoints::Points decodedPoints;
                     CallbackPoints callbackPointsProcessor;
 
@@ -458,23 +458,23 @@ namespace slam {
 
                         // Push to OccupancyMap ring buffer
                         if (!pointsRingBufferOccMap.push(occMapFrame)) {
-                            if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
-                                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            }
+                            // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
+                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                            // }
                         }
 
                         // Push to ClusterExtractor ring buffer
                         if (!pointsRingBufferExtCls.push(extClsFrame)) {
-                            if (!logQueue.push("[PointsListener] Ring buffer full for Ext Cls; decoded points dropped!\n")) {
-                                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            }
+                            // if (!logQueue.push("[PointsListener] Ring buffer full for Ext Cls; decoded points dropped!\n")) {
+                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                            // }
                         }
 
                         // Push to VehiclePose ring buffer
                         if (!ringBufferPose.push(vehPose)) {
-                            if (!logQueue.push("[PointsListener] Ring buffer full for Veh Pose; decoded points dropped!\n")) {
-                                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            }
+                            // if (!logQueue.push("[PointsListener] Ring buffer full for Veh Pose; decoded points dropped!\n")) {
+                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                            // }
                         }
                     }
                 }, bufferSize);
@@ -490,32 +490,32 @@ namespace slam {
                     break;
                 } catch (const std::exception& e) {
                     errorCount++;
-                    if (errorCount <= maxErrors) {
-                        std::ostringstream oss;
-                        oss << "[PointsListener] Error: " << e.what() << ". Restarting...\n";
-                        if (!logQueue.push(oss.str())) {
-                            droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                        }
-                    }
-                    if (errorCount == maxErrors) {
-                        if (!logQueue.push("[PointsListener] Error log limit reached.\n")) {
-                            droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                        }
-                    }
+                    // if (errorCount <= maxErrors) {
+                    //     std::ostringstream oss;
+                    //     oss << "[PointsListener] Error: " << e.what() << ". Restarting...\n";
+                    //     if (!logQueue.push(oss.str())) {
+                    //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    //     }
+                    // }
+                    // if (errorCount == maxErrors) {
+                    //     if (!logQueue.push("[PointsListener] Error log limit reached.\n")) {
+                    //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    //     }
+                    // }
                     ioContext.restart();
                 }
             }
 
             listener.stop();
-            if (!logQueue.push("[PointsListener] Stopped listener on " + hostPortStr + "\n")) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // if (!logQueue.push("[PointsListener] Stopped listener on " + hostPortStr + "\n")) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
         } catch (const std::exception& e) {
-            std::ostringstream oss;
-            oss << "[PointsListener] Failed to start listener on " + hostPortStr << ": " << e.what() << '\n';
-            if (!logQueue.push(oss.str())) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // std::ostringstream oss;
+            // oss << "[PointsListener] Failed to start listener on " + hostPortStr << ": " << e.what() << '\n';
+            // if (!logQueue.push(oss.str())) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
         }
     }
 

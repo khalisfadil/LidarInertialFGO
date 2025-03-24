@@ -49,13 +49,13 @@ namespace slam { // Opening namespace brace
         static std::atomic<int> droppedExtractClusterReports;
         static std::condition_variable globalCV;
 
-        static void signalHandler(int signal) noexcept;
+        static void signalHandler(int signal) ;
         void startPointsListener(boost::asio::io_context& ioContext,
                                  std::string_view host,
                                  uint16_t port,
                                  uint32_t bufferSize,
-                                 const std::vector<int>& allowedCores) noexcept;
-        void setThreadAffinity(const std::vector<int>& coreIDs) noexcept;
+                                 const std::vector<int>& allowedCores) ;
+        void setThreadAffinity(const std::vector<int>& coreIDs) ;
         void runOccupancyMapPipeline(const std::vector<int>& allowedCores) noexcept;
         void runClusterExtractionPipeline(const std::vector<int>& allowedCores) noexcept;
         void runVizualizationPipeline(const std::vector<int>& allowedCores) noexcept;
