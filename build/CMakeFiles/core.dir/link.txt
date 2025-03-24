@@ -1,0 +1,2 @@
+/usr/bin/ar qc libcore.a CMakeFiles/core.dir/source/src/DymCluster/ClusterExtraction.cpp.o CMakeFiles/core.dir/source/src/DymCluster/Hungarian.cpp.o CMakeFiles/core.dir/source/src/DymMap/OccupancyMap.cpp.o CMakeFiles/core.dir/source/src/DymMap/Pipeline.cpp.o CMakeFiles/core.dir/source/src/Utils/Open3d/voxelGrid.cpp.o
+/usr/bin/ranlib libcore.a
