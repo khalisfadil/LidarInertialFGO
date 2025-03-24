@@ -47,11 +47,11 @@ namespace slam {
                 const uint32_t temp_segm = *reinterpret_cast<const uint32_t*>(&data[13]);
                 const uint32_t temp_frameID = *reinterpret_cast<const uint32_t*>(&data[65]);
                 const uint32_t temp_numInput = *reinterpret_cast<const uint32_t*>(&data[69]);
-
+                std::cout << "[startPointsListener1]: " << receivedNumInput_ << "\n";
                 if (data.size() != 73 + temp_numInput * 24) return;
 
                 if (temp_frameID != frameID_) {
-                    if (maxNumSegment_ == currSegmIdx_ - 1 && receivedNumInput_ > 0) {
+                    if (maxNumSegment_ == currSegmIdx_ - 1) {
                         points.pt.assign(receivedPt_.begin(), receivedPt_.begin() + receivedNumInput_);
                         points.att.assign(receivedAtt_.begin(), receivedAtt_.begin() + receivedNumInput_);
                         points.numInput = receivedNumInput_;
@@ -119,9 +119,9 @@ namespace slam {
                 }
 
                 receivedNumInput_ = temp_offset + temp_numInput;
-                std::cout << "[startPointsListener]: " << receivedNumInput_ << "\n";
-                std::cout << "[startPointsListener]: " << receivedNumInput_ << "\n";
-                std::cout << "[startPointsListener]: " << points.numInput << "\n";
+                
+                std::cout << "[startPointsListener2]: " << receivedNumInput_ << "\n";
+                std::cout << "[startPointsListener3]: " << points.numInput << "\n";
             }
 
         private:
