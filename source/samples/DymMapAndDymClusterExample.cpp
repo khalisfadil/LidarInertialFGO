@@ -42,12 +42,12 @@ int main(int argc, char** argv) {
             }
         );
 
-        // Start Occupancy Map Pipeline
-        threads.emplace_back(
-            [&]() {
-                pipeline.runOccupancyMapPipeline(std::vector<int>{0, 1, 2, 3});
-            }
-        );
+        // // Start Occupancy Map Pipeline
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.runOccupancyMapPipeline(std::vector<int>{0, 1, 2, 3});
+        //     }
+        // );
 
         // // Start Cluster Extraction Pipeline
         // threads.emplace_back(

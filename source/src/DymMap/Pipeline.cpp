@@ -347,7 +347,7 @@ namespace slam {
                 [this](const std::vector<uint8_t>& data) noexcept {
                     CallbackPoints::Points decodedPoints;
                     CallbackPoints callbackPointsProcessor;
-
+                    
                     callbackPointsProcessor.process(data, decodedPoints);
 
                     if (decodedPoints.frameID != 0 && decodedPoints.numInput > 0) {
@@ -392,7 +392,7 @@ namespace slam {
                                 }
                             }
                         }
-
+                        std::cout << "[startPointsListener]: " << decodedPoints.numInput << "\n";
                         // Update decodedPoints
                         decodedPoints.pt = std::move(filteredPt);
                         decodedPoints.att = std::move(filteredAtt);
