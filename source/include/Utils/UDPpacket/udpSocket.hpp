@@ -21,9 +21,10 @@ namespace slam {
                 startReceive();                     // Start listening for incoming packets
         }
 
-        ~UDPSocket();
+        ~UDPSocket() {
+            stop();
+        }
         
-
         void startReceive() {
             socket_.async_receive_from(
                 boost::asio::buffer(buffer_),    // Buffer for receiving data
