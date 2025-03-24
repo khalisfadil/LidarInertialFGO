@@ -33,7 +33,10 @@ namespace slam {
             };
 
             // -----------------------------------------------------------------------------
-            CallbackPoints();
+            CallbackPoints() 
+                : receivedPt_(MAX_NUM_POINT, Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN())),
+                receivedAtt_(MAX_NUM_POINT, Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN()))
+            {}
 
             // -----------------------------------------------------------------------------
             void process(const std::vector<uint8_t>& data, Points& points) {
