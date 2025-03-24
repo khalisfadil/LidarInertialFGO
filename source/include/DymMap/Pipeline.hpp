@@ -25,12 +25,9 @@ namespace slam { // Opening namespace brace
 
     class Pipeline { // Opening class brace
     public:
-        static Pipeline& getInstance() noexcept;
-        Pipeline(const Pipeline&) = delete;
-        Pipeline& operator=(const Pipeline&) = delete;
 
-        inline static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance = nullptr;
-        inline static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance = nullptr;
+        static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance;
+        static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance;
         static boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<128>> ringBufferPose;
         static boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<128>> pointsRingBufferOccMap;
         static boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<128>> pointsRingBufferExtCls;
@@ -45,24 +42,25 @@ namespace slam { // Opening namespace brace
         static std::atomic<int> droppedOccupancyMapReports;
         static std::atomic<int> droppedExtractClusterReports;
         static std::condition_variable globalCV;
-
-        static void signalHandler(int signal) noexcept;
+        
+        Pipeline();
+        static void signalHandler(int signal) ;
         void startPointsListener(boost::asio::io_context& ioContext,
                                  std::string_view host,
                                  uint16_t port,
                                  uint32_t bufferSize,
-                                 const std::vector<int>& allowedCores) noexcept;
-        void setThreadAffinity(const std::vector<int>& coreIDs) noexcept;
-        void runOccupancyMapPipeline(const std::vector<int>& allowedCores) noexcept;
-        void runClusterExtractionPipeline(const std::vector<int>& allowedCores) noexcept;
-        void runVizualizationPipeline(const std::vector<int>& allowedCores) noexcept;
-        bool updateVisualization(open3d::visualization::Visualizer* vis) noexcept;
-        void processLogQueue(const std::vector<int>& allowedCores) noexcept;
-        void processReportQueueOccMap(const std::string& filename, const std::vector<int>& allowedCores) noexcept;
-        void processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) noexcept;
+                                 const std::vector<int>& allowedCores) ;
+        void setThreadAffinity(const std::vector<int>& coreIDs) ;
+        void runOccupancyMapPipeline(const std::vector<int>& allowedCores) ;
+        void runClusterExtractionPipeline(const std::vector<int>& allowedCores) ;
+        void runVizualizationPipeline(const std::vector<int>& allowedCores) ;
+        bool updateVisualization(open3d::visualization::Visualizer* vis) ;
+        void processLogQueue(const std::vector<int>& allowedCores) ;
+        void processReportQueueOccMap(const std::string& filename, const std::vector<int>& allowedCores) ;
+        void processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) ;
 
     private:
-        Pipeline();
+
         alignas(64) MapConfig mapConfig_;
         alignas(64) ProcessConfig processConfig_;
         static std::thread logThread_;
