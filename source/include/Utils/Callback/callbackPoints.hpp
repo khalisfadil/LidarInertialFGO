@@ -90,11 +90,10 @@ namespace slam {
                         t_ = temp_t;
                         maxNumSegment_ = temp_maxSegm;
                         currSegmIdx_ = 0;
-
-                        std::cout << "[temp_frameID]: " << temp_frameID << "\n";
-                        std::cout << "[frameID_]: " << frameID_ << "\n";
-
                     }
+
+                    std::cout << "[temp_frameID]: " << temp_frameID << "\n";
+                    std::cout << "[frameID_]: " << frameID_ << "\n";
                     
 
                     if (data.size() - 73 == temp_numInput * 24) {
