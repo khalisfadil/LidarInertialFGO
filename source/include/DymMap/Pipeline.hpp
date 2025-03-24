@@ -5,7 +5,7 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
-
+#include <iostream>
 #include <fstream>
 
 #include <condition_variable>
@@ -42,7 +42,7 @@ namespace slam { // Opening namespace brace
         static std::atomic<int> droppedOccupancyMapReports;
         static std::atomic<int> droppedExtractClusterReports;
         static std::condition_variable globalCV;
-        
+
         Pipeline();
         static void signalHandler(int signal) ;
         void startPointsListener(boost::asio::io_context& ioContext,

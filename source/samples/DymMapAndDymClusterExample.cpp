@@ -1,7 +1,4 @@
 #include "DymMap/Pipeline.hpp"
-#include <iostream>
-#include <vector>
-#include <thread>
 
 using namespace slam;
 
@@ -28,7 +25,7 @@ int main() {
         // Listener configurations
         std::string pointsHost = "127.0.0.1";
         uint16_t pointsPort = 61234;
-        uint32_t bufferSize = 1441;
+        uint32_t bufferSize = 1393;
 
         // Start points listener
         boost::asio::io_context ioContextPoints;

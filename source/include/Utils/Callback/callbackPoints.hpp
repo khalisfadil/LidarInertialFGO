@@ -98,7 +98,7 @@ namespace slam {
 
                         currSegmIdx_++;
 
-                        const uint32_t temp_offset = temp_segm * 57;
+                        const uint32_t temp_offset = temp_segm * 55;
                         
                         for (uint32_t i = 0; i < temp_numInput; ++i) {
                             float point[3];    // For XYZ coordinates
