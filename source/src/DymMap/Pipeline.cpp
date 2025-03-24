@@ -476,7 +476,7 @@ namespace slam {
                     //         //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                     //         // }
                     //     }
-                    }
+                    // }
                 }, bufferSize);
 
             // listener.setReceiveBufferSize(bufferSize);
