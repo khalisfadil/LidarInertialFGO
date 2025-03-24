@@ -490,18 +490,18 @@ namespace slam {
                     break;
                 } catch (const std::exception& e) {
                     errorCount++;
-                    // if (errorCount <= maxErrors) {
-                    //     std::ostringstream oss;
-                    //     oss << "[PointsListener] Error: " << e.what() << ". Restarting...\n";
-                    //     if (!logQueue.push(oss.str())) {
-                    //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                    //     }
-                    // }
-                    // if (errorCount == maxErrors) {
-                    //     if (!logQueue.push("[PointsListener] Error log limit reached.\n")) {
-                    //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                    //     }
-                    // }
+                    if (errorCount <= maxErrors) {
+                        // std::ostringstream oss;
+                        // oss << "[PointsListener] Error: " << e.what() << ". Restarting...\n";
+                        // if (!logQueue.push(oss.str())) {
+                        //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        // }
+                    }
+                    if (errorCount == maxErrors) {
+                        // if (!logQueue.push("[PointsListener] Error log limit reached.\n")) {
+                        //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        // }
+                    }
                     ioContext.restart();
                 }
             }
