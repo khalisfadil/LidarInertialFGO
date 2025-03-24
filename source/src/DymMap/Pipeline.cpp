@@ -71,7 +71,7 @@ namespace slam {
     // Section: processLogQueue
     // -----------------------------------------------------------------------------
 
-    void Pipeline::processLogQueue(const std::vector<int>& allowedCores) noexcept {
+    void Pipeline::processLogQueue(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores); // Pin logging thread to specified cores
 
         std::string message;
@@ -103,7 +103,7 @@ namespace slam {
     // Section: processLogQueue
     // -----------------------------------------------------------------------------
 
-    void Pipeline::processReportQueueOccMap(const std::string& filename, const std::vector<int>& allowedCores) noexcept {
+    void Pipeline::processReportQueueOccMap(const std::string& filename, const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         std::ofstream outfile(filename);
@@ -177,7 +177,7 @@ namespace slam {
     // Section: processLogQueue
     // -----------------------------------------------------------------------------
 
-    void Pipeline::processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) noexcept {
+    void Pipeline::processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         std::ofstream outfile(filename);
@@ -251,7 +251,7 @@ namespace slam {
     // Section: signalHandler
     // -----------------------------------------------------------------------------
 
-    void Pipeline::signalHandler(int signal) noexcept {
+    void Pipeline::signalHandler(int signal) {
         if (signal == SIGINT || signal == SIGTERM) {
             running.store(false, std::memory_order_release);
             globalCV.notify_all();
@@ -270,7 +270,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::setThreadAffinity(const std::vector<int>& coreIDs) noexcept {
+    void Pipeline::setThreadAffinity(const std::vector<int>& coreIDs) {
         if (coreIDs.empty()) {
             if (!logQueue.push("Warning: [ThreadAffinity] No core IDs provided.\n")) {
                 droppedLogs.fetch_add(1, std::memory_order_relaxed);
@@ -328,7 +328,7 @@ namespace slam {
                                         std::string_view host,
                                         uint16_t port,
                                         uint32_t bufferSize,
-                                        const std::vector<int>& allowedCores) noexcept {
+                                        const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         if (host.empty() || port == 0) {
@@ -522,7 +522,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) noexcept {
+    void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
@@ -587,7 +587,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) noexcept {                       
+    void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
         setThreadAffinity(allowedCores);
 
         constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
@@ -656,7 +656,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) noexcept {  
+    void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {  
 
         setThreadAffinity(allowedCores);
 
@@ -686,7 +686,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) noexcept {
+    bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
         bool updated = false;
 
         // Process Occupancy Map Voxels
