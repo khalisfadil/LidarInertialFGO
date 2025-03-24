@@ -83,6 +83,8 @@ namespace slam {
                             points.t = t_;
                             points.NED = NED_;
                             points.RPY = RPY_;
+                            std::cout << "[points.numInput]: " << points.numInput << "\n";
+                            std::cout << "[points.frameID]: " << points.frameID << "\n";
 
                         } 
                         NED_ << temp_ned[0], temp_ned[1], temp_ned[2];
