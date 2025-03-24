@@ -71,7 +71,6 @@ namespace slam {
                     std::memcpy(&temp_numInput, &data[69], sizeof(uint32_t)); // Bytes 69 to 72
 
                     std::cout << "[startPointsListener1]: " << temp_frameID << "\n";
-                    if (data.size() != 73 + temp_numInput * 24) return;
 
                     if (temp_frameID != frameID_) {
                         if (maxNumSegment_ == currSegmIdx_ - 1) {
