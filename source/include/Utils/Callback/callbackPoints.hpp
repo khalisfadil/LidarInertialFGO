@@ -69,9 +69,6 @@ namespace slam {
                     uint32_t temp_numInput;
                     std::memcpy(&temp_numInput, &data[69], sizeof(uint32_t)); // Bytes 69 to 72
 
-                    std::cout << "[temp_frameID]: " << temp_frameID << "\n";
-                    std::cout << "[frameID_]: " << frameID_ << "\n";
-
                     if (temp_frameID != frameID_) {
 
                         if (maxNumSegment_ == currSegmIdx_ - 1) {
@@ -84,7 +81,9 @@ namespace slam {
                             points.NED = NED_;
                             points.RPY = RPY_;
 
-                            
+                            std::cout << "[points.frameID]: " << points.frameID << "\n";
+                            std::cout << "[points.numInput]: " << points.numInput << "\n";
+
                         } 
                         NED_ << temp_ned[0], temp_ned[1], temp_ned[2];
                         RPY_ << temp_rpy[0], temp_rpy[1], temp_rpy[2];
@@ -95,16 +94,10 @@ namespace slam {
                         currSegmIdx_ = 0;
                     }
 
-                    std::cout << "[temp_frameID]: " << temp_frameID << "\n";
-                    std::cout << "[frameID_]: " << frameID_ << "\n";
-                    
-
                     if (data.size() - 73 == temp_numInput * 24) {
 
                         currSegmIdx_++;
 
-                        std::cout << "[currSegmIdx_]: " << currSegmIdx_ << "\n";
-                        std::cout << "[maxNumSegment_]: " << maxNumSegment_ << "\n";
                         const uint32_t temp_offset = temp_segm * 57;
                         
                         for (uint32_t i = 0; i < temp_numInput; ++i) {
