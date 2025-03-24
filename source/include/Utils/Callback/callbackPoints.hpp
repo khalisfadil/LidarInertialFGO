@@ -73,8 +73,8 @@ namespace slam {
                     std::cout << "[temp_t]: " << temp_t << "\n";
                     std::cout << "[temp_maxSegm]: " << temp_maxSegm << "\n";
                     std::cout << "[temp_segm]: " << temp_segm << "\n";
-                    std::cout << "[temp_ned]: " << temp_ned   << "\n";
-                    std::cout << "[temp_rpy]: " << temp_rpy << "\n";
+                    std::cout << "[temp_ned]: " << temp_ned[1]   << "\n";
+                    std::cout << "[temp_rpy]: " << temp_rpy[1] << "\n";
                     std::cout << "[temp_frameID]: " << temp_frameID << "\n";
                     std::cout << "[temp_numInput]: " << temp_numInput << "\n";
 
