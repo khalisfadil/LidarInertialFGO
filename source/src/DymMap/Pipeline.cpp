@@ -346,7 +346,6 @@ namespace slam {
             UDPSocket listener(ioContext, std::string(host), port,
                 [this](const std::vector<uint8_t>& data) {
                     CallbackPoints::Points decodedPoints;
-                    CallbackPoints callbackPointsProcessor;
 
                     callbackPointsProcessor.process(data, decodedPoints);
 

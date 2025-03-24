@@ -73,6 +73,8 @@ namespace slam { // Opening namespace brace
         static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_occMap_ptr;
         static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_extCls_ptr;
         static std::shared_ptr<open3d::geometry::TriangleMesh> vehicle_mesh_ptr;
+
+        CallbackPoints callbackPointsProcessor;
     }; // Closing class brace
 
 } // Closing namespace brace
