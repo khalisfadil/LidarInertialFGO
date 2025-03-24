@@ -324,11 +324,11 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::startPointsListener(boost::asio::io_context& ioContext,
-                                        std::string_view host,
-                                        uint16_t port,
-                                        uint32_t bufferSize,
-                                        const std::vector<int>& allowedCores) {
+    void Pipeline::startPointsListener(boost::asio::io_context& ioContext, 
+                                            const std::string& host, 
+                                            uint16_t port,
+                                            uint32_t bufferSize, 
+                                            const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         if (host.empty() || port == 0) {
@@ -343,8 +343,8 @@ namespace slam {
         std::string hostPortStr = std::string(host) + ":" + std::to_string(port);
 
         try {
-            UDPSocket listener(ioContext, std::string(host), port,
-                [this](const std::vector<uint8_t>& data) noexcept {
+            UDPSocket listener(ioContext, host, port, [&](const std::vector<uint8_t>& data) {
+
                     CallbackPoints::Points decodedPoints;
 
                     callbackPointsProcessor.process(data, decodedPoints);
@@ -478,8 +478,6 @@ namespace slam {
                     }
                 }, bufferSize);
 
-            listener.setReceiveBufferSize(bufferSize);
-
             constexpr int maxErrors = 5;
             int errorCount = 0;
 
@@ -505,7 +503,7 @@ namespace slam {
                 }
             }
 
-            listener.stop();
+            ioContext.stop();
             if (!logQueue.push("[PointsListener] Stopped listener on " + hostPortStr + "\n")) {
                 droppedLogs.fetch_add(1, std::memory_order_relaxed);
             }

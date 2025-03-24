@@ -45,11 +45,12 @@ namespace slam { // Opening namespace brace
 
         Pipeline();
         static void signalHandler(int signal) ;
-        void startPointsListener(boost::asio::io_context& ioContext,
-                                 std::string_view host,
-                                 uint16_t port,
-                                 uint32_t bufferSize,
-                                 const std::vector<int>& allowedCores) ;
+        void startPointsListener(boost::asio::io_context& ioContext, 
+                                    const std::string& host, 
+                                    uint16_t port,
+                                    uint32_t bufferSize, 
+                                    const std::vector<int>& allowedCores);
+
         void setThreadAffinity(const std::vector<int>& coreIDs) ;
         void runOccupancyMapPipeline(const std::vector<int>& allowedCores) ;
         void runClusterExtractionPipeline(const std::vector<int>& allowedCores) ;
