@@ -70,6 +70,10 @@ namespace slam {
 
 
                     if (temp_frameID != frameID_) {
+
+                        std::cout << "[temp_frameID]: " << temp_frameID << "\n";
+                        std::cout << "[frameID_]: " << frameID_ << "\n";
+                        
                         if (maxNumSegment_ == currSegmIdx_ - 1) {
                             std::copy(receivedPt_.begin(), receivedPt_.begin() + receivedNumInput_, points.pt.begin());
                             std::copy(receivedAtt_.begin(), receivedAtt_.begin() + receivedNumInput_, points.att.begin());
