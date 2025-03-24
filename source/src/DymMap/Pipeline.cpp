@@ -392,7 +392,7 @@ namespace slam {
                                 }
                             }
                         }
-                        std::cout << "[startPointsListener]: " << decodedPoints.numInput << "\n";
+
                         // Update decodedPoints
                         decodedPoints.pt = std::move(filteredPt);
                         decodedPoints.att = std::move(filteredAtt);
