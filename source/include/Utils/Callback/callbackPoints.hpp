@@ -3,8 +3,6 @@
 #include <vector>
 #include <cstdint>
 #include <Eigen/Dense>
-#include <tbb/parallel_for.h>
-#include <immintrin.h>
 
 #include "Utils/constants.hpp"
 
