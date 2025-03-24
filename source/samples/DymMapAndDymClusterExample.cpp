@@ -26,7 +26,7 @@ int main(int argc, char** argv) {
         // Listener configurations
         std::string pointsHost = "127.0.0.1";
         uint16_t pointsPort = 61234;
-        uint32_t bufferSize = 1393;
+        uint32_t bufferSize = 1441;
 
         // Start points listener
         boost::asio::io_context ioContextPoints;
