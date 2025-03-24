@@ -70,10 +70,14 @@ namespace slam {
                     uint32_t temp_numInput;
                     std::memcpy(&temp_numInput, &data[69], sizeof(uint32_t)); // Bytes 69 to 72
 
+                    std::cout << "[temp_t]: " << temp_t << "\n";
+                    std::cout << "[temp_maxSegm]: " << temp_maxSegm << "\n";
+                    std::cout << "[temp_segm]: " << temp_segm << "\n";
+                    std::cout << "[temp_ned]: " << temp_ned   << "\n";
+                    std::cout << "[temp_rpy]: " << temp_rpy << "\n";
                     std::cout << "[temp_frameID]: " << temp_frameID << "\n";
-                    std::cout << "[frameID_]: " << frameID_ << "\n";
-                    std::cout << "[maxNumSegment_]: " << maxNumSegment_ << "\n";
-                    std::cout << "[currSegmIdx_]: " << currSegmIdx_ -1  << "\n";
+                    std::cout << "[temp_numInput]: " << temp_numInput << "\n";
+
                     if (temp_frameID != frameID_) {
                         if (maxNumSegment_ == currSegmIdx_ - 1) {
                             std::copy(receivedPt_.begin(), receivedPt_.begin() + receivedNumInput_, points.pt.begin());
