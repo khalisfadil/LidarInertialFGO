@@ -5,6 +5,7 @@
 #include <mutex>
 #include <thread>
 #include <atomic>
+#include <iostream>
 
 #include <fstream>
 
@@ -29,8 +30,9 @@ namespace slam { // Opening namespace brace
         Pipeline(const Pipeline&) = delete;
         Pipeline& operator=(const Pipeline&) = delete;
 
-        inline static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance = nullptr;
-        inline static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance = nullptr;
+        inline static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance;
+        inline static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance;
+        
         static boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<128>> ringBufferPose;
         static boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<128>> pointsRingBufferOccMap;
         static boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<128>> pointsRingBufferExtCls;

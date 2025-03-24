@@ -15,6 +15,9 @@ namespace slam {
     // -----------------------------------------------------------------------------
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
+    std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance = nullptr;
+    std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance = nullptr;
+
     boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<128>> Pipeline::ringBufferPose;
     boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<128>> Pipeline::pointsRingBufferOccMap;
     boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferOccMap;
@@ -534,7 +537,7 @@ namespace slam {
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
             if (itemsToProcess > 0) {
-                
+                std::cout << "[runOccupancyMapPipeline]: " << itemsToProcess << "\n";
                 for (size_t i = 0; i < itemsToProcess; ++i) {
                     if (pointsRingBufferOccMap.pop(localMapDataFrame)) {
                         // Keep updating localPoints with the latest current item
@@ -598,6 +601,7 @@ namespace slam {
             ClusterExtractorDataFrame localExtractorDataFrame;
 
             size_t itemsToProcess = pointsRingBufferExtCls.read_available();
+
             if (itemsToProcess > 0) {
                 for (size_t i = 0; i < itemsToProcess; ++i) {
                     if (pointsRingBufferExtCls.pop(localExtractorDataFrame)) {
