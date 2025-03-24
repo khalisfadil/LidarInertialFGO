@@ -82,13 +82,7 @@ namespace slam {
                             points.NED = NED_;
                             points.RPY = RPY_;
 
-                            std::cout << "[temp_t]: " << temp_t << "\n";
-                            std::cout << "[temp_maxSegm]: " << temp_maxSegm << "\n";
-                            std::cout << "[temp_segm]: " << temp_segm << "\n";
-                            std::cout << "[temp_ned]: " << temp_ned[1]   << "\n";
-                            std::cout << "[temp_rpy]: " << temp_rpy[1] << "\n";
-                            std::cout << "[temp_frameID]: " << temp_frameID << "\n";
-                            std::cout << "[temp_numInput]: " << temp_numInput << "\n";
+                            
                         } 
                         NED_ << temp_ned[0], temp_ned[1], temp_ned[2];
                         RPY_ << temp_rpy[0], temp_rpy[1], temp_rpy[2];
@@ -102,6 +96,14 @@ namespace slam {
                     
 
                     if (data.size() - 73 == temp_numInput * 24) {
+
+                        std::cout << "[temp_t]: " << temp_t << "\n";
+                        std::cout << "[temp_maxSegm]: " << temp_maxSegm << "\n";
+                        std::cout << "[temp_segm]: " << temp_segm << "\n";
+                        std::cout << "[temp_ned]: " << temp_ned[1]   << "\n";
+                        std::cout << "[temp_rpy]: " << temp_rpy[1] << "\n";
+                        std::cout << "[temp_frameID]: " << temp_frameID << "\n";
+                        std::cout << "[temp_numInput]: " << temp_numInput << "\n";
 
                         currSegmIdx_++;
                         const uint32_t temp_offset = temp_segm * 57;
