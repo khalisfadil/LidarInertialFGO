@@ -349,7 +349,6 @@ namespace slam {
                     CallbackPoints callbackPointsProcessor;
                     
                     callbackPointsProcessor.process(data, decodedPoints);
-                    std::cout << "[startPointsListener3]: " << decodedPoints.frameID  << "\n";
 
                     if (decodedPoints.frameID != 0 && decodedPoints.numInput > 0) {
                         const Eigen::Vector3d vehiclePosition = decodedPoints.NED;
