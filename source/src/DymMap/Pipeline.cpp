@@ -339,7 +339,7 @@ namespace slam {
             }
             return;
         }
-
+        std::cout << "[startPointsListener2]: " << port << "\n";
         std::string hostPortStr = std::string(host) + ":" + std::to_string(port);
 
         try {
