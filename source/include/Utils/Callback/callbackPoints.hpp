@@ -33,10 +33,7 @@ namespace slam {
             };
 
             // -----------------------------------------------------------------------------
-            CallbackPoints() 
-                : receivedPt_(MAX_NUM_POINT, Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN())),
-                receivedAtt_(MAX_NUM_POINT, Eigen::Vector3d::Constant(std::numeric_limits<double>::quiet_NaN()))
-            {}
+            CallbackPoints();
 
             // -----------------------------------------------------------------------------
             void process(const std::vector<uint8_t>& data, Points& points) {
@@ -72,6 +69,8 @@ namespace slam {
 
                     std::cout << "[temp_frameID]: " << temp_frameID << "\n";
                     std::cout << "[frameID_]: " << frameID_ << "\n";
+                    std::cout << "[maxNumSegment_]: " << maxNumSegment_ << "\n";
+                    std::cout << "[currSegmIdx_]: " << currSegmIdx_ -1  << "\n";
                     if (temp_frameID != frameID_) {
                         if (maxNumSegment_ == currSegmIdx_ - 1) {
                             std::copy(receivedPt_.begin(), receivedPt_.begin() + receivedNumInput_, points.pt.begin());
@@ -118,15 +117,15 @@ namespace slam {
             }
 
         private:
-            double t_ = 0.0;
+            double t_ ;
             std::vector<Eigen::Vector3d> receivedPt_;
             std::vector<Eigen::Vector3d> receivedAtt_;
-            uint32_t receivedNumInput_ = 0;
-            uint32_t maxNumSegment_ = 0;
-            uint32_t currSegmIdx_ = 0;
-            uint32_t frameID_ = 0;
-            Eigen::Vector3d NED_ = Eigen::Vector3d::Zero();
-            Eigen::Vector3d RPY_ = Eigen::Vector3d::Zero();
+            uint32_t receivedNumInput_ ;
+            uint32_t maxNumSegment_ ;
+            uint32_t currSegmIdx_ ;
+            uint32_t frameID_ ;
+            Eigen::Vector3d NED_ ;
+            Eigen::Vector3d RPY_ ;
     };
 
 } // namespace slam
