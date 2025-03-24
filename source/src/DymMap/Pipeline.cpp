@@ -350,136 +350,136 @@ namespace slam {
 
                     callbackPointsProcessor.process(data, decodedPoints);
 
-                    if (decodedPoints.frameID != 0 && decodedPoints.numInput > 0) {
-                        const Eigen::Vector3d vehiclePosition = decodedPoints.NED;
-                        const uint32_t parallelThreshold = 1000; // Define threshold here, can be adjusted
+                    // if (decodedPoints.frameID != 0 && decodedPoints.numInput > 0) {
+                    //     const Eigen::Vector3d vehiclePosition = decodedPoints.NED;
+                    //     const uint32_t parallelThreshold = 1000; // Define threshold here, can be adjusted
 
-                        // Use regular vectors since we'll handle parallel/serial separately
-                        std::vector<Eigen::Vector3d> filteredPt;
-                        std::vector<Eigen::Vector3d> filteredAtt;
+                    //     // Use regular vectors since we'll handle parallel/serial separately
+                    //     std::vector<Eigen::Vector3d> filteredPt;
+                    //     std::vector<Eigen::Vector3d> filteredAtt;
                         
-                        filteredPt.reserve(decodedPoints.numInput);
-                        filteredAtt.reserve(decodedPoints.numInput);
+                    //     filteredPt.reserve(decodedPoints.numInput);
+                    //     filteredAtt.reserve(decodedPoints.numInput);
 
-                        // Filter points with threshold-based parallel/serial execution
-                        if (decodedPoints.numInput >= parallelThreshold) {
-                            tbb::concurrent_vector<Eigen::Vector3d> tempPt;
-                            tbb::concurrent_vector<Eigen::Vector3d> tempAtt;
-                            tempPt.reserve(decodedPoints.numInput);
-                            tempAtt.reserve(decodedPoints.numInput);
+                    //     // Filter points with threshold-based parallel/serial execution
+                    //     if (decodedPoints.numInput >= parallelThreshold) {
+                    //         tbb::concurrent_vector<Eigen::Vector3d> tempPt;
+                    //         tbb::concurrent_vector<Eigen::Vector3d> tempAtt;
+                    //         tempPt.reserve(decodedPoints.numInput);
+                    //         tempAtt.reserve(decodedPoints.numInput);
 
-                            tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
-                                [&](const tbb::blocked_range<uint32_t>& range) {
-                                    for (uint32_t i = range.begin(); i != range.end(); ++i) {
-                                        const Eigen::Vector3d& point = decodedPoints.pt[i];
-                                        double distance = (point - vehiclePosition).norm();
-                                        if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
-                                            tempPt.push_back(point);
-                                            tempAtt.push_back(decodedPoints.att[i]);
-                                        }
-                                    }
-                                });
+                    //         tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
+                    //             [&](const tbb::blocked_range<uint32_t>& range) {
+                    //                 for (uint32_t i = range.begin(); i != range.end(); ++i) {
+                    //                     const Eigen::Vector3d& point = decodedPoints.pt[i];
+                    //                     double distance = (point - vehiclePosition).norm();
+                    //                     if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
+                    //                         tempPt.push_back(point);
+                    //                         tempAtt.push_back(decodedPoints.att[i]);
+                    //                     }
+                    //                 }
+                    //             });
 
-                            filteredPt = std::vector<Eigen::Vector3d>(tempPt.begin(), tempPt.end());
-                            filteredAtt = std::vector<Eigen::Vector3d>(tempAtt.begin(), tempAtt.end());
-                        } else {
-                            for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
-                                const Eigen::Vector3d& point = decodedPoints.pt[i];
-                                double distance = (point - vehiclePosition).norm();
-                                if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
-                                    filteredPt.push_back(point);
-                                    filteredAtt.push_back(decodedPoints.att[i]);
-                                }
-                            }
-                        }
+                    //         filteredPt = std::vector<Eigen::Vector3d>(tempPt.begin(), tempPt.end());
+                    //         filteredAtt = std::vector<Eigen::Vector3d>(tempAtt.begin(), tempAtt.end());
+                    //     } else {
+                    //         for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
+                    //             const Eigen::Vector3d& point = decodedPoints.pt[i];
+                    //             double distance = (point - vehiclePosition).norm();
+                    //             if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
+                    //                 filteredPt.push_back(point);
+                    //                 filteredAtt.push_back(decodedPoints.att[i]);
+                    //             }
+                    //         }
+                    //     }
 
-                        // Update decodedPoints
-                        decodedPoints.pt = std::move(filteredPt);
-                        decodedPoints.att = std::move(filteredAtt);
-                        decodedPoints.numInput = static_cast<uint32_t>(filteredPt.size());
+                    //     // Update decodedPoints
+                    //     decodedPoints.pt = std::move(filteredPt);
+                    //     decodedPoints.att = std::move(filteredAtt);
+                    //     decodedPoints.numInput = static_cast<uint32_t>(filteredPt.size());
 
-                        if (decodedPoints.numInput == 0) return;
+                    //     if (decodedPoints.numInput == 0) return;
 
-                        // Temporary storage for transformed data
-                        OccupancyMapDataFrame occMapFrame;
-                        ClusterExtractorDataFrame extClsFrame;
-                        VehiclePoseDataFrame vehPose;
+                    //     // Temporary storage for transformed data
+                    //     OccupancyMapDataFrame occMapFrame;
+                    //     ClusterExtractorDataFrame extClsFrame;
+                    //     VehiclePoseDataFrame vehPose;
 
-                        // Parallel transformation into the new structures
-                        tbb::parallel_invoke(
-                            [this, &decodedPoints, &occMapFrame, parallelThreshold]() noexcept {
-                                occMapFrame.frameID = decodedPoints.frameID;
-                                occMapFrame.timestamp = decodedPoints.t;
-                                occMapFrame.vehiclePosition = decodedPoints.NED;
-                                occMapFrame.pointcloud.resize(decodedPoints.numInput);
+                    //     // Parallel transformation into the new structures
+                    //     tbb::parallel_invoke(
+                    //         [this, &decodedPoints, &occMapFrame, parallelThreshold]() noexcept {
+                    //             occMapFrame.frameID = decodedPoints.frameID;
+                    //             occMapFrame.timestamp = decodedPoints.t;
+                    //             occMapFrame.vehiclePosition = decodedPoints.NED;
+                    //             occMapFrame.pointcloud.resize(decodedPoints.numInput);
 
-                                if (decodedPoints.numInput >= parallelThreshold) {
-                                    tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
-                                        [&occMapFrame, &decodedPoints](const tbb::blocked_range<uint32_t>& range) {
-                                            for (uint32_t i = range.begin(); i != range.end(); ++i) {
-                                                occMapFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                                                occMapFrame.pointcloud[i].Att = decodedPoints.att[i];
-                                            }
-                                        });
-                                } else {
-                                    for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
-                                        occMapFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                                        occMapFrame.pointcloud[i].Att = decodedPoints.att[i];
-                                    }
-                                }
-                            },
-                            [this, &decodedPoints, &extClsFrame, parallelThreshold]() noexcept {
-                                extClsFrame.frameID = decodedPoints.frameID;
-                                extClsFrame.timestamp = decodedPoints.t;
-                                extClsFrame.pointcloud.resize(decodedPoints.numInput);
+                    //             if (decodedPoints.numInput >= parallelThreshold) {
+                    //                 tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
+                    //                     [&occMapFrame, &decodedPoints](const tbb::blocked_range<uint32_t>& range) {
+                    //                         for (uint32_t i = range.begin(); i != range.end(); ++i) {
+                    //                             occMapFrame.pointcloud[i].Pt = decodedPoints.pt[i];
+                    //                             occMapFrame.pointcloud[i].Att = decodedPoints.att[i];
+                    //                         }
+                    //                     });
+                    //             } else {
+                    //                 for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
+                    //                     occMapFrame.pointcloud[i].Pt = decodedPoints.pt[i];
+                    //                     occMapFrame.pointcloud[i].Att = decodedPoints.att[i];
+                    //                 }
+                    //             }
+                    //         },
+                    //         [this, &decodedPoints, &extClsFrame, parallelThreshold]() noexcept {
+                    //             extClsFrame.frameID = decodedPoints.frameID;
+                    //             extClsFrame.timestamp = decodedPoints.t;
+                    //             extClsFrame.pointcloud.resize(decodedPoints.numInput);
 
-                                if (decodedPoints.numInput >= parallelThreshold) {
-                                    tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
-                                        [&extClsFrame, &decodedPoints](const tbb::blocked_range<uint32_t>& range) {
-                                            for (uint32_t i = range.begin(); i != range.end(); ++i) {
-                                                extClsFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                                                extClsFrame.pointcloud[i].Att = decodedPoints.att[i];
-                                            }
-                                        });
-                                } else {
-                                    for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
-                                        extClsFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                                        extClsFrame.pointcloud[i].Att = decodedPoints.att[i];
-                                    }
-                                }
-                            },
-                            [this, &decodedPoints, &vehPose]() noexcept {
-                                vehPose.frameID = decodedPoints.frameID;
-                                vehPose.timestamp = decodedPoints.t;
-                                vehPose.NED = decodedPoints.NED;
-                                vehPose.RPY = decodedPoints.RPY;
-                            }
-                        );
+                    //             if (decodedPoints.numInput >= parallelThreshold) {
+                    //                 tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
+                    //                     [&extClsFrame, &decodedPoints](const tbb::blocked_range<uint32_t>& range) {
+                    //                         for (uint32_t i = range.begin(); i != range.end(); ++i) {
+                    //                             extClsFrame.pointcloud[i].Pt = decodedPoints.pt[i];
+                    //                             extClsFrame.pointcloud[i].Att = decodedPoints.att[i];
+                    //                         }
+                    //                     });
+                    //             } else {
+                    //                 for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
+                    //                     extClsFrame.pointcloud[i].Pt = decodedPoints.pt[i];
+                    //                     extClsFrame.pointcloud[i].Att = decodedPoints.att[i];
+                    //                 }
+                    //             }
+                    //         },
+                    //         [this, &decodedPoints, &vehPose]() noexcept {
+                    //             vehPose.frameID = decodedPoints.frameID;
+                    //             vehPose.timestamp = decodedPoints.t;
+                    //             vehPose.NED = decodedPoints.NED;
+                    //             vehPose.RPY = decodedPoints.RPY;
+                    //         }
+                    //     );
 
-                        // Push to OccupancyMap ring buffer
-                        if (!pointsRingBufferOccMap.push(occMapFrame)) {
-                            // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
-                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            // }
-                        }
+                    //     // Push to OccupancyMap ring buffer
+                    //     if (!pointsRingBufferOccMap.push(occMapFrame)) {
+                    //         // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
+                    //         //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    //         // }
+                    //     }
 
-                        // Push to ClusterExtractor ring buffer
-                        if (!pointsRingBufferExtCls.push(extClsFrame)) {
-                            // if (!logQueue.push("[PointsListener] Ring buffer full for Ext Cls; decoded points dropped!\n")) {
-                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            // }
-                        }
+                    //     // Push to ClusterExtractor ring buffer
+                    //     if (!pointsRingBufferExtCls.push(extClsFrame)) {
+                    //         // if (!logQueue.push("[PointsListener] Ring buffer full for Ext Cls; decoded points dropped!\n")) {
+                    //         //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    //         // }
+                    //     }
 
-                        // Push to VehiclePose ring buffer
-                        if (!ringBufferPose.push(vehPose)) {
-                            // if (!logQueue.push("[PointsListener] Ring buffer full for Veh Pose; decoded points dropped!\n")) {
-                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            // }
-                        }
+                    //     // Push to VehiclePose ring buffer
+                    //     if (!ringBufferPose.push(vehPose)) {
+                    //         // if (!logQueue.push("[PointsListener] Ring buffer full for Veh Pose; decoded points dropped!\n")) {
+                    //         //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    //         // }
+                    //     }
                     }
                 }, bufferSize);
 
-            listener.setReceiveBufferSize(bufferSize);
+            // listener.setReceiveBufferSize(bufferSize);
 
             constexpr int maxErrors = 5;
             int errorCount = 0;
@@ -506,7 +506,7 @@ namespace slam {
                 }
             }
 
-            listener.stop();
+            ioContext.stop();
             // if (!logQueue.push("[PointsListener] Stopped listener on " + hostPortStr + "\n")) {
             //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
             // }
