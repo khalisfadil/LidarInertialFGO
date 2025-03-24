@@ -26,13 +26,14 @@ namespace slam { // Opening namespace brace
 
     class Pipeline { // Opening class brace
     public:
-        static Pipeline& getInstance() noexcept;
-        Pipeline(const Pipeline&) = delete;
-        Pipeline& operator=(const Pipeline&) = delete;
+        // static Pipeline& getInstance() noexcept;
+        // Pipeline(const Pipeline&) = delete;
+        // Pipeline& operator=(const Pipeline&) = delete;
+        Pipeline();
 
-        inline static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance;
-        inline static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance;
-        
+        static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance;
+        static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance;
+
         static boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<128>> ringBufferPose;
         static boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<128>> pointsRingBufferOccMap;
         static boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<128>> pointsRingBufferExtCls;
@@ -64,7 +65,7 @@ namespace slam { // Opening namespace brace
         void processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) noexcept;
 
     private:
-        Pipeline();
+
         alignas(64) MapConfig mapConfig_;
         alignas(64) ProcessConfig processConfig_;
         static std::thread logThread_;

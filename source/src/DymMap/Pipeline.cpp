@@ -15,8 +15,8 @@ namespace slam {
     // -----------------------------------------------------------------------------
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
-    std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance = nullptr;
-    std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance = nullptr;
+    std::unique_ptr<occmap::OccupancyMap> Pipeline::occupancyMapInstance = nullptr;
+    std::unique_ptr<cluster::ClusterExtraction> Pipeline::clusterExtractionInstance = nullptr;
 
     boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<128>> Pipeline::ringBufferPose;
     boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<128>> Pipeline::pointsRingBufferOccMap;
@@ -43,10 +43,10 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    Pipeline& Pipeline::getInstance() noexcept {
-        static Pipeline instance;
-        return instance;
-    }
+    // Pipeline& Pipeline::getInstance() noexcept {
+    //     static Pipeline instance;
+    //     return instance;
+    // }
 
     // -----------------------------------------------------------------------------
     // Section: assignVoxelColorsRed

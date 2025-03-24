@@ -7,7 +7,9 @@ using namespace slam;
 
 int main(int argc, char** argv) {
     // Get the singleton instance of Pipeline
-    Pipeline& pipeline = Pipeline::getInstance();
+    // Pipeline& pipeline = Pipeline::getInstance();
+
+    Pipeline pipeline;
 
     // Set up signal handling
     struct sigaction sigIntHandler;
@@ -40,13 +42,6 @@ int main(int argc, char** argv) {
             }
         );
 
-        // Start logging thread
-        threads.emplace_back(
-            [&]() {
-                pipeline.processLogQueue(std::vector<int>{20});
-            }
-        );
-
         // Start Occupancy Map Pipeline
         threads.emplace_back(
             [&]() {
@@ -65,6 +60,13 @@ int main(int argc, char** argv) {
         // threads.emplace_back(
         //     [&]() {
         //         pipeline.runVizualizationPipeline(std::vector<int>{8, 9, 10, 11});
+        //     }
+        // );
+
+        // // Start logging thread
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.processLogQueue(std::vector<int>{20});
         //     }
         // );
 
