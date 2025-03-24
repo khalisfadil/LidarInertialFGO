@@ -71,7 +71,7 @@ int main(int argc, char** argv) {
         // Start Occupancy Map Report Queue Processing
         threads.emplace_back(
             [&]() {
-                pipeline.processReportQueueOccMap("occupancy_report.txt", 
+                pipeline.processReportQueueOccMap("../source/result/occupancy_report.txt", 
                                                   std::vector<int>{21});
             }
         );
@@ -79,7 +79,7 @@ int main(int argc, char** argv) {
         // Start Cluster Extraction Report Queue Processing
         threads.emplace_back(
             [&]() {
-                pipeline.processReportQueueExtCls("cluster_report.txt", 
+                pipeline.processReportQueueExtCls("../source/result/cluster_report.txt", 
                                                   std::vector<int>{22});
             }
         );

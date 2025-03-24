@@ -10,7 +10,7 @@ target = GT.GenericTarget(username, address);
 target.terminateAtTaskOverload = false;
 target.terminateAtCPUOverload = false;
 target.targetSoftwareDirectory = '~/GT/sendPoints/';
-target.targetBitmaskCPUCores = '0x0000F000';
+target.targetBitmaskCPUCores = '0x000F0000';
 % 0000 0000 0000 0000 1111 0000 0000 0000.
 % The 1 bits are at positions 12, 13, 14, and 15 (counting from 0 on the right):
 
