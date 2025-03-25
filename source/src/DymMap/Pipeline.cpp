@@ -733,7 +733,6 @@ namespace slam {
 
         vis.Run();
         vis.DestroyVisualizerWindow();
-        std::cout << "[runViz] Visualization ended\n";
     }
 
     // -----------------------------------------------------------------------------
@@ -769,7 +768,7 @@ namespace slam {
                 view.SetLookat(latestNED);
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(10);
+                view.SetZoom(5);
                 std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << "\n";
             }
         }
