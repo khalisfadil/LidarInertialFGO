@@ -558,7 +558,7 @@ namespace slam {
                 
                 occupancyMapInstance->occupancyMap(localMapDataFrame);
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
-                
+                std::cout << "[occMapVoxels]: " << occMapVoxels.size() << "\n";
                 if (!voxelsRingBufferOccMap.push(std::move(occMapVoxels))) {
                     if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
