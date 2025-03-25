@@ -682,7 +682,7 @@ namespace slam {
                 std::cerr << "Error: Failed to create visualizer window.\n";
                 return;
             }
-            vis.GetRenderOption().background_color_ = Eigen::Vector3d(0, 0, 0);
+            vis.GetRenderOption().background_color_ = Eigen::Vector3d(1, 1, 1);
 
             // Initialize geometries with checks
             if (!voxel_grid_occMap_ptr) {
@@ -850,13 +850,13 @@ namespace slam {
 
                     // Update camera only if position changes significantly
                     if ((latestNED - lastNED).norm() > 1.0) { // 1-meter threshold
-                        auto& view = vis->GetViewControl();
-                        view.SetLookat(latestNED);
-                        view.SetFront({0, 0, -1});
-                        view.SetUp({0, 1, 0});
-                        view.SetZoom(1);
-                        lastNED = latestNED;
-                        std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 15\n";
+                        // auto& view = vis->GetViewControl();
+                        // view.SetLookat(latestNED);
+                        // view.SetFront({0, 0, -1});
+                        // view.SetUp({0, 1, 0});
+                        // view.SetZoom(1);
+                        // lastNED = latestNED;
+                        // std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 15\n";
                     }
                 } catch (const std::exception& e) {
                     std::cerr << "Error updating vehicle pose: " << e.what() << "\n";
