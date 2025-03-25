@@ -863,6 +863,9 @@ namespace slam {
                 }
             }
         }
+
+        // Ensure a return value is always provided
+        return running.load(std::memory_order_acquire) || updated;
     }
     // void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {
     //         setThreadAffinity(allowedCores);
