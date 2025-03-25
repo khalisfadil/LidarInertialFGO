@@ -706,7 +706,7 @@ namespace slam {
 
             // Set initial camera parameters
             auto& view = vis.GetViewControl();
-            view.SetLookat({-67.0, 20.0, 0.0}); // Initial lookat
+            view.SetLookat({0.0, 0.0, 0.0}); // Initial lookat
             view.SetFront({0, 0, -1});
             view.SetUp({0, 1, 0});
             view.SetZoom(8.0); // Wider initial zoom for stability (adjust as needed)
