@@ -401,7 +401,7 @@ namespace slam {
                         decodedPoints.pt = std::move(filteredPt);
                         decodedPoints.att = std::move(filteredAtt);
                         decodedPoints.numInput = static_cast<uint32_t>(filteredPt.size());
-                        std::cout << "[decodedPoints.numInput2]: " << decodedPoints.numInput << "\n";
+                        std::cout << "[decodedPoints.pt2]: " << decodedPoints.pt.size() << "\n";
                         if (decodedPoints.numInput == 0) return;
 
                         // Temporary storage for transformed data
