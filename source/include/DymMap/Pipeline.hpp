@@ -70,6 +70,9 @@ private:
     static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_occMap_ptr;
     static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_extCls_ptr;
     static std::shared_ptr<open3d::geometry::TriangleMesh> vehicle_mesh_ptr;
+
+    void updateVehicleMesh(std::shared_ptr<open3d::geometry::TriangleMesh>& mesh,
+                                 const Eigen::Vector3d& NED, const Eigen::Vector3d& RPY);
 };
 
 } // namespace slam
