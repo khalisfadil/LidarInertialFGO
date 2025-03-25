@@ -18,7 +18,8 @@ namespace slam {
             [&](const tbb::blocked_range<size_t>& range) {
                 for (size_t i = range.begin(); i != range.end(); ++i) {
                     const auto& voxel = voxels[i];
-                    Eigen::Vector3i grid_index(voxel.key.x, voxel.key.y, voxel.key.z);
+                    // Eigen::Vector3i grid_index(voxel.key.x, voxel.key.y, voxel.key.z);
+                    Eigen::Vector3i grid_index(i+1, i+1, i+1);
                     Eigen::Vector3d color(
                         static_cast<double>(voxel.color.x()) / 255.0,
                         static_cast<double>(voxel.color.y()) / 255.0,

@@ -7,8 +7,8 @@ namespace slam {
 
     struct MapConfig {
 
-        double resolution = 50.0;           ///< The resolution of the map in meters per voxel.
-        double mapMaxDistance = 300.0;   ///< The maximum distance that can be reached in the map.
+        double resolution = 1.0;           ///< The resolution of the map in meters per voxel.
+        double mapMaxDistance = 200.0;   ///< The maximum distance that can be reached in the map.
         Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero();
         unsigned int maxPointsPerVoxel = 20;
         ColorMode colorMode = ColorMode::Occupancy;
@@ -22,7 +22,7 @@ namespace slam {
 
     struct ProcessConfig {
 
-        double mapMaxDistance = 350.0;   ///< The maximum distance that can be reached in the map.
+        double mapMaxDistance = 200.0;   ///< The maximum distance that can be reached in the map.
         double mapMinDistance = 10.0;   ///< The maximum distance that can be reached in the map.
         Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero();
     };
