@@ -362,7 +362,7 @@ namespace slam {
                         
                         filteredPt.reserve(decodedPoints.numInput);
                         filteredAtt.reserve(decodedPoints.numInput);
-                        std::cout << "[decodedPoints.numInput1]: " << decodedPoints.numInput << "\n";
+                    
                         // Filter points with threshold-based parallel/serial execution
                         if (decodedPoints.numInput >= parallelThreshold) {
                             tbb::concurrent_vector<Eigen::Vector3d> tempPt;
@@ -384,7 +384,7 @@ namespace slam {
 
                             filteredPt = std::vector<Eigen::Vector3d>(tempPt.begin(), tempPt.end());
                             filteredAtt = std::vector<Eigen::Vector3d>(tempAtt.begin(), tempAtt.end());
-                            std::cout << "[filteredPt1]: " << filteredPt.size() << "\n";
+                            
                         } else {
                             for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
                                 const Eigen::Vector3d& point = decodedPoints.pt[i];
@@ -392,7 +392,6 @@ namespace slam {
                                 if (distance >= processConfig_.mapMinDistance && distance <= processConfig_.mapMaxDistance) {
                                     filteredPt.push_back(point);
                                     filteredAtt.push_back(decodedPoints.att[i]);
-                                    std::cout << "[filteredPt2]: " << filteredPt.size() << "\n";
                                 }
                             }
                         }
@@ -401,7 +400,7 @@ namespace slam {
                         decodedPoints.pt = std::move(filteredPt);
                         decodedPoints.att = std::move(filteredAtt);
                         decodedPoints.numInput = static_cast<uint32_t>(filteredPt.size());
-                        std::cout << "[decodedPoints.pt2]: " << decodedPoints.pt.size() << "\n";
+                        std::cout << "[decodedPoints.numInput]: " << decodedPoints.numInput << "\n";
                         if (decodedPoints.numInput == 0) return;
 
                         // Temporary storage for transformed data
