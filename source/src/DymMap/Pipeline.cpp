@@ -458,10 +458,6 @@ namespace slam {
                                 vehPose.RPY = decodedPoints.RPY;
                             }
                         );
-                        std::cout << "[occMapFrame]: " << occMapFrame.pointcloud.size() << "\n";
-                        std::cout << "[extClsFrame]: " << extClsFrame.pointcloud.size() << "\n";
-                        std::cout << "[vehPose]: " << vehPose.NED[1] << "\n";
-                        
 
                         // Push to OccupancyMap ring buffer
                         if (!pointsRingBufferOccMap.push(occMapFrame)) {
@@ -586,6 +582,7 @@ namespace slam {
                     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                 }
             }
+            std::cout << "[occMapVoxels]: " << occMapVoxels.size() << "\n";
         }
     }
 
