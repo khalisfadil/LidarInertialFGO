@@ -739,6 +739,7 @@ namespace slam {
 
         // Process Vehicle Pose
         size_t itemsToProcessVehPose = ringBufferPose.read_available();
+        std::cout << "[itemsToProcessVehPose]: " << itemsToProcessVehPose << "\n";
         if (itemsToProcessVehPose > 0) {
             VehiclePoseDataFrame localProcessVehPose;
             for (size_t i = 0; i < itemsToProcessVehPose; ++i) {
@@ -753,6 +754,11 @@ namespace slam {
                 vehicle_mesh_ptr->vertex_colors_ = new_vehicle_mesh->vertex_colors_;
                 vis->UpdateGeometry(vehicle_mesh_ptr);
                 updated = true;
+
+                // Update camera to look at the vehicle
+                auto& view = vis->GetViewControl();
+                view.SetLookat(localProcessVehPose.NED);
+                view.SetZoom(2.0); // Zoom in to make objects larger
             }
         }
 
