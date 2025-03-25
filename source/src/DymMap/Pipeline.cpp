@@ -348,7 +348,7 @@ namespace slam {
                     CallbackPoints::Points decodedPoints;
 
                     callbackPointsProcessor.process(data, decodedPoints);
-
+                    std::cout << "[points.numInput]: " << points.numInput << "\n";
                     if (decodedPoints.frameID != 0 && decodedPoints.numInput > 0) {
                         const Eigen::Vector3d vehiclePosition = decodedPoints.NED;
                         const uint32_t parallelThreshold = 1000; // Define threshold here, can be adjusted
