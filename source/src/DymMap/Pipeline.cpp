@@ -537,6 +537,7 @@ namespace slam {
             OccupancyMapDataFrame localMapDataFrame;
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
+            std::cout << "[itemsToProcess]: " << itemsToProcess << "\n";
             if (itemsToProcess > 0) {
                 
                 for (size_t i = 0; i < itemsToProcess; ++i) {
@@ -544,9 +545,10 @@ namespace slam {
                         // Keep updating localPoints with the latest current item
                     }
                 }
+                std::cout << "[localMapDataFrame]: " << localMapDataFrame.pointcloud.size() << "\n";
                 occupancyMapInstance->occupancyMap(localMapDataFrame);
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
-
+                std::cout << "[occMapVoxels]: " << occMapVoxels.size() << "\n";
                 if (!voxelsRingBufferOccMap.push(std::move(occMapVoxels))) {
                     if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
@@ -582,7 +584,7 @@ namespace slam {
                     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                 }
             }
-            std::cout << "[occMapVoxels]: " << occMapVoxels.size() << "\n";
+            
         }
     }
 
