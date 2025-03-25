@@ -6,12 +6,14 @@ namespace slam {
         const std::vector<Voxel3D>& voxels, const Eigen::Vector3d& origin, double resolution) {
         auto voxel_grid = std::make_shared<open3d::geometry::VoxelGrid>();
         voxel_grid->voxel_size_ = resolution;
-        // Adjust origin to align voxel centers with computeGridToWorld
         voxel_grid->origin_ = origin - Eigen::Vector3d(resolution / 2.0, resolution / 2.0, resolution / 2.0);
+
+        std::cout << "[createVoxelGrid] Origin: " << voxel_grid->origin_.transpose() << "\n";
+        std::cout << "[createVoxelGrid] Voxel size: " << voxel_grid->voxel_size_ << "\n";
+        std::cout << "[createVoxelGrid] Input voxels: " << voxels.size() << "\n";
 
         tbb::concurrent_vector<std::pair<Eigen::Vector3i, open3d::geometry::Voxel>> temp_voxels;
         temp_voxels.reserve(voxels.size());
-
         tbb::parallel_for(tbb::blocked_range<size_t>(0, voxels.size()),
             [&](const tbb::blocked_range<size_t>& range) {
                 for (size_t i = range.begin(); i != range.end(); ++i) {
@@ -22,15 +24,28 @@ namespace slam {
                         static_cast<double>(voxel.color.y()) / 255.0,
                         static_cast<double>(voxel.color.z()) / 255.0
                     );
+                    // Debug first voxel color
+                    if (i == 0) {
+                        std::cout << "[createVoxelGrid] First voxel raw color: " << voxel.color.x() << " "
+                                << voxel.color.y() << " " << voxel.color.z() << "\n";
+                        std::cout << "[createVoxelGrid] First voxel normalized color: " << color.transpose() << "\n";
+                    }
+                    // Ensure visible color if zero
+                    if (voxel.color.x() == 0 && voxel.color.y() == 0 && voxel.color.z() == 0) {
+                        color = Eigen::Vector3d(1.0, 0.0, 0.0); // Default to red if all zeros
+                    }
                     temp_voxels.emplace_back(grid_index, open3d::geometry::Voxel(grid_index, color));
                 }
             });
+
+        std::cout << "[createVoxelGrid] Temp voxels created: " << temp_voxels.size() << "\n";
 
         voxel_grid->voxels_.reserve(temp_voxels.size());
         for (const auto& [grid_index, voxel] : temp_voxels) {
             voxel_grid->voxels_.emplace(grid_index, voxel);
         }
-        std::cout << "[temp_voxels]: " << temp_voxels.size() << "\n";
+
+        std::cout << "[createVoxelGrid] Voxels assigned: " << voxel_grid->voxels_.size() << "\n";
 
         return voxel_grid;
     }
