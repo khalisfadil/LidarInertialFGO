@@ -769,7 +769,7 @@ namespace slam {
                 view.SetLookat(latestNED);
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(0.1);
+                view.SetZoom(10);
                 std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << "\n";
             }
         }
