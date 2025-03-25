@@ -537,7 +537,7 @@ namespace slam {
     void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(50);
 
         // Pre-allocate voxel buffer to reduce allocation overhead
         std::vector<Voxel3D> occMapVoxels;
@@ -604,7 +604,7 @@ namespace slam {
     void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(50);
 
         // Pre-allocate voxel buffer to reduce allocation overhead
         std::vector<Voxel3D> ExtClsVoxels;
@@ -689,27 +689,27 @@ namespace slam {
 
         open3d::visualization::Visualizer vis;
         vis.CreateVisualizerWindow("3D Voxel Visualization - Ocean View", 1280, 720);
-        vis.GetRenderOption().background_color_ = Eigen::Vector3d(0.0, 0.2, 0.5);
+        vis.GetRenderOption().background_color_ = Eigen::Vector3d(0, 0, 0);
 
-        // Add static voxel grid directly
-        auto static_voxel_grid = std::make_shared<open3d::geometry::VoxelGrid>();
-        static_voxel_grid->voxel_size_ = mapConfig_.resolution;
-        static_voxel_grid->origin_ = Eigen::Vector3d(-67.0, 20.0, 0.0); // Near initial NED
-        static_voxel_grid->AddVoxel(open3d::geometry::Voxel(Eigen::Vector3i(0, 0, 0), Eigen::Vector3d(1.0, 0.0, 0.0))); // Red
-        static_voxel_grid->AddVoxel(open3d::geometry::Voxel(Eigen::Vector3i(1, 1, 1), Eigen::Vector3d(0.0, 1.0, 0.0))); // Green
-        std::cout << "[runViz] Static voxel grid - Origin: " << static_voxel_grid->origin_.transpose()
-                << ", Voxel count: " << static_voxel_grid->voxels_.size()
-                << ", First voxel pos: " << (static_voxel_grid->origin_ + Eigen::Vector3d(0.5, 0.5, 0.5)).transpose() << "\n";
-        vis.AddGeometry(static_voxel_grid);
+        // // Add static voxel grid directly
+        // auto static_voxel_grid = std::make_shared<open3d::geometry::VoxelGrid>();
+        // static_voxel_grid->voxel_size_ = mapConfig_.resolution;
+        // static_voxel_grid->origin_ = Eigen::Vector3d(-67.0, 20.0, 0.0); // Near initial NED
+        // static_voxel_grid->AddVoxel(open3d::geometry::Voxel(Eigen::Vector3i(0, 0, 0), Eigen::Vector3d(1.0, 0.0, 0.0))); // Red
+        // static_voxel_grid->AddVoxel(open3d::geometry::Voxel(Eigen::Vector3i(1, 1, 1), Eigen::Vector3d(0.0, 1.0, 0.0))); // Green
+        // std::cout << "[runViz] Static voxel grid - Origin: " << static_voxel_grid->origin_.transpose()
+        //         << ", Voxel count: " << static_voxel_grid->voxels_.size()
+        //         << ", First voxel pos: " << (static_voxel_grid->origin_ + Eigen::Vector3d(0.5, 0.5, 0.5)).transpose() << "\n";
+        // vis.AddGeometry(static_voxel_grid);
 
-        // Add static voxels via createVoxelGrid
-        std::vector<Voxel3D> static_voxels = {
-            {0, CellKey{0, 0, 0}, 0.0, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(), 0, Eigen::Vector3i(255, 0, 0)},
-            {0, CellKey{1, 1, 1}, 0.0, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(), 0, Eigen::Vector3i(0, 255, 0)}
-        };
-        auto static_voxel_grid2 = createVoxelGrid(static_voxels, Eigen::Vector3d(-67.0, 20.0, 0.0), mapConfig_.resolution);
-        std::cout << "[runViz] Static voxel grid2 (via createVoxelGrid) - Voxel count: " << static_voxel_grid2->voxels_.size() << "\n";
-        vis.AddGeometry(static_voxel_grid2);
+        // // Add static voxels via createVoxelGrid
+        // std::vector<Voxel3D> static_voxels = {
+        //     {0, CellKey{0, 0, 0}, 0.0, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(), 0, Eigen::Vector3i(255, 0, 0)},
+        //     {0, CellKey{1, 1, 1}, 0.0, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(), 0, Eigen::Vector3i(0, 255, 0)}
+        // };
+        // auto static_voxel_grid2 = createVoxelGrid(static_voxels, Eigen::Vector3d(-67.0, 20.0, 0.0), mapConfig_.resolution);
+        // std::cout << "[runViz] Static voxel grid2 (via createVoxelGrid) - Voxel count: " << static_voxel_grid2->voxels_.size() << "\n";
+        // vis.AddGeometry(static_voxel_grid2);
 
         // Add coordinate frame
         auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
@@ -768,7 +768,7 @@ namespace slam {
                 view.SetLookat(latestNED);
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(5);
+                view.SetZoom(4);
                 std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << "\n";
             }
         }
