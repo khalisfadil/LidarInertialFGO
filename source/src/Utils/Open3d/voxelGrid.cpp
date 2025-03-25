@@ -30,6 +30,7 @@ namespace slam {
         for (const auto& [grid_index, voxel] : temp_voxels) {
             voxel_grid->voxels_.emplace(grid_index, voxel);
         }
+        std::cout << "[temp_voxels]: " << temp_voxels.size() << "\n";
 
         return voxel_grid;
     }

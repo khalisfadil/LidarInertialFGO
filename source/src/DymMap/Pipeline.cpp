@@ -690,7 +690,7 @@ namespace slam {
         view.SetFront({0, -1, -1});
         view.SetUp({0, 1, 0});
         view.SetLookat({0, 0, 0});
-        view.SetZoom(1.0); // Start with a neutral zoom
+        view.SetZoom(0.5); // Start with a neutral zoom
 
         vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
             return updateVisualization(vis_ptr);
