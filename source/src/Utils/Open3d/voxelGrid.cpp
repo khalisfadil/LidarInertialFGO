@@ -8,10 +8,6 @@ namespace slam {
         voxel_grid->voxel_size_ = resolution;
         voxel_grid->origin_ = origin;
 
-        // std::cout << "[createVoxelGrid] Origin: " << voxel_grid->origin_.transpose() << "\n";
-        // std::cout << "[createVoxelGrid] Voxel size: " << voxel_grid->voxel_size_ << "\n";
-        // std::cout << "[createVoxelGrid] Input voxels: " << voxels.size() << "\n";
-
         tbb::concurrent_vector<std::pair<Eigen::Vector3i, open3d::geometry::Voxel>> temp_voxels;
         temp_voxels.reserve(voxels.size());
         tbb::parallel_for(tbb::blocked_range<size_t>(0, voxels.size()),
@@ -26,28 +22,14 @@ namespace slam {
                         static_cast<double>(voxel.color.z()) / 255.0
                     );
 
-                    // // Debug first voxel
-                    // if (i == 0) {
-                    //     Eigen::Vector3d world_pos = voxel.computeGridToWorld(origin, resolution); // Use Voxel3D method
-                    //     std::cout << "[createVoxelGrid] First voxel grid index: " << grid_index.x() << " "
-                    //             << grid_index.y() << " " << grid_index.z() << "\n";
-                    //     std::cout << "[createVoxelGrid] First voxel world position: " << world_pos.transpose() << "\n";
-                    //     std::cout << "[createVoxelGrid] First voxel raw color: " << voxel.color.x() << " "
-                    //             << voxel.color.y() << " " << voxel.color.z() << "\n";
-                    //     std::cout << "[createVoxelGrid] First voxel normalized color: " << color.transpose() << "\n";
-                    // }
                     temp_voxels.emplace_back(grid_index, open3d::geometry::Voxel(grid_index, color));
                 }
             });
-
-        // std::cout << "[createVoxelGrid] Temp voxels created: " << temp_voxels.size() << "\n";
 
         voxel_grid->voxels_.reserve(temp_voxels.size());
         for (const auto& [grid_index, voxel] : temp_voxels) {
             voxel_grid->voxels_.emplace(grid_index, voxel);
         }
-
-        // std::cout << "[createVoxelGrid] Voxels assigned: " << voxel_grid->voxels_.size() << "\n";
 
         return voxel_grid;
     }

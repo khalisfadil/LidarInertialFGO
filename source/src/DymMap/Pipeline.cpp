@@ -561,7 +561,7 @@ namespace slam {
                 
                 occupancyMapInstance->occupancyMap(localMapDataFrame);
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
-                std::cout << "[occMapVoxels]: " << occMapVoxels.size() << "\n";
+                
                 if (!voxelsRingBufferOccMap.push(std::move(occMapVoxels))) {
                     if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
@@ -709,7 +709,7 @@ namespace slam {
             view.SetLookat({-67.0, 20.0, 0.0}); // Initial lookat
             view.SetFront({0, 0, -1});
             view.SetUp({0, 1, 0});
-            view.SetZoom(5.0); // Wider initial zoom for stability (adjust as needed)
+            view.SetZoom(8.0); // Wider initial zoom for stability (adjust as needed)
 
             // Register animation callback
             vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
@@ -749,7 +749,7 @@ namespace slam {
 
     bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
         bool updated = false;
-        static Eigen::Vector3d currentLookat = {-67.0, 20.0, 0.0}; // Track current camera position
+        static Eigen::Vector3d currentLookat = {0, 0, 0}; // Track current camera position
         static auto lastUpdateTime = std::chrono::steady_clock::now();
         constexpr double smoothingFactor = 0.1; // For smooth camera interpolation (0.0 to 1.0)
         constexpr std::chrono::milliseconds targetFrameDuration(16); // ~60 FPS
