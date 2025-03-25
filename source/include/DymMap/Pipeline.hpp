@@ -26,7 +26,9 @@ namespace slam {
         Pipeline(const Pipeline&) = delete;
         Pipeline& operator=(const Pipeline&) = delete;
 
-        static void signalHandler(int signal);  // Keep static for signal handling
+        static void signalHandler(int signal);  // Static for signal handling
+        static bool isRunning();  // Static accessor for running_
+
         void startPointsListener(boost::asio::io_context& ioContext, 
                                const std::string& host, 
                                uint16_t port,
@@ -40,11 +42,10 @@ namespace slam {
         void processReportQueueOccMap(const std::string& filename, const std::vector<int>& allowedCores);
         void processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores);
 
-        // Public access to running_ for main loop
-        std::atomic<bool> running_{true};
-
     private:
         void setThreadAffinity(const std::vector<int>& coreIDs);
+
+        static std::atomic<bool> running_;  // Static to be shared across all instances
 
         std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance_;
         std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance_;

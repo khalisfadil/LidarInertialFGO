@@ -6,7 +6,7 @@ int main() {
     Pipeline pipeline;
 
     struct sigaction sigIntHandler;
-    sigIntHandler.sa_handler = [](int signal) { Pipeline::signalHandler(signal); };
+    sigIntHandler.sa_handler = Pipeline::signalHandler;  // Static method
     sigemptyset(&sigIntHandler.sa_mask);
     sigIntHandler.sa_flags = 0;
     sigaction(SIGINT, &sigIntHandler, nullptr);
@@ -31,7 +31,7 @@ int main() {
         threads.emplace_back([&]() { pipeline.processReportQueueOccMap("../source/result/occupancy_report.txt", {21}); });
         threads.emplace_back([&]() { pipeline.processReportQueueExtCls("../source/result/cluster_report.txt", {22}); });
 
-        while (pipeline.running_.load(std::memory_order_acquire)) {
+        while (Pipeline::isRunning()) {  // Use static accessor
             std::this_thread::sleep_for(std::chrono::milliseconds(100));
         }
 

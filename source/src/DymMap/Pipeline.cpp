@@ -31,10 +31,13 @@ namespace slam {
 
     void Pipeline::signalHandler(int signal) {
         if (signal == SIGINT || signal == SIGTERM) {
-            // Note: Can't access instance members here since this is static
-            // For simplicity, we'll assume a single instance and handle shutdown externally
+            running_.store(false, std::memory_order_release);
             write(STDOUT_FILENO, "[signalHandler] Shutting down...\n", 33);
         }
+    }
+
+    bool Pipeline::isRunning() {
+        return running_.load(std::memory_order_acquire);
     }
 
     void Pipeline::processLogQueue(const std::vector<int>& allowedCores) {
