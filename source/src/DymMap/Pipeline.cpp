@@ -18,11 +18,11 @@ namespace slam {
     std::unique_ptr<occmap::OccupancyMap>  Pipeline::occupancyMapInstance;
     std::unique_ptr<cluster::ClusterExtraction>  Pipeline::clusterExtractionInstance;
 
-    boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<128>> Pipeline::ringBufferPose;
-    boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<128>> Pipeline::pointsRingBufferOccMap;
-    boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferOccMap;
-    boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<128>> Pipeline::pointsRingBufferExtCls;
-    boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferExtCls;
+    boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<1024>> Pipeline::ringBufferPose;
+    boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<1024>> Pipeline::pointsRingBufferOccMap;
+    boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<1024>> Pipeline::voxelsRingBufferOccMap;
+    boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<1024>> Pipeline::pointsRingBufferExtCls;
+    boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<1024>> Pipeline::voxelsRingBufferExtCls;
     
     boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<1024>> Pipeline::logQueue;
     boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> Pipeline::reportOccupancyMapQueue;
@@ -375,7 +375,7 @@ namespace slam {
                         
                         filteredPt.reserve(decodedPoints.numInput);
                         filteredAtt.reserve(decodedPoints.numInput);
-                    
+                        std::cerr << "number points in listener: " << decodedPoints.numInput << std::endl;
                         // Filter points with threshold-based parallel/serial execution
                         if (decodedPoints.numInput >= parallelThreshold) {
                             tbb::concurrent_vector<Eigen::Vector3d> tempPt;
@@ -479,12 +479,12 @@ namespace slam {
                             }
                         }
 
-                        // Push to ClusterExtractor ring buffer
-                        if (!pointsRingBufferExtCls.push(extClsFrame)) {
-                            if (!logQueue.push("[PointsListener] Ring buffer full for Ext Cls; decoded points dropped!\n")) {
-                                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            }
-                        }
+                        // // Push to ClusterExtractor ring buffer
+                        // if (!pointsRingBufferExtCls.push(extClsFrame)) {
+                        //     if (!logQueue.push("[PointsListener] Ring buffer full for Ext Cls; decoded points dropped!\n")) {
+                        //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        //     }
+                        // }
 
                         // Push to VehiclePose ring buffer
                         if (!ringBufferPose.push(vehPose)) {
@@ -558,6 +558,7 @@ namespace slam {
                         // Keep updating localPoints with the latest current item
                     }
                 }
+                std::cerr << "Number of point in runOccupancyMapPipeline " << localMapDataFrame.pointcloud.size() << std::endl;
                 
                 occupancyMapInstance->occupancyMap(localMapDataFrame);
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
@@ -721,7 +722,7 @@ namespace slam {
                 view.SetLookat({0.0, 0.0, 0.0}); // Center on origin
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(15.0); // Wide zoom
+                view.SetZoom(20.0); // Wide zoom
 
                 // Register animation callback
                 vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {

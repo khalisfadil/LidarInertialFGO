@@ -602,24 +602,21 @@ namespace slam {
         // -----------------------------------------------------------------------------
 
         std::vector<Voxel3D> ClusterExtraction::getOccupiedVoxel() const {
-            std::vector<Voxel3D> occupiedVoxels;
-            // Reserve space based on current map size to minimize reallocations
-            occupiedVoxels.reserve(occupancyMap_.size());
+            // Use a tbb::concurrent_vector for thread-safe parallel collection
+            tbb::concurrent_vector<Voxel3D> occupiedVoxels;
+            occupiedVoxels.reserve(occupancyMap_.size()); // Reserve space to reduce reallocations
 
             // Parallel iteration over the concurrent map
             tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
                 [&](const auto& mapEntry) {
                     const Voxel3D& voxel = mapEntry.second;
-                    // Only include voxels that have points (counter > 0)
                     if (voxel.counter > 0) {
-                        // Thread-safe push_back since we're using parallel_for_each
-                        occupiedVoxels.push_back(voxel);
+                        occupiedVoxels.push_back(voxel); // Thread-safe push_back
                     }
                 });
 
-            // Shrink to fit the actual size (optional, for memory efficiency)
-            occupiedVoxels.shrink_to_fit();
-            return occupiedVoxels;
+            // Convert to std::vector and return
+            return std::vector<Voxel3D>(occupiedVoxels.begin(), occupiedVoxels.end());
         }
     }  // namespace cluster
 }  // namespace slam

@@ -53,12 +53,12 @@ int main() {
         //     }
         // );
 
-        // Start Visualization Pipeline
-        threads.emplace_back(
-            [&]() {
-                pipeline.runVizualizationPipeline(std::vector<int>{8, 9, 10, 11});
-            }
-        );
+        // // Start Visualization Pipeline
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.runVizualizationPipeline(std::vector<int>{8, 9, 10, 11});
+        //     }
+        // );
 
         // // Start logging thread
         // threads.emplace_back(

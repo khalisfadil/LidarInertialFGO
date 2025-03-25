@@ -27,11 +27,11 @@ public:
     // Static members remain for single-pipeline design
     static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance;
     static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance;
-    static boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<128>> ringBufferPose;
-    static boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<128>> pointsRingBufferOccMap;
-    static boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<128>> pointsRingBufferExtCls;
-    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferOccMap;
-    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferExtCls;
+    static boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<1024>> ringBufferPose;
+    static boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<1024>> pointsRingBufferOccMap;
+    static boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<1024>> pointsRingBufferExtCls;
+    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<1024>> voxelsRingBufferOccMap;
+    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<1024>> voxelsRingBufferExtCls;
     static boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<1024>> logQueue;
     static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> reportOccupancyMapQueue;
     static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> reportExtractClusterQueue;

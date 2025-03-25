@@ -12,12 +12,15 @@
 #include <tbb/concurrent_unordered_map.h>
 #include <tbb/parallel_invoke.h>
 #include <tbb/parallel_for_each.h>
+#include <tbb/concurrent_vector.h>
 #include <tbb/concurrent_unordered_set.h>
 
 #include "Utils/dataframe.hpp"
 #include "Utils/cellKey.hpp"
 #include "Utils/voxel.hpp"
 #include "Utils/colorMode.hpp"
+
+#include "Utils/mapconfig.hpp"
 
 namespace slam {
     namespace occmap {
@@ -50,6 +53,8 @@ namespace slam {
                     return a.first == b.first && a.second == b.second;
                 }
             };
+
+            alignas(64) MapConfig mapConfig_;
 
             // Private methods
             void occupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp);
