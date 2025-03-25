@@ -366,7 +366,7 @@ namespace slam {
                     if (decodedPoints.frameID != 0) {
                         
                         storedDecodedPoints = decodedPoints;
-                        
+                        std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
                         if (decodedPoints.numInput == 0) return;
 
                         // // Temporary storage for transformed data
@@ -427,9 +427,9 @@ namespace slam {
 
                         // Push to OccupancyMap ring buffer
                         if (!pointsRingBufferOccMap.push(storedDecodedPoints)) {
-                            if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
-                                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            }
+                            // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
+                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                            // }
                         }
 
                         // if (!pointsRingBufferExtCls.push(storedDecodedPoints)) {
@@ -440,9 +440,9 @@ namespace slam {
 
                         // Push to OccupancyMap ring buffer
                         if (!ringBufferPose.push(storedDecodedPoints)) {
-                            if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
-                                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            }
+                            // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
+                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                            // }
                         }
 
                     }
@@ -554,7 +554,7 @@ namespace slam {
             auto cycleStartTime = std::chrono::steady_clock::now();
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
-            // std::cerr << "Items to process in runOccupancyMapPipeline: " << itemsToProcess << std::endl;
+            std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
             if (itemsToProcess > 0) {
                 
                 for (size_t i = 0; i < itemsToProcess; ++i) {
