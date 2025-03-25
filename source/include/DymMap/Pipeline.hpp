@@ -73,6 +73,11 @@ private:
 
     void updateVehicleMesh(std::shared_ptr<open3d::geometry::TriangleMesh>& mesh,
                                  const Eigen::Vector3d& NED, const Eigen::Vector3d& RPY);
+    
+    void updateVoxelGrid(std::shared_ptr<open3d::geometry::VoxelGrid>& grid,
+                                const std::vector<Voxel3D>& voxels,
+                                const Eigen::Vector3d& origin,
+                                double resolution);
 };
 
 } // namespace slam

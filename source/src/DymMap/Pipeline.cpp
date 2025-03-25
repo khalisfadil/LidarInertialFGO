@@ -606,83 +606,83 @@ namespace slam {
     // -----------------------------------------------------------------------------
 
     void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
-        setThreadAffinity(allowedCores);
+            setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
+            constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
 
-        // Pre-allocate voxel buffer to reduce allocation overhead
-        std::vector<Voxel3D> ExtClsVoxels;
+            // Pre-allocate voxel buffer to reduce allocation overhead
+            std::vector<Voxel3D> ExtClsVoxels;
 
-        while (running.load(std::memory_order_acquire)) {
-            auto cycleStartTime = std::chrono::steady_clock::now();
-            ClusterExtractorDataFrame localExtractorDataFrame;
+            while (running.load(std::memory_order_acquire)) {
+                auto cycleStartTime = std::chrono::steady_clock::now();
+                ClusterExtractorDataFrame localExtractorDataFrame;
 
-            size_t itemsToProcess = pointsRingBufferExtCls.read_available();
-            if (itemsToProcess > 0) {
-                for (size_t i = 0; i < itemsToProcess; ++i) {
-                    if (pointsRingBufferExtCls.pop(localExtractorDataFrame)) {
-                        // Process each frame (assuming this is intended)
-                        // If you want to accumulate points, modify this logic
+                size_t itemsToProcess = pointsRingBufferExtCls.read_available();
+                if (itemsToProcess > 0) {
+                    for (size_t i = 0; i < itemsToProcess; ++i) {
+                        if (pointsRingBufferExtCls.pop(localExtractorDataFrame)) {
+                            // Process each frame (assuming this is intended)
+                            // If you want to accumulate points, modify this logic
+                        }
+                    }
+                    // Extract clusters from the last popped frame
+                    clusterExtractionInstance->extractClusters(localExtractorDataFrame);
+                    ExtClsVoxels = clusterExtractionInstance->getOccupiedVoxel();
+
+                    // Push voxels to the ring buffer
+                    if (!voxelsRingBufferExtCls.push(std::move(ExtClsVoxels))) {
+                        if (!logQueue.push("[ClusterExtractionPipeline] Voxel buffer full; data dropped!\n")) {
+                            droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        }
+                    }
+
+                    // Create and populate report
+                    ReportDataFrame reportClusterExtractor;
+                    reportClusterExtractor.frameID = localExtractorDataFrame.frameID;
+                    reportClusterExtractor.timestamp = localExtractorDataFrame.timestamp;
+                    reportClusterExtractor.numpoint = localExtractorDataFrame.pointcloud.size();
+                    reportClusterExtractor.occmapsize = ExtClsVoxels.size();
+                    reportClusterExtractor.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
+                        std::chrono::steady_clock::now() - cycleStartTime).count();
+
+                    // Push report to the queue
+                    if (!reportExtractClusterQueue.push(reportClusterExtractor)) {
+                        if (!logQueue.push("[ClusterExtractionPipeline] Report queue full; data dropped!\n")) {
+                            droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        }
+                        droppedExtractClusterReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
                     }
                 }
-                // Extract clusters from the last popped frame
-                clusterExtractionInstance->extractClusters(localExtractorDataFrame);
-                ExtClsVoxels = clusterExtractionInstance->getOccupiedVoxel();
 
-                // Push voxels to the ring buffer
-                if (!voxelsRingBufferExtCls.push(std::move(ExtClsVoxels))) {
-                    if (!logQueue.push("[ClusterExtractionPipeline] Voxel buffer full; data dropped!\n")) {
+                auto cycleEndTime = std::chrono::steady_clock::now();
+                auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
+
+                if (elapsedTime < targetCycleDuration) {
+                    std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
+                } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
+                    std::ostringstream oss;
+                    oss << "Warning: [ClusterExtractionPipeline] Processing exceeded target by " 
+                        << (elapsedTime - targetCycleDuration).count() << " ms\n";
+                    if (!logQueue.push(oss.str())) {
                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
                     }
-                }
-
-                // Create and populate report
-                ReportDataFrame reportClusterExtractor;
-                reportClusterExtractor.frameID = localExtractorDataFrame.frameID;
-                reportClusterExtractor.timestamp = localExtractorDataFrame.timestamp;
-                reportClusterExtractor.numpoint = localExtractorDataFrame.pointcloud.size();
-                reportClusterExtractor.occmapsize = ExtClsVoxels.size();
-                reportClusterExtractor.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
-                    std::chrono::steady_clock::now() - cycleStartTime).count();
-
-                // Push report to the queue
-                if (!reportExtractClusterQueue.push(reportClusterExtractor)) {
-                    if (!logQueue.push("[ClusterExtractionPipeline] Report queue full; data dropped!\n")) {
-                        droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                    }
-                    droppedExtractClusterReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
-                }
-            }
-
-            auto cycleEndTime = std::chrono::steady_clock::now();
-            auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
-
-            if (elapsedTime < targetCycleDuration) {
-                std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
-            } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
-                std::ostringstream oss;
-                oss << "Warning: [ClusterExtractionPipeline] Processing exceeded target by " 
-                    << (elapsedTime - targetCycleDuration).count() << " ms\n";
-                if (!logQueue.push(oss.str())) {
-                    droppedLogs.fetch_add(1, std::memory_order_relaxed);
                 }
             }
         }
-    }
 
-    // -----------------------------------------------------------------------------
-    // Section: assignVoxelColorsRed
-    // -----------------------------------------------------------------------------
-    void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {
+        // -----------------------------------------------------------------------------
+        // Section: assignVoxelColorsRed
+        // -----------------------------------------------------------------------------
+        
+        void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         try {
             open3d::visualization::Visualizer vis;
             if (!vis.CreateVisualizerWindow("3D Voxel Visualization", 1280, 720)) {
-                // std::cerr << "Error: Failed to create visualizer window.\n";
                 return;
             }
-            vis.GetRenderOption().background_color_ = Eigen::Vector3d(1, 1, 1);
+            vis.GetRenderOption().background_color_ = Eigen::Vector3d(1, 1, 1); // White background
 
             // Initialize geometries with checks
             if (!voxel_grid_occMap_ptr) {
@@ -700,50 +700,45 @@ namespace slam {
             }
 
             // Add initial geometries
-            if (!vis.AddGeometry(voxel_grid_occMap_ptr)) {
-                // std::cerr << "Warning: Failed to add initial occupancy map geometry.\n";
-            }
-            if (!vis.AddGeometry(voxel_grid_extCls_ptr)) {
-                // std::cerr << "Warning: Failed to add initial cluster extraction geometry.\n";
-            }
-            if (!vis.AddGeometry(vehicle_mesh_ptr)) {
-                // std::cerr << "Warning: Failed to add initial vehicle mesh.\n";
-            }
-
-            // // Add coordinate frame
-            // auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
-            // if (!vis.AddGeometry(coord_frame)) {
-            //     std::cerr << "Warning: Failed to add coordinate frame.\n";
-            // }
+            vis.AddGeometry(voxel_grid_occMap_ptr);
+            vis.AddGeometry(voxel_grid_extCls_ptr);
+            vis.AddGeometry(vehicle_mesh_ptr);
 
             // Set initial camera parameters
             auto& view = vis.GetViewControl();
-            view.SetLookat({-67.0, 20.0, 0.0});
+            view.SetLookat({-67.0, 20.0, 0.0}); // Initial lookat
             view.SetFront({0, 0, -1});
             view.SetUp({0, 1, 0});
-            view.SetZoom(1);
-            // std::cout << "[runViz] Initial camera set - Lookat: (-67, 20, 0), Zoom: 15\n";
+            view.SetZoom(5.0); // Wider initial zoom for stability (adjust as needed)
 
-            // Register animation callback with exception handling
+            // Register animation callback
             vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
                 try {
                     return updateVisualization(vis_ptr);
                 } catch (const std::exception& e) {
-                    // std::cerr << "Error in visualization callback: " << e.what() << "\n";
-                    return running.load(std::memory_order_acquire); // Continue unless stopped
+                    return running.load(std::memory_order_acquire);
                 }
             });
 
-            // Run the visualizer
             vis.Run();
             vis.DestroyVisualizerWindow();
-            // std::cout << "[runViz] Visualizer shutdown completed.\n";
         } catch (const std::exception& e) {
-            // std::cerr << "Fatal error in visualization pipeline: " << e.what() << "\n";
+            // Handle silently for now, per your preference
         }
     }
 
-    // Helper function to update vehicle mesh in place (optional optimization)
+    // Helper function to update voxel grid in place
+    void Pipeline::updateVoxelGrid(std::shared_ptr<open3d::geometry::VoxelGrid>& grid,
+                                const std::vector<Voxel3D>& voxels,
+                                const Eigen::Vector3d& origin,
+                                double resolution) {
+        auto new_grid = createVoxelGrid(voxels, origin, resolution);
+        grid->voxels_ = new_grid->voxels_; // Update voxels in place
+        grid->origin_ = origin;            // Ensure consistency
+        grid->voxel_size_ = resolution;
+    }
+
+    // Helper function to update vehicle mesh in place
     void Pipeline::updateVehicleMesh(std::shared_ptr<open3d::geometry::TriangleMesh>& mesh,
                                     const Eigen::Vector3d& NED, const Eigen::Vector3d& RPY) {
         auto new_mesh = createVehicleMesh(NED, RPY);
@@ -754,357 +749,69 @@ namespace slam {
 
     bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
         bool updated = false;
-        static Eigen::Vector3d lastNED = mapConfig_.mapOrigin; // Track last camera position
+        static Eigen::Vector3d currentLookat = {-67.0, 20.0, 0.0}; // Track current camera position
+        static auto lastUpdateTime = std::chrono::steady_clock::now();
+        constexpr double smoothingFactor = 0.1; // For smooth camera interpolation (0.0 to 1.0)
+        constexpr std::chrono::milliseconds targetFrameDuration(16); // ~60 FPS
 
-        // Process Occupancy Map Voxels
-        // Producer: data processing thread, Consumer: visualization thread
+        // Process Occupancy Map Voxels (latest data only)
         size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
         if (itemsToProcessVoxelOccMap > 0) {
             std::vector<Voxel3D> localVoxelProcessOccMap;
-            for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
-                if (!voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
-                    // std::cerr << "Warning: Failed to pop occupancy map voxel data.\n";
-                }
+            while (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
+                // Keep only the latest data by overwriting
             }
             if (!localVoxelProcessOccMap.empty()) {
-                try {
-                    auto new_voxel_grid = createVoxelGrid(localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
-                    if (!vis->RemoveGeometry(voxel_grid_occMap_ptr)) {
-                        // std::cerr << "Warning: Failed to remove old occupancy map geometry.\n";
-                    }
-                    voxel_grid_occMap_ptr = new_voxel_grid;
-                    if (!vis->AddGeometry(voxel_grid_occMap_ptr)) {
-                        // std::cerr << "Error: Failed to add new occupancy map geometry.\n";
-                    } else {
-                        updated = true;
-                        // std::cout << "[updateViz] Updated occupancy map with " << localVoxelProcessOccMap.size() << " voxels.\n";
-                    }
-                } catch (const std::exception& e) {
-                    // std::cerr << "Error updating occupancy map: " << e.what() << "\n";
-                }
-            } else {
-                // std::cout << "[updateViz] No new occupancy map voxels available.\n";
+                updateVoxelGrid(voxel_grid_occMap_ptr, localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
+                vis->UpdateGeometry(voxel_grid_occMap_ptr);
+                updated = true;
             }
         }
 
-        // Process Cluster Extraction Voxels
-        // Producer: data processing thread, Consumer: visualization thread
+        // Process Cluster Extraction Voxels (latest data only)
         size_t itemsToProcessVoxelExtCls = voxelsRingBufferExtCls.read_available();
         if (itemsToProcessVoxelExtCls > 0) {
             std::vector<Voxel3D> localVoxelProcessExtCls;
-            for (size_t i = 0; i < itemsToProcessVoxelExtCls; ++i) {
-                if (!voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
-                    // std::cerr << "Warning: Failed to pop cluster extraction voxel data.\n";
-                }
+            while (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
+                // Keep only the latest data
             }
             if (!localVoxelProcessExtCls.empty()) {
-                try {
-                    auto new_voxel_grid = createVoxelGrid(localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
-                    if (!vis->RemoveGeometry(voxel_grid_extCls_ptr)) {
-                        // std::cerr << "Warning: Failed to remove old cluster extraction geometry.\n";
-                    }
-                    voxel_grid_extCls_ptr = new_voxel_grid;
-                    if (!vis->AddGeometry(voxel_grid_extCls_ptr)) {
-                        // std::cerr << "Error: Failed to add new cluster extraction geometry.\n";
-                    } else {
-                        updated = true;
-                        // std::cout << "[updateViz] Updated cluster extraction with " << localVoxelProcessExtCls.size() << " voxels.\n";
-                    }
-                } catch (const std::exception& e) {
-                    // std::cerr << "Error updating cluster extraction: " << e.what() << "\n";
-                }
-            } else {
-                // std::cout << "[updateViz] No new cluster extraction voxels available.\n";
+                updateVoxelGrid(voxel_grid_extCls_ptr, localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
+                vis->UpdateGeometry(voxel_grid_extCls_ptr);
+                updated = true;
             }
         }
 
-        // Process Vehicle Pose
-        // Producer: pose processing thread, Consumer: visualization thread
+        // Process Vehicle Pose (latest data only)
         size_t itemsToProcessVehPose = ringBufferPose.read_available();
-        Eigen::Vector3d latestNED = lastNED; // Default to last known position
         if (itemsToProcessVehPose > 0) {
             VehiclePoseDataFrame localProcessVehPose;
-            bool poseUpdated = false;
-            for (size_t i = 0; i < itemsToProcessVehPose; ++i) {
-                if (ringBufferPose.pop(localProcessVehPose)) {
-                    poseUpdated = true;
-                } else {
-                    // std::cerr << "Warning: Failed to pop vehicle pose data.\n";
-                }
+            while (ringBufferPose.pop(localProcessVehPose)) {
+                // Keep only the latest pose
             }
-            if (poseUpdated) {
-                try {
-                    if (!vehicle_mesh_ptr) {
-                        vehicle_mesh_ptr = createVehicleMesh(localProcessVehPose.NED, localProcessVehPose.RPY);
-                        if (!vis->AddGeometry(vehicle_mesh_ptr)) {
-                            // std::cerr << "Error: Failed to add initial vehicle mesh.\n";
-                        }
-                    } else {
-                        updateVehicleMesh(vehicle_mesh_ptr, localProcessVehPose.NED, localProcessVehPose.RPY);
-                        if (!vis->UpdateGeometry(vehicle_mesh_ptr)) {
-                            // std::cerr << "Warning: Failed to update vehicle mesh.\n";
-                        }
-                    }
-                    updated = true;
-                    latestNED = localProcessVehPose.NED;
+            updateVehicleMesh(vehicle_mesh_ptr, localProcessVehPose.NED, localProcessVehPose.RPY);
+            vis->UpdateGeometry(vehicle_mesh_ptr);
+            updated = true;
 
-                    // Update camera only if position changes significantly
-                    if ((latestNED - lastNED).norm() > 1.0) { // 1-meter threshold
-                        // auto& view = vis->GetViewControl();
-                        // view.SetLookat(latestNED);
-                        // view.SetFront({0, 0, -1});
-                        // view.SetUp({0, 1, 0});
-                        // view.SetZoom(1);
-                        // lastNED = latestNED;
-                        // std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 15\n";
-                    }
-                } catch (const std::exception& e) {
-                    // std::cerr << "Error updating vehicle pose: " << e.what() << "\n";
-                }
-            }
+            // Smoothly interpolate camera lookat
+            Eigen::Vector3d targetLookat = localProcessVehPose.NED;
+            currentLookat = currentLookat + smoothingFactor * (targetLookat - currentLookat);
+            auto& view = vis->GetViewControl();
+            view.SetLookat(currentLookat);
+            view.SetFront({0, 0, -1});
+            view.SetUp({0, 1, 0});
+            // Zoom is fixed at 5.0 from initialization, no need to set again
         }
 
-        // Ensure a return value is always provided
+        // Frame rate limiter
+        auto now = std::chrono::steady_clock::now();
+        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTime);
+        if (elapsed < targetFrameDuration) {
+            std::this_thread::sleep_for(targetFrameDuration - elapsed);
+        }
+        lastUpdateTime = now;
+
         return running.load(std::memory_order_acquire) || updated;
     }
-    // void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {
-    //         setThreadAffinity(allowedCores);
-
-
-    //         open3d::visualization::Visualizer vis;
-    //         vis.CreateVisualizerWindow("3D Voxel Visualization - Ocean View", 1280, 720);
-    //         vis.GetRenderOption().background_color_ = Eigen::Vector3d(0, 0, 0);
-
-    //         vis.AddGeometry(voxel_grid_occMap_ptr);
-    //         vis.AddGeometry(voxel_grid_extCls_ptr);
-    //         vis.AddGeometry(vehicle_mesh_ptr);
-
-    //         // Add coordinate frame once
-    //         auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
-    //         vis.AddGeometry(coord_frame);
-
-    //         auto& view = vis.GetViewControl();
-    //         view.SetLookat({-67.0, 20.0, 0.0}); // Initial lookat matches static voxels and early NED
-    //         view.SetFront({0, 0, -1});
-    //         view.SetUp({0, 1, 0});
-    //         view.SetZoom(15); // Wide view to see dynamic voxels ~190m away
-    //         // std::cout << "[runViz] Camera set - Lookat: (-67, 20, 0), Zoom: 0.1\n";
-
-    //         vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
-    //             return updateVisualization(vis_ptr);
-    //         });
-
-    //         vis.Run();
-    //         vis.DestroyVisualizerWindow();
-    //     }
-
-    //     // -----------------------------------------------------------------------------
-    //     // Section: assignVoxelColorsRed
-    //     // -----------------------------------------------------------------------------
-    //     bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
-    //         bool updated = false;
-
-    //         // Process Occupancy Map Voxels
-    //         size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
-    //         if (itemsToProcessVoxelOccMap > 0) {
-    //             std::vector<Voxel3D> localVoxelProcessOccMap;
-    //             for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
-    //                 if (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
-    //                     // Keep the latest data
-    //                 }
-    //             }
-    //             if (!localVoxelProcessOccMap.empty()) {
-    //                 // Create a new VoxelGrid and replace the old one
-    //                 auto new_voxel_grid = createVoxelGrid(localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
-    //                 vis->RemoveGeometry(voxel_grid_occMap_ptr); // Remove old geometry
-    //                 voxel_grid_occMap_ptr = new_voxel_grid;
-    //                 vis->AddGeometry(voxel_grid_occMap_ptr);   // Add new geometry
-    //                 updated = true;
-    //             }
-    //         }
-
-    //         // Process Cluster Extraction Voxels
-    //         size_t itemsToProcessVoxelExtCls = voxelsRingBufferExtCls.read_available();
-    //         if (itemsToProcessVoxelExtCls > 0) {
-    //             std::vector<Voxel3D> localVoxelProcessExtCls;
-    //             for (size_t i = 0; i < itemsToProcessVoxelExtCls; ++i) {
-    //                 if (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
-    //                     // Keep the latest data
-    //                 }
-    //             }
-    //             if (!localVoxelProcessExtCls.empty()) {
-    //                 // Create a new VoxelGrid and replace the old one
-    //                 auto new_voxel_grid = createVoxelGrid(localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
-    //                 vis->RemoveGeometry(voxel_grid_extCls_ptr);
-    //                 voxel_grid_extCls_ptr = new_voxel_grid;
-    //                 vis->AddGeometry(voxel_grid_extCls_ptr);
-    //                 updated = true;
-    //             }
-    //         }
-
-    //         // Process Vehicle Pose
-    //         size_t itemsToProcessVehPose = ringBufferPose.read_available();
-    //         Eigen::Vector3d latestNED = mapConfig_.mapOrigin;
-    //         if (itemsToProcessVehPose > 0) {
-    //             VehiclePoseDataFrame localProcessVehPose;
-    //             for (size_t i = 0; i < itemsToProcessVehPose; ++i) {
-    //                 if (ringBufferPose.pop(localProcessVehPose)) {
-    //                     // Keep the latest pose
-    //                 }
-    //             }
-    //             if (vehicle_mesh_ptr) {
-    //                 auto new_vehicle_mesh = createVehicleMesh(localProcessVehPose.NED, localProcessVehPose.RPY);
-    //                 vehicle_mesh_ptr->vertices_ = new_vehicle_mesh->vertices_;
-    //                 vehicle_mesh_ptr->triangles_ = new_vehicle_mesh->triangles_;
-    //                 vehicle_mesh_ptr->vertex_colors_ = new_vehicle_mesh->vertex_colors_;
-    //                 vis->UpdateGeometry(vehicle_mesh_ptr);
-    //                 updated = true;
-
-    //                 latestNED = localProcessVehPose.NED;
-    //                 auto& view = vis->GetViewControl();
-    //                 view.SetLookat(latestNED);
-    //                 view.SetFront({0, 0, -1});
-    //                 view.SetUp({0, 1, 0});
-    //                 view.SetZoom(15); // Consistent with initialization
-    //                 std::cout << "[updateViz2] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 15\n";
-    //                 std::cout << "Lookat: " << view.GetLookat().transpose() << "\n";
-    //                 std::cout << "Front: " << view.GetFront().transpose() << "\n";
-    //                 std::cout << "Up: " << view.GetUp().transpose() << "\n";
-    //             }
-    //         }
-
-    //         return running.load(std::memory_order_acquire) || updated;
-    //     }
-    // bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
-    //     bool updated = false;
-
-    //     // Process Occupancy Map Voxels
-    //     size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
-    //     // std::cout << "[itemsToProcessVoxelOccMap]: " << itemsToProcessVoxelOccMap << "\n";
-    //     if (itemsToProcessVoxelOccMap > 0) {
-    //         std::vector<Voxel3D> localVoxelProcessOccMap;
-    //         for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
-    //             if (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
-    //                 // Keep the latest data; could accumulate if needed
-    //             }
-    //         }
-    //         if (!localVoxelProcessOccMap.empty()) {
-    //             voxel_grid_occMap_ptr->voxels_ = createVoxelGrid(localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution)->voxels_;
-    //             vis->UpdateGeometry(voxel_grid_occMap_ptr);
-    //             updated = true;
-    //         }
-    //     }
-
-    //     // Process Cluster Extraction Voxels
-    //     size_t itemsToProcessVoxelExtCls = voxelsRingBufferExtCls.read_available();
-    //     if (itemsToProcessVoxelExtCls > 0) {
-    //         std::vector<Voxel3D> localVoxelProcessExtCls;
-    //         for (size_t i = 0; i < itemsToProcessVoxelExtCls; ++i) {
-    //             if (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) { // Corrected from OccMap to ExtCls
-    //                 // Keep the latest data
-    //             }
-    //         }
-    //         if (!localVoxelProcessExtCls.empty()) {
-    //             voxel_grid_extCls_ptr->voxels_ = createVoxelGrid(localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution)->voxels_;
-    //             vis->UpdateGeometry(voxel_grid_extCls_ptr);
-    //             updated = true;
-    //         }
-    //     }
-
-    //     // Process Vehicle Pose
-    //     size_t itemsToProcessVehPose = ringBufferPose.read_available();
-    //     // std::cout << "[updateViz] itemsToProcessVehPose: " << itemsToProcessVehPose << "\n";
-    //     Eigen::Vector3d latestNED = mapConfig_.mapOrigin;
-    //     if (itemsToProcessVehPose > 0) {
-    //         VehiclePoseDataFrame localProcessVehPose;
-    //         for (size_t i = 0; i < itemsToProcessVehPose; ++i) {
-    //             if (ringBufferPose.pop(localProcessVehPose)) {
-    //                 // Keep the latest pose
-    //             }
-    //         }
-    //         if (vehicle_mesh_ptr) {
-    //             auto new_vehicle_mesh = createVehicleMesh(localProcessVehPose.NED, localProcessVehPose.RPY);
-    //             vehicle_mesh_ptr->vertices_ = new_vehicle_mesh->vertices_;
-    //             vehicle_mesh_ptr->triangles_ = new_vehicle_mesh->triangles_;
-    //             vehicle_mesh_ptr->vertex_colors_ = new_vehicle_mesh->vertex_colors_;
-    //             vis->UpdateGeometry(vehicle_mesh_ptr);
-    //             updated = true;
-
-    //             latestNED = localProcessVehPose.NED; // Store latest NED for voxels
-    //             // std::cout << "[updateViz] Vehicle NED: " << latestNED.transpose() << "\n";
-
-    //             // Update camera to look at the vehicle
-    //             auto& view = vis->GetViewControl();
-    //             view.SetLookat(latestNED);
-    //             view.SetFront({0, 0, -1});
-    //             view.SetUp({0, 1, 0});
-    //             view.SetZoom(15); // Zoom out to see ~200+ meters
-    //             std::cout << "[updateViz2] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
-    //             std::cout << "Lookat: " << view.GetLookat().transpose() << "\n";
-    //             std::cout << "Front: " << view.GetFront().transpose() << "\n";
-    //             std::cout << "Up: " << view.GetUp().transpose() << "\n";
-    //         }
-    //     }
-
-    //     return running.load(std::memory_order_acquire) || updated; // Continue if running or updated
-    // }
-
-    // bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
-    //     bool updated = false;
-
-    //     // Process Vehicle Pose first to get the latest NED
-    //     size_t itemsToProcessVehPose = ringBufferPose.read_available();
-    //     std::cout << "[updateViz] itemsToProcessVehPose: " << itemsToProcessVehPose << "\n";
-    //     Eigen::Vector3d latestNED = mapConfig_.mapOrigin; // Default to mapOrigin if no pose
-    //     if (itemsToProcessVehPose > 0) {
-    //         VehiclePoseDataFrame localProcessVehPose;
-    //         for (size_t i = 0; i < itemsToProcessVehPose; ++i) {
-    //             if (ringBufferPose.pop(localProcessVehPose)) {
-    //                 // Keep the latest pose
-    //             }
-    //         }
-    //         if (vehicle_mesh_ptr) {
-    //             auto new_vehicle_mesh = createVehicleMesh(localProcessVehPose.NED, localProcessVehPose.RPY);
-    //             vehicle_mesh_ptr->vertices_ = new_vehicle_mesh->vertices_;
-    //             vehicle_mesh_ptr->triangles_ = new_vehicle_mesh->triangles_;
-    //             vehicle_mesh_ptr->vertex_colors_ = new_vehicle_mesh->vertex_colors_;
-    //             vis->UpdateGeometry(vehicle_mesh_ptr);
-    //             updated = true;
-
-    //             latestNED = localProcessVehPose.NED; // Store latest NED for voxels
-    //             std::cout << "[updateViz] Vehicle NED: " << latestNED.transpose() << "\n";
-
-    //             auto& view = vis->GetViewControl();
-    //             view.SetLookat(latestNED);
-    //             view.SetFront({0, 0, -1});
-    //             view.SetUp({0, 1, 0});
-    //             view.SetZoom(0.1); // Zoom out to see ~200+ meters
-    //             std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
-    //         }
-    //     }
-
-    //     // Process Occupancy Map Voxels
-    //     size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
-    //     std::cout << "[updateViz] itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << "\n";
-    //     if (itemsToProcessVoxelOccMap > 0) {
-    //         std::vector<Voxel3D> localVoxelProcessOccMap;
-    //         for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
-    //             if (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
-    //                 // Keep the latest data
-    //             }
-    //         }
-    //         if (!localVoxelProcessOccMap.empty()) {
-    //             std::cout << "[updateViz] Voxel count: " << localVoxelProcessOccMap.size() << "\n";
-    //             std::cout << "[updateViz] First voxel key: " << localVoxelProcessOccMap[0].key.x << " "
-    //                     << localVoxelProcessOccMap[0].key.y << " " << localVoxelProcessOccMap[0].key.z << "\n";
-
-    //             voxel_grid_occMap_ptr = createVoxelGrid(localVoxelProcessOccMap, latestNED, mapConfig_.resolution);
-    //             vis->UpdateGeometry(voxel_grid_occMap_ptr);
-    //             updated = true;
-    //         }
-    //     }
-
-    //     return running.load(std::memory_order_acquire) || updated;
-    // }
 
 }  // namespace slam
