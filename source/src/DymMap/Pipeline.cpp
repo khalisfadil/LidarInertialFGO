@@ -537,7 +537,7 @@ namespace slam {
     void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(50);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
 
         // Pre-allocate voxel buffer to reduce allocation overhead
         std::vector<Voxel3D> occMapVoxels;
@@ -605,7 +605,7 @@ namespace slam {
     void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(50);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
 
         // Pre-allocate voxel buffer to reduce allocation overhead
         std::vector<Voxel3D> ExtClsVoxels;
