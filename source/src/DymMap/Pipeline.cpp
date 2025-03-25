@@ -397,10 +397,10 @@ namespace slam {
                         }
 
                         // Update decodedPoints
+                        decodedPoints.numInput = static_cast<uint32_t>(filteredPt.size());
                         decodedPoints.pt = std::move(filteredPt);
                         decodedPoints.att = std::move(filteredAtt);
-                        decodedPoints.numInput = static_cast<uint32_t>(filteredPt.size());
-                        std::cout << "[decodedPoints.pt]: " << decodedPoints.pt.size() << "\n";
+                        
                         std::cout << "[decodedPoints.numInput]: " << decodedPoints.numInput << "\n";
                         if (decodedPoints.numInput == 0) return;
 
