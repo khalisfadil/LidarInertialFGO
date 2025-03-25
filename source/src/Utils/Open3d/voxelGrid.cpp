@@ -24,15 +24,15 @@ namespace slam {
                         static_cast<double>(voxel.color.y()) / 255.0,
                         static_cast<double>(voxel.color.z()) / 255.0
                     );
-                    // Debug first voxel color
+                    // Debug first voxel
                     if (i == 0) {
+                        Eigen::Vector3d world_pos = voxel.computeGridToWorld(origin, resolution); // Use Voxel3D method
+                        std::cout << "[createVoxelGrid] First voxel grid index: " << grid_index.x() << " "
+                                << grid_index.y() << " " << grid_index.z() << "\n";
+                        std::cout << "[createVoxelGrid] First voxel world position: " << world_pos.transpose() << "\n";
                         std::cout << "[createVoxelGrid] First voxel raw color: " << voxel.color.x() << " "
                                 << voxel.color.y() << " " << voxel.color.z() << "\n";
                         std::cout << "[createVoxelGrid] First voxel normalized color: " << color.transpose() << "\n";
-                    }
-                    // Ensure visible color if zero
-                    if (voxel.color.x() == 0 && voxel.color.y() == 0 && voxel.color.z() == 0) {
-                        color = Eigen::Vector3d(1.0, 0.0, 0.0); // Default to red if all zeros
                     }
                     temp_voxels.emplace_back(grid_index, open3d::geometry::Voxel(grid_index, color));
                 }

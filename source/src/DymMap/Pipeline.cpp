@@ -770,7 +770,7 @@ namespace slam {
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
                 view.SetZoom(6.0); // Zoom out to see ~200+ meters
-                // std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
+                std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
             }
         }
 
