@@ -399,7 +399,7 @@ namespace slam {
                         decodedPoints.pt = std::move(filteredPt);
                         decodedPoints.att = std::move(filteredAtt);
                         decodedPoints.numInput = static_cast<uint32_t>(filteredPt.size());
-
+                        std::cout << "[decodedPoints.numInput]: " << decodedPoints.numInput << "\n";
                         if (decodedPoints.numInput == 0) return;
 
                         // Temporary storage for transformed data
@@ -457,7 +457,7 @@ namespace slam {
                                 vehPose.RPY = decodedPoints.RPY;
                             }
                         );
-                        std::cout << "[occMapFrame]: " << occMapFrame.pointcloud.size() << "\n";
+                        
 
                         // Push to OccupancyMap ring buffer
                         if (!pointsRingBufferOccMap.push(occMapFrame)) {
