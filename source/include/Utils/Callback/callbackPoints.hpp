@@ -44,19 +44,9 @@ namespace slam {
 
             if (frameId != frameID_) {
                 if (maxNumSegment_ == currSegmIdx_ - 1) {
-                    if (receivedNumInput_ < 1000) {
-                        // Serial copy for small datasets
-                        std::copy_n(receivedPt_.data(), receivedNumInput_, points.pt.data());
-                        std::copy_n(receivedAtt_.data(), receivedNumInput_, points.att.data());
-                    } else {
-                        // Parallel TBB copy for large datasets
-                        tbb::parallel_for(tbb::blocked_range<size_t>(0, receivedNumInput_, 64),
-                            [&](const tbb::blocked_range<size_t>& r) {
-                                std::copy_n(receivedPt_.data() + r.begin(), r.end() - r.begin(), points.pt.data() + r.begin());
-                                std::copy_n(receivedAtt_.data() + r.begin(), r.end() - r.begin(), points.att.data() + r.begin());
-                            }, tbb::auto_partitioner());
-                    }
-
+                    // Serial copy for small datasets
+                    std::copy_n(receivedPt_.data(), receivedNumInput_, points.pt.data());
+                    std::copy_n(receivedAtt_.data(), receivedNumInput_, points.att.data());
                     points.numInput = receivedNumInput_;
                     points.frameID = frameID_;
                     points.t = t_;
@@ -80,22 +70,20 @@ namespace slam {
             const uint32_t offset = segmIdx * 55;
             const float* payload = reinterpret_cast<const float*>(buffer + 73);
 
-            tbb::parallel_for(tbb::blocked_range<uint32_t>(0, numInput, 32), 
-                [&](const tbb::blocked_range<uint32_t>& r) {
-                    for (uint32_t i = r.begin(); i != r.end(); ++i) {
-                        const float* base = payload + i * 6;
-                        receivedPt_[offset + i] = Eigen::Vector3d(
-                            static_cast<double>(base[0]),
-                            static_cast<double>(base[1]),
-                            static_cast<double>(base[2])
-                        );
-                        receivedAtt_[offset + i] = Eigen::Vector3d(
-                            static_cast<double>(base[3]),
-                            static_cast<double>(base[4]),
-                            static_cast<double>(base[5])
-                        );
-                    }
-                }, tbb::auto_partitioner());
+            // Sequential loop replacing tbb::parallel_for
+            for (uint32_t i = 0; i < numInput; ++i) {
+                const float* base = payload + i * 6;
+                receivedPt_[offset + i] = Eigen::Vector3d(
+                    static_cast<double>(base[0]),
+                    static_cast<double>(base[1]),
+                    static_cast<double>(base[2])
+                );
+                receivedAtt_[offset + i] = Eigen::Vector3d(
+                    static_cast<double>(base[3]),
+                    static_cast<double>(base[4]),
+                    static_cast<double>(base[5])
+                );
+            }
 
             receivedNumInput_ = offset + numInput;
         }

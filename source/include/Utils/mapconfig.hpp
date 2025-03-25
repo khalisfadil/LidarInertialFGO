@@ -22,8 +22,8 @@ namespace slam {
 
     struct ProcessConfig {
 
-        double mapMaxDistance = 250.0;   ///< The maximum distance that can be reached in the map.
-        double mapMinDistance = 30.0;   ///< The maximum distance that can be reached in the map.
+        double mapMaxDistance = 300.0;   ///< The maximum distance that can be reached in the map.
+        double mapMinDistance = 50.0;   ///< The maximum distance that can be reached in the map.
         Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero();
     };
 

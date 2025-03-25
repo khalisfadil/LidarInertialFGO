@@ -27,20 +27,25 @@ public:
     // Static members remain for single-pipeline design
     static std::unique_ptr<occmap::OccupancyMap> occupancyMapInstance;
     static std::unique_ptr<cluster::ClusterExtraction> clusterExtractionInstance;
-    static boost::lockfree::spsc_queue<VehiclePoseDataFrame, boost::lockfree::capacity<1024>> ringBufferPose;
-    static boost::lockfree::spsc_queue<OccupancyMapDataFrame, boost::lockfree::capacity<1024>> pointsRingBufferOccMap;
-    static boost::lockfree::spsc_queue<ClusterExtractorDataFrame, boost::lockfree::capacity<1024>> pointsRingBufferExtCls;
-    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<1024>> voxelsRingBufferOccMap;
-    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<1024>> voxelsRingBufferExtCls;
-    static boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<1024>> logQueue;
-    static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> reportOccupancyMapQueue;
-    static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<1024>> reportExtractClusterQueue;
+
+    static boost::lockfree::spsc_queue<CallbackPoints::Points, boost::lockfree::capacity<128>> ringBufferPose;
+    static boost::lockfree::spsc_queue<CallbackPoints::Points, boost::lockfree::capacity<128>> pointsRingBufferOccMap;
+    static boost::lockfree::spsc_queue<CallbackPoints::Points, boost::lockfree::capacity<128>> pointsRingBufferExtCls;
+
+    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferOccMap;
+    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferExtCls;
+    static boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128>> logQueue;
+    static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<128>> reportOccupancyMapQueue;
+    static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<128>> reportExtractClusterQueue;
+
 
     static std::atomic<bool> running;
     static std::atomic<int> droppedLogs;
     static std::atomic<int> droppedOccupancyMapReports;
     static std::atomic<int> droppedExtractClusterReports;
     static std::condition_variable globalCV;
+
+    open3d::visualization::Visualizer vis;
 
     Pipeline();
     static void signalHandler(int signal); // Must be static for signal handling
@@ -52,7 +57,7 @@ public:
 
     void setThreadAffinity(const std::vector<int>& coreIDs);
     void runOccupancyMapPipeline(const std::vector<int>& allowedCores);
-    void runClusterExtractionPipeline(const std::vector<int>& allowedCores);
+    // void runClusterExtractionPipeline(const std::vector<int>& allowedCores);
     void runVizualizationPipeline(const std::vector<int>& allowedCores);
     bool updateVisualization(open3d::visualization::Visualizer* vis);
     void processLogQueue(const std::vector<int>& allowedCores);
@@ -65,6 +70,15 @@ private:
     static std::thread logThread_; // Static thread for logging
 
     CallbackPoints callbackPointsProcessor;
+    CallbackPoints::Points storedDecodedPoints;
+
+    CallbackPoints::Points localPointOccMap;
+    OccupancyMapDataFrame occMapFrame;
+    std::vector<Voxel3D> occMapVoxels;
+
+    std::vector<Voxel3D> localVoxelProcessOccMap;
+    CallbackPoints::Points localPointsVehPose;
+
     uint32_t frameID_ = 0;
     
     static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_occMap_ptr;
@@ -78,6 +92,8 @@ private:
                                 const std::vector<Voxel3D>& voxels,
                                 const Eigen::Vector3d& origin,
                                 double resolution);
+
+    void processPoints(CallbackPoints::Points& decodedPoints);
 };
 
 } // namespace slam
