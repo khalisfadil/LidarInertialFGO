@@ -19,7 +19,7 @@ namespace slam {
                 for (size_t i = range.begin(); i != range.end(); ++i) {
                     const auto& voxel = voxels[i];
                     // Eigen::Vector3i grid_index(voxel.key.x, voxel.key.y, voxel.key.z);
-                    Eigen::Vector3i grid_index(i+1, i+1, i+1);
+                    Eigen::Vector3i grid_index(-28 + i, 8 + i, 0);
                     Eigen::Vector3d color(
                         static_cast<double>(voxel.color.x()) / 255.0,
                         static_cast<double>(voxel.color.y()) / 255.0,
