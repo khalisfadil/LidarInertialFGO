@@ -721,7 +721,7 @@ namespace slam {
             view.SetLookat({-67.0, 20.0, 0.0});
             view.SetFront({0, 0, -1});
             view.SetUp({0, 1, 0});
-            view.SetZoom(15);
+            view.SetZoom(10);
             std::cout << "[runViz] Initial camera set - Lookat: (-67, 20, 0), Zoom: 15\n";
 
             // Register animation callback with exception handling
@@ -854,7 +854,7 @@ namespace slam {
                         view.SetLookat(latestNED);
                         view.SetFront({0, 0, -1});
                         view.SetUp({0, 1, 0});
-                        view.SetZoom(15);
+                        view.SetZoom(10);
                         lastNED = latestNED;
                         std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 15\n";
                     }
