@@ -350,8 +350,7 @@ namespace slam {
                     callbackPointsProcessor.process(data, decodedPoints);
 
                     if (decodedPoints.frameID != 0 && decodedPoints.frameID != frameID_ && decodedPoints.numInput > 0) {
-                        std::cout << "[decodedPoints.numInput]: " << decodedPoints.numInput << "\n";
-                        std::cout << "[decodedPoints.frameID]: " << decodedPoints.frameID << "\n";
+                        
                         frameID_ = decodedPoints.frameID;
                         
                         const Eigen::Vector3d vehiclePosition = decodedPoints.NED;
@@ -458,6 +457,7 @@ namespace slam {
                                 vehPose.RPY = decodedPoints.RPY;
                             }
                         );
+                        std::cout << "[occMapFrame]: " << occMapFrame.pointcloud.size() << "\n";
 
                         // Push to OccupancyMap ring buffer
                         if (!pointsRingBufferOccMap.push(occMapFrame)) {
