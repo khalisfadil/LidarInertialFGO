@@ -565,7 +565,7 @@ namespace slam {
                     std::chrono::steady_clock::now() - cycleStartTime).count();
 
                 // Push report to the queue
-                if (!reportExtractClusterQueue.push(reportOccupancyMap)) {
+                if (!reportOccupancyMapQueue.push(reportOccupancyMap)) {
                     if (!logQueue.push("[OccupancyMapPipeline] Report queue full; data dropped!\n")) {
                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
                     }
