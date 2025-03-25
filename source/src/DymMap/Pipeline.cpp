@@ -678,8 +678,8 @@ namespace slam {
 
         try {
             open3d::visualization::Visualizer vis;
-            if (!vis.CreateVisualizerWindow("3D Voxel Visualization - Ocean View", 1280, 720)) {
-                std::cerr << "Error: Failed to create visualizer window.\n";
+            if (!vis.CreateVisualizerWindow("3D Voxel Visualization", 1280, 720)) {
+                // std::cerr << "Error: Failed to create visualizer window.\n";
                 return;
             }
             vis.GetRenderOption().background_color_ = Eigen::Vector3d(1, 1, 1);
@@ -701,13 +701,13 @@ namespace slam {
 
             // Add initial geometries
             if (!vis.AddGeometry(voxel_grid_occMap_ptr)) {
-                std::cerr << "Warning: Failed to add initial occupancy map geometry.\n";
+                // std::cerr << "Warning: Failed to add initial occupancy map geometry.\n";
             }
             if (!vis.AddGeometry(voxel_grid_extCls_ptr)) {
-                std::cerr << "Warning: Failed to add initial cluster extraction geometry.\n";
+                // std::cerr << "Warning: Failed to add initial cluster extraction geometry.\n";
             }
             if (!vis.AddGeometry(vehicle_mesh_ptr)) {
-                std::cerr << "Warning: Failed to add initial vehicle mesh.\n";
+                // std::cerr << "Warning: Failed to add initial vehicle mesh.\n";
             }
 
             // // Add coordinate frame
@@ -722,14 +722,14 @@ namespace slam {
             view.SetFront({0, 0, -1});
             view.SetUp({0, 1, 0});
             view.SetZoom(1);
-            std::cout << "[runViz] Initial camera set - Lookat: (-67, 20, 0), Zoom: 15\n";
+            // std::cout << "[runViz] Initial camera set - Lookat: (-67, 20, 0), Zoom: 15\n";
 
             // Register animation callback with exception handling
             vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
                 try {
                     return updateVisualization(vis_ptr);
                 } catch (const std::exception& e) {
-                    std::cerr << "Error in visualization callback: " << e.what() << "\n";
+                    // std::cerr << "Error in visualization callback: " << e.what() << "\n";
                     return running.load(std::memory_order_acquire); // Continue unless stopped
                 }
             });
@@ -737,9 +737,9 @@ namespace slam {
             // Run the visualizer
             vis.Run();
             vis.DestroyVisualizerWindow();
-            std::cout << "[runViz] Visualizer shutdown completed.\n";
+            // std::cout << "[runViz] Visualizer shutdown completed.\n";
         } catch (const std::exception& e) {
-            std::cerr << "Fatal error in visualization pipeline: " << e.what() << "\n";
+            // std::cerr << "Fatal error in visualization pipeline: " << e.what() << "\n";
         }
     }
 
@@ -763,27 +763,27 @@ namespace slam {
             std::vector<Voxel3D> localVoxelProcessOccMap;
             for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
                 if (!voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
-                    std::cerr << "Warning: Failed to pop occupancy map voxel data.\n";
+                    // std::cerr << "Warning: Failed to pop occupancy map voxel data.\n";
                 }
             }
             if (!localVoxelProcessOccMap.empty()) {
                 try {
                     auto new_voxel_grid = createVoxelGrid(localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
                     if (!vis->RemoveGeometry(voxel_grid_occMap_ptr)) {
-                        std::cerr << "Warning: Failed to remove old occupancy map geometry.\n";
+                        // std::cerr << "Warning: Failed to remove old occupancy map geometry.\n";
                     }
                     voxel_grid_occMap_ptr = new_voxel_grid;
                     if (!vis->AddGeometry(voxel_grid_occMap_ptr)) {
-                        std::cerr << "Error: Failed to add new occupancy map geometry.\n";
+                        // std::cerr << "Error: Failed to add new occupancy map geometry.\n";
                     } else {
                         updated = true;
-                        std::cout << "[updateViz] Updated occupancy map with " << localVoxelProcessOccMap.size() << " voxels.\n";
+                        // std::cout << "[updateViz] Updated occupancy map with " << localVoxelProcessOccMap.size() << " voxels.\n";
                     }
                 } catch (const std::exception& e) {
-                    std::cerr << "Error updating occupancy map: " << e.what() << "\n";
+                    // std::cerr << "Error updating occupancy map: " << e.what() << "\n";
                 }
             } else {
-                std::cout << "[updateViz] No new occupancy map voxels available.\n";
+                // std::cout << "[updateViz] No new occupancy map voxels available.\n";
             }
         }
 
@@ -794,27 +794,27 @@ namespace slam {
             std::vector<Voxel3D> localVoxelProcessExtCls;
             for (size_t i = 0; i < itemsToProcessVoxelExtCls; ++i) {
                 if (!voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
-                    std::cerr << "Warning: Failed to pop cluster extraction voxel data.\n";
+                    // std::cerr << "Warning: Failed to pop cluster extraction voxel data.\n";
                 }
             }
             if (!localVoxelProcessExtCls.empty()) {
                 try {
                     auto new_voxel_grid = createVoxelGrid(localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
                     if (!vis->RemoveGeometry(voxel_grid_extCls_ptr)) {
-                        std::cerr << "Warning: Failed to remove old cluster extraction geometry.\n";
+                        // std::cerr << "Warning: Failed to remove old cluster extraction geometry.\n";
                     }
                     voxel_grid_extCls_ptr = new_voxel_grid;
                     if (!vis->AddGeometry(voxel_grid_extCls_ptr)) {
-                        std::cerr << "Error: Failed to add new cluster extraction geometry.\n";
+                        // std::cerr << "Error: Failed to add new cluster extraction geometry.\n";
                     } else {
                         updated = true;
-                        std::cout << "[updateViz] Updated cluster extraction with " << localVoxelProcessExtCls.size() << " voxels.\n";
+                        // std::cout << "[updateViz] Updated cluster extraction with " << localVoxelProcessExtCls.size() << " voxels.\n";
                     }
                 } catch (const std::exception& e) {
-                    std::cerr << "Error updating cluster extraction: " << e.what() << "\n";
+                    // std::cerr << "Error updating cluster extraction: " << e.what() << "\n";
                 }
             } else {
-                std::cout << "[updateViz] No new cluster extraction voxels available.\n";
+                // std::cout << "[updateViz] No new cluster extraction voxels available.\n";
             }
         }
 
@@ -829,7 +829,7 @@ namespace slam {
                 if (ringBufferPose.pop(localProcessVehPose)) {
                     poseUpdated = true;
                 } else {
-                    std::cerr << "Warning: Failed to pop vehicle pose data.\n";
+                    // std::cerr << "Warning: Failed to pop vehicle pose data.\n";
                 }
             }
             if (poseUpdated) {
@@ -837,12 +837,12 @@ namespace slam {
                     if (!vehicle_mesh_ptr) {
                         vehicle_mesh_ptr = createVehicleMesh(localProcessVehPose.NED, localProcessVehPose.RPY);
                         if (!vis->AddGeometry(vehicle_mesh_ptr)) {
-                            std::cerr << "Error: Failed to add initial vehicle mesh.\n";
+                            // std::cerr << "Error: Failed to add initial vehicle mesh.\n";
                         }
                     } else {
                         updateVehicleMesh(vehicle_mesh_ptr, localProcessVehPose.NED, localProcessVehPose.RPY);
                         if (!vis->UpdateGeometry(vehicle_mesh_ptr)) {
-                            std::cerr << "Warning: Failed to update vehicle mesh.\n";
+                            // std::cerr << "Warning: Failed to update vehicle mesh.\n";
                         }
                     }
                     updated = true;
@@ -859,7 +859,7 @@ namespace slam {
                         // std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 15\n";
                     }
                 } catch (const std::exception& e) {
-                    std::cerr << "Error updating vehicle pose: " << e.what() << "\n";
+                    // std::cerr << "Error updating vehicle pose: " << e.what() << "\n";
                 }
             }
         }
