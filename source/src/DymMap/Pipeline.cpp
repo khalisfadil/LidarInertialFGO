@@ -675,143 +675,155 @@ namespace slam {
         // -----------------------------------------------------------------------------
         
         void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {
-        setThreadAffinity(allowedCores);
+            setThreadAffinity(allowedCores);
 
-        try {
-            open3d::visualization::Visualizer vis;
-            if (!vis.CreateVisualizerWindow("3D Voxel Visualization", 1280, 720)) {
-                return;
-            }
-            vis.GetRenderOption().background_color_ = Eigen::Vector3d(1, 1, 1); // White background
-
-            // Initialize geometries with checks
-            if (!voxel_grid_occMap_ptr) {
-                voxel_grid_occMap_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
-                voxel_grid_occMap_ptr->origin_ = mapConfig_.mapOrigin;
-                voxel_grid_occMap_ptr->voxel_size_ = mapConfig_.resolution;
-            }
-            if (!voxel_grid_extCls_ptr) {
-                voxel_grid_extCls_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
-                voxel_grid_extCls_ptr->origin_ = mapConfig_.mapOrigin;
-                voxel_grid_extCls_ptr->voxel_size_ = mapConfig_.resolution;
-            }
-            if (!vehicle_mesh_ptr) {
-                vehicle_mesh_ptr = std::make_shared<open3d::geometry::TriangleMesh>();
-            }
-
-            // Add initial geometries
-            vis.AddGeometry(voxel_grid_occMap_ptr);
-            vis.AddGeometry(voxel_grid_extCls_ptr);
-            vis.AddGeometry(vehicle_mesh_ptr);
-
-            // Set initial camera parameters
-            auto& view = vis.GetViewControl();
-            view.SetLookat({0.0, 0.0, 0.0}); // Initial lookat
-            view.SetFront({0, 0, -1});
-            view.SetUp({0, 1, 0});
-            view.SetZoom(8.0); // Wider initial zoom for stability (adjust as needed)
-
-            // Register animation callback
-            vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
-                try {
-                    return updateVisualization(vis_ptr);
-                } catch (const std::exception& e) {
-                    return running.load(std::memory_order_acquire);
+            try {
+                open3d::visualization::Visualizer vis;
+                if (!vis.CreateVisualizerWindow("3D Voxel Visualization", 1280, 720)) {
+                    return;
                 }
-            });
+                vis.GetRenderOption().background_color_ = Eigen::Vector3d(1, 1, 1); // White background
 
-            vis.Run();
-            vis.DestroyVisualizerWindow();
-        } catch (const std::exception& e) {
-            // Handle silently for now, per your preference
-        }
-    }
+                // Initialize geometries with default data
+                if (!voxel_grid_occMap_ptr) {
+                    voxel_grid_occMap_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
+                    voxel_grid_occMap_ptr->origin_ = mapConfig_.mapOrigin;
+                    voxel_grid_occMap_ptr->voxel_size_ = mapConfig_.resolution;
+                    voxel_grid_occMap_ptr->voxels_.emplace(Eigen::Vector3i(0, 0, 0), open3d::geometry::Voxel(Eigen::Vector3d(1, 0, 0))); // Red voxel at origin
+                }
+                if (!voxel_grid_extCls_ptr) {
+                    voxel_grid_extCls_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
+                    voxel_grid_extCls_ptr->origin_ = mapConfig_.mapOrigin;
+                    voxel_grid_extCls_ptr->voxel_size_ = mapConfig_.resolution;
+                    voxel_grid_extCls_ptr->voxels_.emplace(Eigen::Vector3i(0, 0, 0), open3d::geometry::Voxel(Eigen::Vector3d(0, 1, 0))); // Green voxel offset
+                }
+                if (!vehicle_mesh_ptr) {
+                    vehicle_mesh_ptr = createVehicleMesh({0, 0, 0}, {0, 0, 0}); // Default vehicle at origin
+                }
 
-    // Helper function to update voxel grid in place
-    void Pipeline::updateVoxelGrid(std::shared_ptr<open3d::geometry::VoxelGrid>& grid,
-                                const std::vector<Voxel3D>& voxels,
-                                const Eigen::Vector3d& origin,
-                                double resolution) {
-        auto new_grid = createVoxelGrid(voxels, origin, resolution);
-        grid->voxels_ = new_grid->voxels_; // Update voxels in place
-        grid->origin_ = origin;            // Ensure consistency
-        grid->voxel_size_ = resolution;
-    }
+                // Add initial geometries
+                vis.AddGeometry(voxel_grid_occMap_ptr);
+                vis.AddGeometry(voxel_grid_extCls_ptr);
+                vis.AddGeometry(vehicle_mesh_ptr);
 
-    // Helper function to update vehicle mesh in place
-    void Pipeline::updateVehicleMesh(std::shared_ptr<open3d::geometry::TriangleMesh>& mesh,
-                                    const Eigen::Vector3d& NED, const Eigen::Vector3d& RPY) {
-        auto new_mesh = createVehicleMesh(NED, RPY);
-        mesh->vertices_ = new_mesh->vertices_;
-        mesh->triangles_ = new_mesh->triangles_;
-        mesh->vertex_colors_ = new_mesh->vertex_colors_;
-    }
+                // Add coordinate frame for reference
+                auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
+                vis.AddGeometry(coord_frame);
 
-    bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
-        bool updated = false;
-        static Eigen::Vector3d currentLookat = {0, 0, 0}; // Track current camera position
-        static auto lastUpdateTime = std::chrono::steady_clock::now();
-        constexpr double smoothingFactor = 0.1; // For smooth camera interpolation (0.0 to 1.0)
-        constexpr std::chrono::milliseconds targetFrameDuration(16); // ~60 FPS
+                // Set initial camera parameters
+                auto& view = vis.GetViewControl();
+                view.SetLookat({0.0, 0.0, 0.0}); // Center on origin
+                view.SetFront({0, 0, -1});
+                view.SetUp({0, 1, 0});
+                view.SetZoom(10.0); // Wide zoom
 
-        // Process Occupancy Map Voxels (latest data only)
-        size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
-        if (itemsToProcessVoxelOccMap > 0) {
-            std::vector<Voxel3D> localVoxelProcessOccMap;
-            while (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
-                // Keep only the latest data by overwriting
-            }
-            if (!localVoxelProcessOccMap.empty()) {
-                updateVoxelGrid(voxel_grid_occMap_ptr, localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
-                vis->UpdateGeometry(voxel_grid_occMap_ptr);
-                updated = true;
-            }
-        }
+                // Register animation callback
+                vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
+                    try {
+                        return updateVisualization(vis_ptr);
+                    } catch (const std::exception& e) {
+                        return running.load(std::memory_order_acquire);
+                    }
+                });
 
-        // Process Cluster Extraction Voxels (latest data only)
-        size_t itemsToProcessVoxelExtCls = voxelsRingBufferExtCls.read_available();
-        if (itemsToProcessVoxelExtCls > 0) {
-            std::vector<Voxel3D> localVoxelProcessExtCls;
-            while (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
-                // Keep only the latest data
-            }
-            if (!localVoxelProcessExtCls.empty()) {
-                updateVoxelGrid(voxel_grid_extCls_ptr, localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
-                vis->UpdateGeometry(voxel_grid_extCls_ptr);
-                updated = true;
+                vis.Run();
+                vis.DestroyVisualizerWindow();
+            } catch (const std::exception& e) {
+                // Silent handling
             }
         }
 
-        // Process Vehicle Pose (latest data only)
-        size_t itemsToProcessVehPose = ringBufferPose.read_available();
-        if (itemsToProcessVehPose > 0) {
-            VehiclePoseDataFrame localProcessVehPose;
-            while (ringBufferPose.pop(localProcessVehPose)) {
-                // Keep only the latest pose
+        // Helper function to update voxel grid safely
+        void Pipeline::updateVoxelGrid(std::shared_ptr<open3d::geometry::VoxelGrid>& grid,
+                                    const std::vector<Voxel3D>& voxels,
+                                    const Eigen::Vector3d& origin,
+                                    double resolution) {
+            if (!voxels.empty()) {
+                auto new_grid = createVoxelGrid(voxels, origin, resolution);
+                if (new_grid && !new_grid->voxels_.empty()) {
+                    grid->voxels_ = new_grid->voxels_; // Safe assignment
+                    grid->origin_ = origin;
+                    grid->voxel_size_ = resolution;
+                }
             }
-            updateVehicleMesh(vehicle_mesh_ptr, localProcessVehPose.NED, localProcessVehPose.RPY);
-            vis->UpdateGeometry(vehicle_mesh_ptr);
-            updated = true;
-
-            // Smoothly interpolate camera lookat
-            Eigen::Vector3d targetLookat = localProcessVehPose.NED;
-            currentLookat = currentLookat + smoothingFactor * (targetLookat - currentLookat);
-            auto& view = vis->GetViewControl();
-            view.SetLookat(currentLookat);
-            view.SetFront({0, 0, -1});
-            view.SetUp({0, 1, 0});
-            // Zoom is fixed at 5.0 from initialization, no need to set again
         }
 
-        // Frame rate limiter
-        auto now = std::chrono::steady_clock::now();
-        auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTime);
-        if (elapsed < targetFrameDuration) {
-            std::this_thread::sleep_for(targetFrameDuration - elapsed);
+        // Helper function to update vehicle mesh safely
+        void Pipeline::updateVehicleMesh(std::shared_ptr<open3d::geometry::TriangleMesh>& mesh,
+                                        const Eigen::Vector3d& NED, const Eigen::Vector3d& RPY) {
+            auto new_mesh = createVehicleMesh(NED, RPY);
+            if (new_mesh && !new_mesh->vertices_.empty()) {
+                mesh->vertices_ = new_mesh->vertices_;
+                mesh->triangles_ = new_mesh->triangles_;
+                mesh->vertex_colors_ = new_mesh->vertex_colors_;
+            }
         }
-        lastUpdateTime = now;
 
-        return running.load(std::memory_order_acquire) || updated;
-    }
+        bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
+            bool updated = false;
+            static Eigen::Vector3d currentLookat = {0, 0, 0};
+            static auto lastUpdateTime = std::chrono::steady_clock::now();
+            constexpr double smoothingFactor = 0.1;
+            constexpr std::chrono::milliseconds targetFrameDuration(16); // ~60 FPS
+
+            // Process Occupancy Map Voxels
+            size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
+            if (itemsToProcessVoxelOccMap > 0) {
+                std::vector<Voxel3D> localVoxelProcessOccMap;
+                while (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
+                    // Keep latest data
+                }
+                if (!localVoxelProcessOccMap.empty()) {
+                    updateVoxelGrid(voxel_grid_occMap_ptr, localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
+                    if (vis->UpdateGeometry(voxel_grid_occMap_ptr)) {
+                        updated = true;
+                    }
+                }
+            }
+
+            // Process Cluster Extraction Voxels
+            size_t itemsToProcessVoxelExtCls = voxelsRingBufferExtCls.read_available();
+            if (itemsToProcessVoxelExtCls > 0) {
+                std::vector<Voxel3D> localVoxelProcessExtCls;
+                while (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
+                    // Keep latest data
+                }
+                if (!localVoxelProcessExtCls.empty()) {
+                    updateVoxelGrid(voxel_grid_extCls_ptr, localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
+                    if (vis->UpdateGeometry(voxel_grid_extCls_ptr)) {
+                        updated = true;
+                    }
+                }
+            }
+
+            // Process Vehicle Pose
+            size_t itemsToProcessVehPose = ringBufferPose.read_available();
+            if (itemsToProcessVehPose > 0) {
+                VehiclePoseDataFrame localProcessVehPose;
+                while (ringBufferPose.pop(localProcessVehPose)) {
+                    // Keep latest pose
+                }
+                updateVehicleMesh(vehicle_mesh_ptr, localProcessVehPose.NED, localProcessVehPose.RPY);
+                if (vis->UpdateGeometry(vehicle_mesh_ptr)) {
+                    updated = true;
+                    Eigen::Vector3d targetLookat = localProcessVehPose.NED;
+                    currentLookat = currentLookat + smoothingFactor * (targetLookat - currentLookat);
+                    auto& view = vis->GetViewControl();
+                    view.SetLookat(currentLookat);
+                    view.SetFront({0, 0, -1});
+                    view.SetUp({0, 1, 0});
+                }
+            }
+
+            // Frame rate limiter
+            auto now = std::chrono::steady_clock::now();
+            auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastUpdateTime);
+            if (elapsed < targetFrameDuration) {
+                std::this_thread::sleep_for(targetFrameDuration - elapsed);
+            }
+            lastUpdateTime = now;
+
+            return running.load(std::memory_order_acquire) || updated;
+        }
 
 }  // namespace slam
