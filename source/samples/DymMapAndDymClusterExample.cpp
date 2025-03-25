@@ -35,14 +35,14 @@ int main() {
                                              pointsHost,
                                              pointsPort,
                                              bufferSize,
-                                             std::vector<int>{12, 13, 14, 15});
+                                             std::vector<int>{0, 1, 2, 3});
             }
         );
 
         // Start Occupancy Map Pipeline
         threads.emplace_back(
             [&]() {
-                pipeline.runOccupancyMapPipeline(std::vector<int>{0, 1, 2, 3});
+                pipeline.runOccupancyMapPipeline(std::vector<int>{4, 5, 6, 7});
             }
         );
 
