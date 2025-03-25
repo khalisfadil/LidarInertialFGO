@@ -64,6 +64,16 @@ namespace slam {
                 mapConfig_.resolution, mapConfig_.mapOrigin, mapConfig_.tolerance, mapConfig_.min_size, mapConfig_.max_size,
                 mapConfig_.max_frames, mapConfig_.maxPointsPerVoxel, mapConfig_.colorMode);
         }
+        // Initialize geometry pointers
+        if (!voxel_grid_occMap_ptr) {
+            voxel_grid_occMap_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
+        }
+        if (!voxel_grid_extCls_ptr) {
+            voxel_grid_extCls_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
+        }
+        if (!vehicle_mesh_ptr) {
+            vehicle_mesh_ptr = std::make_shared<open3d::geometry::TriangleMesh>();
+        }
 
     }
 
