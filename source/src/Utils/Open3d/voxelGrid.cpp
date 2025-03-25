@@ -20,10 +20,15 @@ namespace slam {
                     const auto& voxel = voxels[i];
                     // Eigen::Vector3i grid_index(voxel.key.x, voxel.key.y, voxel.key.z);
                     Eigen::Vector3i grid_index(-28 + i, 8 + i, 0);
+                    // Eigen::Vector3d color(
+                    //     static_cast<double>(voxel.color.x()) / 255.0,
+                    //     static_cast<double>(voxel.color.y()) / 255.0,
+                    //     static_cast<double>(voxel.color.z()) / 255.0
+                    // );
                     Eigen::Vector3d color(
-                        static_cast<double>(voxel.color.x()) / 255.0,
-                        static_cast<double>(voxel.color.y()) / 255.0,
-                        static_cast<double>(voxel.color.z()) / 255.0
+                        static_cast<double>(1) ,
+                        static_cast<double>(1) ,
+                        static_cast<double>(1) 
                     );
                     // Debug first voxel
                     if (i == 0) {
