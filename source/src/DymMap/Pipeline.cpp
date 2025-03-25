@@ -540,7 +540,7 @@ namespace slam {
     void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(32);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
 
         // Pre-allocate voxel buffer to reduce allocation overhead
         std::vector<Voxel3D> occMapVoxels;
@@ -608,7 +608,7 @@ namespace slam {
     void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
             setThreadAffinity(allowedCores);
 
-            constexpr auto targetCycleDuration = std::chrono::milliseconds(32);
+            constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
 
             // Pre-allocate voxel buffer to reduce allocation overhead
             std::vector<Voxel3D> ExtClsVoxels;
@@ -770,7 +770,7 @@ namespace slam {
             static Eigen::Vector3d currentLookat = {0, 0, 0};
             static auto lastUpdateTime = std::chrono::steady_clock::now();
             constexpr double smoothingFactor = 0.1;
-            constexpr std::chrono::milliseconds targetFrameDuration(32); // ~60 FPS
+            constexpr std::chrono::milliseconds targetFrameDuration(100); // ~60 FPS
 
             // Process Occupancy Map Voxels
             size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
