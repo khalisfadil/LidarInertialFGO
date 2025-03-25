@@ -8,10 +8,10 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 add_compile_options(-march=native -O3 -Wall -pedantic -Wno-unused-function -flto)
-add_link_options(-flto)
+add_link_options(-flto=$(nproc))  # Parallel LTO using all cores
 
 # CMake policies
-cmake_policy(SET CMP0072 NEW) # OpenGL handling
+cmake_policy(SET CMP0072 NEW)
 
 # Find required dependencies
 set(Open3D_DIR "/usr/local/lib/cmake/Open3D/") # Ensure correct directory
