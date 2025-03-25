@@ -766,7 +766,7 @@ namespace slam {
                 view.SetLookat(localProcessVehPose.NED);
                 view.SetFront({0, 0, -1}); // Look toward vehicle from above
                 view.SetUp({0, 1, 0});
-                view.SetZoom(2.0); // Zoom in
+                // view.SetZoom(2.0); // Zoom in
             }
         }
 
