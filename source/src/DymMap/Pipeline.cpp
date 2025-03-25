@@ -537,7 +537,7 @@ namespace slam {
     void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(50);
 
         // Pre-allocate voxel buffer to reduce allocation overhead
         std::vector<Voxel3D> occMapVoxels;
@@ -605,7 +605,7 @@ namespace slam {
     void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(50);
 
         // Pre-allocate voxel buffer to reduce allocation overhead
         std::vector<Voxel3D> ExtClsVoxels;
@@ -691,8 +691,8 @@ namespace slam {
         view.SetLookat({-67.0, 20.0, 0.0}); // Initial lookat matches static voxels and early NED
         view.SetFront({0, 0, -1});
         view.SetUp({0, 1, 0});
-        view.SetZoom(5.0); // Wide view to see dynamic voxels ~190m away
-        std::cout << "[runViz] Camera set - Lookat: (-67, 20, 0), Zoom: 0.1\n";
+        view.SetZoom(6.0); // Wide view to see dynamic voxels ~190m away
+        // std::cout << "[runViz] Camera set - Lookat: (-67, 20, 0), Zoom: 0.1\n";
 
         vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
             return updateVisualization(vis_ptr);
@@ -711,7 +711,7 @@ namespace slam {
 
         // Process Occupancy Map Voxels
         size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
-        std::cout << "[itemsToProcessVoxelOccMap]: " << itemsToProcessVoxelOccMap << "\n";
+        // std::cout << "[itemsToProcessVoxelOccMap]: " << itemsToProcessVoxelOccMap << "\n";
         if (itemsToProcessVoxelOccMap > 0) {
             std::vector<Voxel3D> localVoxelProcessOccMap;
             for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
@@ -744,7 +744,7 @@ namespace slam {
 
         // Process Vehicle Pose
         size_t itemsToProcessVehPose = ringBufferPose.read_available();
-        std::cout << "[updateViz] itemsToProcessVehPose: " << itemsToProcessVehPose << "\n";
+        // std::cout << "[updateViz] itemsToProcessVehPose: " << itemsToProcessVehPose << "\n";
         Eigen::Vector3d latestNED = mapConfig_.mapOrigin;
         if (itemsToProcessVehPose > 0) {
             VehiclePoseDataFrame localProcessVehPose;
@@ -762,15 +762,15 @@ namespace slam {
                 updated = true;
 
                 latestNED = localProcessVehPose.NED; // Store latest NED for voxels
-                std::cout << "[updateViz] Vehicle NED: " << latestNED.transpose() << "\n";
+                // std::cout << "[updateViz] Vehicle NED: " << latestNED.transpose() << "\n";
 
                 // Update camera to look at the vehicle
                 auto& view = vis->GetViewControl();
                 view.SetLookat(latestNED);
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(5.0); // Zoom out to see ~200+ meters
-                std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
+                view.SetZoom(6.0); // Zoom out to see ~200+ meters
+                // std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
             }
         }
 
