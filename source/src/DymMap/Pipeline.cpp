@@ -689,13 +689,19 @@ namespace slam {
                     voxel_grid_occMap_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
                     voxel_grid_occMap_ptr->origin_ = mapConfig_.mapOrigin;
                     voxel_grid_occMap_ptr->voxel_size_ = mapConfig_.resolution;
-                    voxel_grid_occMap_ptr->voxels_.emplace(Eigen::Vector3i(0, 0, 0), open3d::geometry::Voxel(Eigen::Vector3d(1, 0, 0))); // Red voxel at origin
+                    voxel_grid_occMap_ptr->voxels_.emplace(
+                        Eigen::Vector3i(0, 0, 0), 
+                        open3d::geometry::Voxel(Eigen::Vector3i(0, 0, 0), Eigen::Vector3d(1, 0, 0)) // Red voxel at origin
+                    );
                 }
                 if (!voxel_grid_extCls_ptr) {
                     voxel_grid_extCls_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
                     voxel_grid_extCls_ptr->origin_ = mapConfig_.mapOrigin;
                     voxel_grid_extCls_ptr->voxel_size_ = mapConfig_.resolution;
-                    voxel_grid_extCls_ptr->voxels_.emplace(Eigen::Vector3i(0, 0, 0), open3d::geometry::Voxel(Eigen::Vector3d(0, 1, 0))); // Green voxel offset
+                    voxel_grid_extCls_ptr->voxels_.emplace(
+                        Eigen::Vector3i(1, 1, 1), 
+                        open3d::geometry::Voxel(Eigen::Vector3i(1, 1, 1), Eigen::Vector3d(0, 1, 0)) // Green voxel offset
+                    );
                 }
                 if (!vehicle_mesh_ptr) {
                     vehicle_mesh_ptr = createVehicleMesh({0, 0, 0}, {0, 0, 0}); // Default vehicle at origin
