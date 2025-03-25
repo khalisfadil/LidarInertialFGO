@@ -677,7 +677,7 @@ namespace slam {
 
         open3d::visualization::Visualizer vis;
         vis.CreateVisualizerWindow("3D Voxel Visualization - Ocean View", 1280, 720);
-        vis.GetRenderOption().background_color_ = Eigen::Vector3d(0.0, 0.2, 0.5);
+        vis.GetRenderOption().background_color_ = Eigen::Vector3d(0.0, 0.0, 0.0);
 
         vis.AddGeometry(voxel_grid_occMap_ptr);
         vis.AddGeometry(voxel_grid_extCls_ptr);
@@ -688,10 +688,11 @@ namespace slam {
         vis.AddGeometry(coord_frame);
 
         auto& view = vis.GetViewControl();
-        view.SetFront({0, -1, -1});
+        view.SetLookat({-67.0, 20.0, 0.0}); // Initial lookat matches static voxels and early NED
+        view.SetFront({0, 0, -1});
         view.SetUp({0, 1, 0});
-        view.SetLookat({0, 0, 0});
-        view.SetZoom(1.0); // Start with a neutral zoom
+        view.SetZoom(5.0); // Wide view to see dynamic voxels ~190m away
+        std::cout << "[runViz] Camera set - Lookat: (-67, 20, 0), Zoom: 0.1\n";
 
         vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
             return updateVisualization(vis_ptr);
@@ -743,7 +744,8 @@ namespace slam {
 
         // Process Vehicle Pose
         size_t itemsToProcessVehPose = ringBufferPose.read_available();
-        std::cout << "[itemsToProcessVehPose]: " << itemsToProcessVehPose << "\n";
+        std::cout << "[updateViz] itemsToProcessVehPose: " << itemsToProcessVehPose << "\n";
+        Eigen::Vector3d latestNED = mapConfig_.mapOrigin;
         if (itemsToProcessVehPose > 0) {
             VehiclePoseDataFrame localProcessVehPose;
             for (size_t i = 0; i < itemsToProcessVehPose; ++i) {
@@ -759,17 +761,78 @@ namespace slam {
                 vis->UpdateGeometry(vehicle_mesh_ptr);
                 updated = true;
 
+                latestNED = localProcessVehPose.NED; // Store latest NED for voxels
+                std::cout << "[updateViz] Vehicle NED: " << latestNED.transpose() << "\n";
+
                 // Update camera to look at the vehicle
                 auto& view = vis->GetViewControl();
-                view.SetLookat(localProcessVehPose.NED);
-                view.SetZoom(2.0); // Zoom in to make objects larger
+                view.SetLookat(latestNED);
+                view.SetFront({0, 0, -1});
+                view.SetUp({0, 1, 0});
+                view.SetZoom(5.0); // Zoom out to see ~200+ meters
+                std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
             }
         }
 
-        auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);  // 10-meter frame
-        vis->AddGeometry(coord_frame);
-
         return running.load(std::memory_order_acquire) || updated; // Continue if running or updated
     }
+
+    // bool Pipeline::updateVisualization(open3d::visualization::Visualizer* vis) {
+    //     bool updated = false;
+
+    //     // Process Vehicle Pose first to get the latest NED
+    //     size_t itemsToProcessVehPose = ringBufferPose.read_available();
+    //     std::cout << "[updateViz] itemsToProcessVehPose: " << itemsToProcessVehPose << "\n";
+    //     Eigen::Vector3d latestNED = mapConfig_.mapOrigin; // Default to mapOrigin if no pose
+    //     if (itemsToProcessVehPose > 0) {
+    //         VehiclePoseDataFrame localProcessVehPose;
+    //         for (size_t i = 0; i < itemsToProcessVehPose; ++i) {
+    //             if (ringBufferPose.pop(localProcessVehPose)) {
+    //                 // Keep the latest pose
+    //             }
+    //         }
+    //         if (vehicle_mesh_ptr) {
+    //             auto new_vehicle_mesh = createVehicleMesh(localProcessVehPose.NED, localProcessVehPose.RPY);
+    //             vehicle_mesh_ptr->vertices_ = new_vehicle_mesh->vertices_;
+    //             vehicle_mesh_ptr->triangles_ = new_vehicle_mesh->triangles_;
+    //             vehicle_mesh_ptr->vertex_colors_ = new_vehicle_mesh->vertex_colors_;
+    //             vis->UpdateGeometry(vehicle_mesh_ptr);
+    //             updated = true;
+
+    //             latestNED = localProcessVehPose.NED; // Store latest NED for voxels
+    //             std::cout << "[updateViz] Vehicle NED: " << latestNED.transpose() << "\n";
+
+    //             auto& view = vis->GetViewControl();
+    //             view.SetLookat(latestNED);
+    //             view.SetFront({0, 0, -1});
+    //             view.SetUp({0, 1, 0});
+    //             view.SetZoom(0.1); // Zoom out to see ~200+ meters
+    //             std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
+    //         }
+    //     }
+
+    //     // Process Occupancy Map Voxels
+    //     size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
+    //     std::cout << "[updateViz] itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << "\n";
+    //     if (itemsToProcessVoxelOccMap > 0) {
+    //         std::vector<Voxel3D> localVoxelProcessOccMap;
+    //         for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
+    //             if (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
+    //                 // Keep the latest data
+    //             }
+    //         }
+    //         if (!localVoxelProcessOccMap.empty()) {
+    //             std::cout << "[updateViz] Voxel count: " << localVoxelProcessOccMap.size() << "\n";
+    //             std::cout << "[updateViz] First voxel key: " << localVoxelProcessOccMap[0].key.x << " "
+    //                     << localVoxelProcessOccMap[0].key.y << " " << localVoxelProcessOccMap[0].key.z << "\n";
+
+    //             voxel_grid_occMap_ptr = createVoxelGrid(localVoxelProcessOccMap, latestNED, mapConfig_.resolution);
+    //             vis->UpdateGeometry(voxel_grid_occMap_ptr);
+    //             updated = true;
+    //         }
+    //     }
+
+    //     return running.load(std::memory_order_acquire) || updated;
+    // }
 
 }  // namespace slam
