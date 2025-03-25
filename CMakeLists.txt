@@ -9,7 +9,6 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # Enable parallel LTO and optimizations
 add_compile_options(-march=native -O3 -Wall -pedantic -Wno-unused-function -flto)
-add_link_options(-flto)  # Parallel LTO with all cores
 
 # CMake policies (set before finding packages to suppress Open3D warning)
 cmake_policy(SET CMP0072 NEW)
