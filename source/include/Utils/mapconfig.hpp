@@ -24,7 +24,7 @@ namespace slam {
 
         double resolution = 0.1;           ///< The resolution of the map in meters per voxel.
         double mapMaxDistance = 350.0;   ///< The maximum distance that can be reached in the map.
-        double mapMinDistance = 20.0;   ///< The maximum distance that can be reached in the map.
+        double mapMinDistance = 10.0;   ///< The maximum distance that can be reached in the map.
         Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero();
     };
 
