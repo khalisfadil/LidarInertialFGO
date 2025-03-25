@@ -550,7 +550,7 @@ namespace slam {
             OccupancyMapDataFrame localMapDataFrame;
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
-            
+            std::cerr << "Items to process in runOccupancyMapPipeline: " << itemsToProcess << std::endl;
             if (itemsToProcess > 0) {
                 
                 for (size_t i = 0; i < itemsToProcess; ++i) {
@@ -774,6 +774,7 @@ namespace slam {
 
             // Process Occupancy Map Voxels
             size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
+            std::cerr << "Items to process in voxel occupancy map in updateVisualization: " << itemsToProcessVoxelOccMap << std::endl;
             if (itemsToProcessVoxelOccMap > 0) {
                 std::vector<Voxel3D> localVoxelProcessOccMap;
                 while (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
