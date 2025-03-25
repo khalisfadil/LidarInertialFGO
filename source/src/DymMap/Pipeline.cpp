@@ -671,8 +671,7 @@ namespace slam {
     // Section: assignVoxelColorsRed
     // -----------------------------------------------------------------------------
 
-    void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {  
-
+    void Pipeline::runVizualizationPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
         open3d::visualization::Visualizer vis;
@@ -683,11 +682,15 @@ namespace slam {
         vis.AddGeometry(voxel_grid_extCls_ptr);
         vis.AddGeometry(vehicle_mesh_ptr);
 
+        // Add coordinate frame once
+        auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
+        vis.AddGeometry(coord_frame);
+
         auto& view = vis.GetViewControl();
         view.SetFront({0, -1, -1});
         view.SetUp({0, 1, 0});
         view.SetLookat({0, 0, 0});
-        view.SetZoom(0.5);
+        view.SetZoom(1.0); // Start with a neutral zoom
 
         vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
             return updateVisualization(vis_ptr);
@@ -711,11 +714,11 @@ namespace slam {
             std::vector<Voxel3D> localVoxelProcessOccMap;
             for (size_t i = 0; i < itemsToProcessVoxelOccMap; ++i) {
                 if (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
-                    // Keep the latest data; could accumulate if needed
+                    // Keep the latest data
                 }
             }
             if (!localVoxelProcessOccMap.empty()) {
-                voxel_grid_occMap_ptr->voxels_ = createVoxelGrid(localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution)->voxels_;
+                voxel_grid_occMap_ptr = createVoxelGrid(localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
                 vis->UpdateGeometry(voxel_grid_occMap_ptr);
                 updated = true;
             }
@@ -726,12 +729,12 @@ namespace slam {
         if (itemsToProcessVoxelExtCls > 0) {
             std::vector<Voxel3D> localVoxelProcessExtCls;
             for (size_t i = 0; i < itemsToProcessVoxelExtCls; ++i) {
-                if (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) { // Corrected from OccMap to ExtCls
+                if (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
                     // Keep the latest data
                 }
             }
             if (!localVoxelProcessExtCls.empty()) {
-                voxel_grid_extCls_ptr->voxels_ = createVoxelGrid(localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution)->voxels_;
+                voxel_grid_extCls_ptr = createVoxelGrid(localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
                 vis->UpdateGeometry(voxel_grid_extCls_ptr);
                 updated = true;
             }
@@ -755,14 +758,19 @@ namespace slam {
                 vis->UpdateGeometry(vehicle_mesh_ptr);
                 updated = true;
 
+                // Log vehicle position
+                std::cout << "Vehicle NED: " << localProcessVehPose.NED.transpose() << "\n";
+
                 // Update camera to look at the vehicle
                 auto& view = vis->GetViewControl();
                 view.SetLookat(localProcessVehPose.NED);
-                view.SetZoom(2.0); // Zoom in to make objects larger
+                view.SetFront({0, 0, -1}); // Look toward vehicle from above
+                view.SetUp({0, 1, 0});
+                view.SetZoom(2.0); // Zoom in
             }
         }
 
-        return running.load(std::memory_order_acquire) || updated; // Continue if running or updated
+        return running.load(std::memory_order_acquire) || updated;
     }
 
 }  // namespace slam

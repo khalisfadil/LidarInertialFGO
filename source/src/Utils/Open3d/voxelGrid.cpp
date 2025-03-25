@@ -37,12 +37,10 @@ namespace slam {
     std::shared_ptr<open3d::geometry::TriangleMesh> createVehicleMesh(
         const Eigen::Vector3d& NED, const Eigen::Vector3d& RPY) {
         auto vehicle_mesh = std::make_shared<open3d::geometry::TriangleMesh>();
-
-        // Define base arrow mesh in local coordinates
         std::vector<Eigen::Vector3d> local_vertices = {
-            {1.0, 0.0, 0.0},    // Vertex 0: Front tip of the arrow
-            {-1.0, -0.5, 0.0},  // Vertex 1: Rear left corner
-            {-1.0, 0.5, 0.0}    // Vertex 2: Rear right corner
+            {10.0, 0.0, 0.0},    // Front tip (10 meters long)
+            {-10.0, -5.0, 0.0},  // Rear left (10 meters wide)
+            {-10.0, 5.0, 0.0}    // Rear right
         };
 
         Eigen::AngleAxisd rollAngle(RPY.x(), Eigen::Vector3d::UnitX());
