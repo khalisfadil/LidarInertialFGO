@@ -677,7 +677,7 @@ namespace slam {
 
         open3d::visualization::Visualizer vis;
         vis.CreateVisualizerWindow("3D Voxel Visualization - Ocean View", 1280, 720);
-        vis.GetRenderOption().background_color_ = Eigen::Vector3d(0.0, 0.0, 0.0);
+        vis.GetRenderOption().background_color_ = Eigen::Vector3d(1, 1, 1);
 
         vis.AddGeometry(voxel_grid_occMap_ptr);
         vis.AddGeometry(voxel_grid_extCls_ptr);
@@ -691,7 +691,7 @@ namespace slam {
         view.SetLookat({-67.0, 20.0, 0.0}); // Initial lookat matches static voxels and early NED
         view.SetFront({0, 0, -1});
         view.SetUp({0, 1, 0});
-        view.SetZoom(6.0); // Wide view to see dynamic voxels ~190m away
+        view.SetZoom(0.5); // Wide view to see dynamic voxels ~190m away
         // std::cout << "[runViz] Camera set - Lookat: (-67, 20, 0), Zoom: 0.1\n";
 
         vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
@@ -767,10 +767,13 @@ namespace slam {
                 // Update camera to look at the vehicle
                 auto& view = vis->GetViewControl();
                 view.SetLookat(latestNED);
-                view.SetFront({0, 0, -1});
+                view.SetFront({0, -1, 0});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(6.0); // Zoom out to see ~200+ meters
-                std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.1\n";
+                view.SetZoom(0.5); // Zoom out to see ~200+ meters
+                std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << ", Zoom: 0.5\n";
+                std::cout << "Lookat: " << view.GetLookat().transpose() << "\n";
+                std::cout << "Front: " << view.GetFront().transpose() << "\n";
+                std::cout << "Up: " << view.GetUp().transpose() << "\n";
             }
         }
 

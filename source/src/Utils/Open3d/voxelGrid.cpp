@@ -6,7 +6,7 @@ namespace slam {
         const std::vector<Voxel3D>& voxels, const Eigen::Vector3d& origin, double resolution) {
         auto voxel_grid = std::make_shared<open3d::geometry::VoxelGrid>();
         voxel_grid->voxel_size_ = resolution;
-        voxel_grid->origin_ = origin - Eigen::Vector3d(resolution / 2.0, resolution / 2.0, resolution / 2.0);
+        voxel_grid->origin_ = origin;
 
         std::cout << "[createVoxelGrid] Origin: " << voxel_grid->origin_.transpose() << "\n";
         std::cout << "[createVoxelGrid] Voxel size: " << voxel_grid->voxel_size_ << "\n";
