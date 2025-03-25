@@ -65,6 +65,7 @@ private:
     static std::thread logThread_; // Static thread for logging
 
     CallbackPoints callbackPointsProcessor;
+    uint32_t frameID_ = 0;
     
     static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_occMap_ptr;
     static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_extCls_ptr;
