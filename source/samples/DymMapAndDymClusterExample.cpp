@@ -39,49 +39,49 @@ int main() {
             }
         );
 
-        // Start Occupancy Map Pipeline
-        threads.emplace_back(
-            [&]() {
-                pipeline.runOccupancyMapPipeline(std::vector<int>{0, 1, 2, 3});
-            }
-        );
+        // // Start Occupancy Map Pipeline
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.runOccupancyMapPipeline(std::vector<int>{0, 1, 2, 3});
+        //     }
+        // );
 
-        // Start Cluster Extraction Pipeline
-        threads.emplace_back(
-            [&]() {
-                pipeline.runClusterExtractionPipeline(std::vector<int>{4, 5, 6, 7});
-            }
-        );
+        // // Start Cluster Extraction Pipeline
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.runClusterExtractionPipeline(std::vector<int>{4, 5, 6, 7});
+        //     }
+        // );
 
-        // Start Visualization Pipeline
-        threads.emplace_back(
-            [&]() {
-                pipeline.runVizualizationPipeline(std::vector<int>{8, 9, 10, 11});
-            }
-        );
+        // // Start Visualization Pipeline
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.runVizualizationPipeline(std::vector<int>{8, 9, 10, 11});
+        //     }
+        // );
 
-        // Start logging thread
-        threads.emplace_back(
-            [&]() {
-                pipeline.processLogQueue(std::vector<int>{20});
-            }
-        );
+        // // Start logging thread
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.processLogQueue(std::vector<int>{20});
+        //     }
+        // );
 
-        // Start Occupancy Map Report Queue Processing
-        threads.emplace_back(
-            [&]() {
-                pipeline.processReportQueueOccMap("../source/result/occupancy_report.txt", 
-                                                  std::vector<int>{21});
-            }
-        );
+        // // Start Occupancy Map Report Queue Processing
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.processReportQueueOccMap("../source/result/occupancy_report.txt", 
+        //                                           std::vector<int>{21});
+        //     }
+        // );
 
-        // Start Cluster Extraction Report Queue Processing
-        threads.emplace_back(
-            [&]() {
-                pipeline.processReportQueueExtCls("../source/result/cluster_report.txt", 
-                                                  std::vector<int>{22});
-            }
-        );
+        // // Start Cluster Extraction Report Queue Processing
+        // threads.emplace_back(
+        //     [&]() {
+        //         pipeline.processReportQueueExtCls("../source/result/cluster_report.txt", 
+        //                                           std::vector<int>{22});
+        //     }
+        // );
 
         // Monitor signal and clean up
         while (Pipeline::running.load(std::memory_order_acquire)) {
