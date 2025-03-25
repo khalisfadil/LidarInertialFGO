@@ -710,11 +710,11 @@ namespace slam {
                 std::cerr << "Warning: Failed to add initial vehicle mesh.\n";
             }
 
-            // Add coordinate frame
-            auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
-            if (!vis.AddGeometry(coord_frame)) {
-                std::cerr << "Warning: Failed to add coordinate frame.\n";
-            }
+            // // Add coordinate frame
+            // auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
+            // if (!vis.AddGeometry(coord_frame)) {
+            //     std::cerr << "Warning: Failed to add coordinate frame.\n";
+            // }
 
             // Set initial camera parameters
             auto& view = vis.GetViewControl();
