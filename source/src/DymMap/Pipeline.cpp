@@ -693,7 +693,7 @@ namespace slam {
 
         // Add static voxel grid directly
         auto static_voxel_grid = std::make_shared<open3d::geometry::VoxelGrid>();
-        static_voxel_grid->voxel_size_ = 1.0;
+        static_voxel_grid->voxel_size_ = mapConfig_.resolution;
         static_voxel_grid->origin_ = Eigen::Vector3d(-67.0, 20.0, 0.0); // Near initial NED
         static_voxel_grid->AddVoxel(open3d::geometry::Voxel(Eigen::Vector3i(0, 0, 0), Eigen::Vector3d(1.0, 0.0, 0.0))); // Red
         static_voxel_grid->AddVoxel(open3d::geometry::Voxel(Eigen::Vector3i(1, 1, 1), Eigen::Vector3d(0.0, 1.0, 0.0))); // Green
@@ -707,7 +707,7 @@ namespace slam {
             {0, CellKey{0, 0, 0}, 0.0, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(), 0, Eigen::Vector3i(255, 0, 0)},
             {0, CellKey{1, 1, 1}, 0.0, Eigen::Vector3d::Zero(), Eigen::Vector3d::Zero(), 0, Eigen::Vector3i(0, 255, 0)}
         };
-        auto static_voxel_grid2 = createVoxelGrid(static_voxels, Eigen::Vector3d(-67.0, 20.0, 0.0), 1.0);
+        auto static_voxel_grid2 = createVoxelGrid(static_voxels, Eigen::Vector3d(-67.0, 20.0, 0.0), mapConfig_.resolution);
         std::cout << "[runViz] Static voxel grid2 (via createVoxelGrid) - Voxel count: " << static_voxel_grid2->voxels_.size() << "\n";
         vis.AddGeometry(static_voxel_grid2);
 
@@ -769,7 +769,7 @@ namespace slam {
                 view.SetLookat(latestNED);
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(0.5);
+                view.SetZoom(0.1);
                 std::cout << "[updateViz] Camera updated - Lookat: " << latestNED.transpose() << "\n";
             }
         }
