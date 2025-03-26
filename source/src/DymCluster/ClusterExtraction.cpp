@@ -185,6 +185,10 @@ namespace slam {
 
             // Pre-compute sizes
             const size_t curr_size = clusters_.size();
+            {
+                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                std::cerr << "[extractClusters] curr_size: " << curr_size << std::endl;
+            }
             const size_t total_prev_size = std::accumulate(prevClusters_.begin(), prevClusters_.end(), size_t{0},
                 [](size_t sum, const auto& frame_clusters) { return sum + frame_clusters.size(); });
 

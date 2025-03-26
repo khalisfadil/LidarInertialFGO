@@ -9,6 +9,9 @@
 #include <map>
 #include <numeric>
 
+#include <iostream>
+#include <fstream>
+
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
 #include <tbb/concurrent_unordered_map.h>
@@ -110,6 +113,8 @@ namespace slam {
             std::deque<std::vector<slam::Cluster3D>> prevClusters_;
             double max_distance_threshold_ = 2.0;
             std::vector<slam::Point3D> dynamic_points_;
+
+            std::mutex consoleMutex;
         };
     }  // namespace cluster
 }  // namespace slam

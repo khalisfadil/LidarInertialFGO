@@ -816,11 +816,11 @@ namespace slam {
             // Process Occupancy Map Voxels
             size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
             size_t itemsToProcessVoxelExtClsPersistent = voxelsRingBufferExtClsPersistent.read_available();
-            {
-                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                std::cerr << "[updateVisualization] itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << std::endl;
-                std::cerr << "[updateVisualization] itemsToProcessVoxelExtClsPersistent: " << itemsToProcessVoxelExtClsPersistent << std::endl;
-            }
+            // {
+            //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+            //     std::cerr << "[updateVisualization] itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << std::endl;
+            //     std::cerr << "[updateVisualization] itemsToProcessVoxelExtClsPersistent: " << itemsToProcessVoxelExtClsPersistent << std::endl;
+            // }
 
             std::vector<Voxel3D> localVoxelProcessOccMap;
             std::vector<Voxel3D> localVoxelProcessExtClsPersistent;
