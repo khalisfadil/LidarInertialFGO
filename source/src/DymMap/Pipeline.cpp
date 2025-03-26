@@ -368,10 +368,10 @@ namespace slam {
 
                     if (decodedPoints.frameID != 0) {
 
-                        {
-                            std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                            std::cerr << "storedDecodedPoints.numInput: " << decodedPoints.numInput << std::endl;
-                        }
+                        // {
+                        //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                        //     std::cerr << "storedDecodedPoints.numInput: " << decodedPoints.numInput << std::endl;
+                        // }
                         
                         if (decodedPoints.numInput == 0) return;
 
@@ -505,10 +505,10 @@ namespace slam {
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
 
-            {
-                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                std::cerr << "[runOccupancyMapPipeline] itemsToProcess: " << itemsToProcess << std::endl;
-            }
+            // {
+            //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+            //     std::cerr << "[runOccupancyMapPipeline] itemsToProcess: " << itemsToProcess << std::endl;
+            // }
 
             CallbackPoints::Points localPointOccMap;
             if (itemsToProcess > 0) {
@@ -537,10 +537,10 @@ namespace slam {
                 std::vector<Voxel3D> occMapVoxels;
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
                 
-                {
-                    std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                    std::cerr << "[runOccupancyMapPipeline] occMapVoxels : " << occMapVoxels.size() << std::endl;
-                }
+                // {
+                //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                //     std::cerr << "[runOccupancyMapPipeline] occMapVoxels : " << occMapVoxels.size() << std::endl;
+                // }
 
                 if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
                     // if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
@@ -570,18 +570,18 @@ namespace slam {
             auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
             if (elapsedTime < targetCycleDuration) {
                 std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
-                {
-                    std::lock_guard<std::mutex> consoleLock(consoleMutex);
-                    std::cout << "[OccupancyMapPipeline] Processing Time: " 
-                            << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
-                }
+                // {
+                //     std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                //     std::cout << "[OccupancyMapPipeline] Processing Time: " 
+                //             << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
+                // }
             } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
-                {
-                    std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                    std::cout << "Warning: [OccupancyMapPipeline] Processing took longer than 100 ms. Time: " 
-                      << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
-                      << " ms. Skipping sleep.\n";
-                }
+                // {
+                //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                //     std::cout << "Warning: [OccupancyMapPipeline] Processing took longer than 100 ms. Time: " 
+                //       << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
+                //       << " ms. Skipping sleep.\n";
+                // }
                 // std::ostringstream oss;
                 // oss << "Warning: [OccupancyMapPipeline] Processing exceeded target by " << (elapsedTime - targetCycleDuration).count() << " ms\n";
                 // if (!logQueue.push(oss.str())) {
@@ -607,10 +607,10 @@ namespace slam {
 
                 size_t itemsToProcess = pointsRingBufferExtCls.read_available();
 
-                {
-                    std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                    std::cerr << "[runClusterExtractionPipeline] itemsToProcess: " << itemsToProcess << std::endl;
-                }
+                // {
+                //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                //     std::cerr << "[runClusterExtractionPipeline] itemsToProcess: " << itemsToProcess << std::endl;
+                // }
 
                 CallbackPoints::Points localPointExtCls;
                 if (itemsToProcess > 0) {
@@ -865,10 +865,10 @@ namespace slam {
             // Process Cluster Extraction Voxels
             
             size_t itemsToProcessVoxelExtClsNonPersistent = voxelsRingBufferExtClsNonPersistent.read_available();
-            {
-                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                std::cerr << "[updateVisualization] itemsToProcessVoxelExtClsNonPersistent: " << itemsToProcessVoxelExtClsNonPersistent << std::endl;
-            }
+            // {
+            //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+            //     std::cerr << "[updateVisualization] itemsToProcessVoxelExtClsNonPersistent: " << itemsToProcessVoxelExtClsNonPersistent << std::endl;
+            // }
             std::vector<Voxel3D> localVoxelProcessExtClsNonPersistent;
             if (itemsToProcessVoxelExtClsNonPersistent > 0) {
 
@@ -885,10 +885,10 @@ namespace slam {
 
             // Process Vehicle Pose
             size_t itemsToProcessVehPose = ringBufferPose.read_available();
-            {
-                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                std::cerr << "[updateVisualization] itemsToProcessVehPose: " << itemsToProcessVehPose << std::endl;
-            }
+            // {
+            //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+            //     std::cerr << "[updateVisualization] itemsToProcessVehPose: " << itemsToProcessVehPose << std::endl;
+            // }
             CallbackPoints::Points localPointsVehPose;
             if (itemsToProcessVehPose > 0) {
                 
@@ -904,10 +904,10 @@ namespace slam {
                     view.SetLookat(currentLookat);
                     view.SetFront({0, 0, -1});
                     view.SetUp({0, 1, 0});
-                    {
-                        std::lock_guard<std::mutex> consoleLock(consoleMutex);
-                        std::cerr << "[updateVehicleMesh] targetLookat: " << targetLookat.transpose() << std::endl;
-                    }
+                    // {
+                    //     std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                    //     std::cerr << "[updateVehicleMesh] targetLookat: " << targetLookat.transpose() << std::endl;
+                    // }
                 }
             }
 
