@@ -585,7 +585,7 @@ namespace slam {
                     occMapFrame.pointcloud[i].Att = localPointOccMap.att[i];
                 }
                 
-                occupancyMapInstance->occupancyMap(occMapFrame);
+                // occupancyMapInstance->occupancyMap(occMapFrame);
                 // occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
                 
                 // if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
