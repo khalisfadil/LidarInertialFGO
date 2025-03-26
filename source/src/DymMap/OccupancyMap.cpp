@@ -130,29 +130,28 @@ namespace slam {
                     });
             };
 
-            // // Execute tasks
-            // if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
-            //     tbb::parallel_invoke(raycastingTask, distanceCheckTask);
-            // } else {
-            //     raycastingTask();
-            //     distanceCheckTask();
-            // }
+            // Execute tasks
+            if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
+                tbb::parallel_invoke(raycastingTask, distanceCheckTask);
+            } else {
+                raycastingTask();
+                distanceCheckTask();
+            }
 
-            raycastingTask();
-            distanceCheckTask();
+            // raycastingTask();
+            // distanceCheckTask();
 
             // Create a new occupancy map excluding cells marked for removal
             tbb::concurrent_unordered_map<slam::CellKey, slam::Voxel3D, slam::CellKeyHash> newOccupancyMap;
-            newOccupancyMap.rehash(occupancyMap_.size() - cellsToRemove.size());
+            size_t newSize = (occupancyMap_.size() > cellsToRemove.size()) ? (occupancyMap_.size() - cellsToRemove.size()) : 0;
+            newOccupancyMap.rehash(newSize);
 
-            tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
-                [&](const auto& mapEntry) {
-                    if (cellsToRemove.find(mapEntry.first) == cellsToRemove.end()) {
-                        newOccupancyMap.insert(mapEntry);
-                    }
-                });
+            for (const auto& mapEntry : occupancyMap_) {
+                if (cellsToRemove.find(mapEntry.first) == cellsToRemove.end()) {
+                    newOccupancyMap.insert(mapEntry);
+                }
+            }
 
-            // Swap to update the main occupancy map
             occupancyMap_.swap(newOccupancyMap);
         }
 
