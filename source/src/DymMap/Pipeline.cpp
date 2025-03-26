@@ -836,20 +836,18 @@ namespace slam {
                         // Keep latest data
                     }
 
-                    if (!localVoxelProcessExtClsPersistent.empty()) {
-                        // Create set of CellKeys for O(1) lookup
+                    if (!extClsVoxelsPersistent.empty()) {
                         std::unordered_set<slam::CellKey, slam::CellKeyHash> persistentKeys;
-                        persistentKeys.reserve(localVoxelProcessExtClsPersistent.size());
+                        persistentKeys.reserve(extClsVoxelsPersistent.size());
                         
-                        for (const auto& voxel : localVoxelProcessExtClsPersistent) {
-                            persistentKeys.insert(voxel.key);  // Assuming cellkey is the member name
+                        for (const auto& voxel : extClsVoxelsPersistent) {
+                            persistentKeys.insert(voxel.key);
                         }
 
-                        // Filter OccMap based on CellKey
                         localVoxelProcessOccMap.erase(
                             std::remove_if(localVoxelProcessOccMap.begin(), localVoxelProcessOccMap.end(),
                                 [&persistentKeys](const Voxel3D& voxel) {
-                                    return persistentKeys.contains(voxel.key);
+                                    return persistentKeys.find(voxel.key) != persistentKeys.end();
                                 }),
                             localVoxelProcessOccMap.end()
                         );
@@ -891,6 +889,7 @@ namespace slam {
                 std::lock_guard<std::mutex> consoleLock(consoleMutex);  
                 std::cerr << "[updateVisualization] itemsToProcessVehPose: " << itemsToProcessVehPose << std::endl;
             }
+            CallbackPoints::Points localPointsVehPose;
             if (itemsToProcessVehPose > 0) {
                 
                 while (ringBufferPose.pop(localPointsVehPose)) {

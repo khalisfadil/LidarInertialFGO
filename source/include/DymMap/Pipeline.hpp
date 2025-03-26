@@ -74,8 +74,6 @@ private:
     CallbackPoints callbackPointsProcessor;
     CallbackPoints::Points storedDecodedPoints;
 
-    CallbackPoints::Points localPointsVehPose;
-
     uint32_t frameID_ = 0;
     
     static std::shared_ptr<open3d::geometry::VoxelGrid> voxel_grid_occMap_ptr;
