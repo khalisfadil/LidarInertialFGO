@@ -20,7 +20,7 @@ namespace slam {
             if (frame.pointcloud.empty()) return;
             const auto& points = frame.pointcloud;
             occupancyMapBase(points, frame.frameID, frame.timestamp);
-            // clearUnwantedVoxel(frame.vehiclePosition);
+            clearUnwantedVoxel(frame.vehiclePosition);
         }
 
         void OccupancyMap::occupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp) {
@@ -108,12 +108,15 @@ namespace slam {
                     });
             };
 
-            if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
-                tbb::parallel_invoke(distanceCheck, raycasting);
-            } else {
-                distanceCheck();
-                raycasting();
-            }
+            // if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
+            //     tbb::parallel_invoke(distanceCheck, raycasting);
+            // } else {
+            //     distanceCheck();
+            //     raycasting();
+            // }
+
+            distanceCheck();
+            raycasting();
 
             tbb::concurrent_unordered_map<CellKey, Voxel3D, CellKeyHash> newOccupancyMap;
             newOccupancyMap.reserve(occupancyMap_.size() - cellsToRemove.size());
