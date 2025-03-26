@@ -96,17 +96,17 @@ namespace slam {
                     });
             };
 
-            CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
-            auto raycasting = [&]() {
-                tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
-                    [&](const CellKey& targetCell) {
-                        auto result = raycastCache.insert(
-                            {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
-                             performRaycast(sourceCell, targetCell)}
-                        );
-                        cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
-                    });
-            };
+            // CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
+            // auto raycasting = [&]() {
+            //     tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
+            //         [&](const CellKey& targetCell) {
+            //             auto result = raycastCache.insert(
+            //                 {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
+            //                  performRaycast(sourceCell, targetCell)}
+            //             );
+            //             cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
+            //         });
+            // };
 
             // if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
             //     tbb::parallel_invoke(distanceCheck, raycasting);
@@ -116,7 +116,7 @@ namespace slam {
             // }
 
             distanceCheck();
-            raycasting();
+            // raycasting();
 
             tbb::concurrent_unordered_map<CellKey, Voxel3D, CellKeyHash> newOccupancyMap;
             newOccupancyMap.reserve(occupancyMap_.size() - cellsToRemove.size());
