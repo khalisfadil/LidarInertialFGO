@@ -286,9 +286,10 @@ namespace slam {
 
     void Pipeline::setThreadAffinity(const std::vector<int>& coreIDs) {
         if (coreIDs.empty()) {
-            if (!logQueue.push("Warning: [ThreadAffinity] No core IDs provided.\n")) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            std::lock_guard<std::mutex> consoleLock(consoleMutex);
+            // if (!logQueue.push("Warning: [ThreadAffinity] No core IDs provided.\n")) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
             return;
         }
 
@@ -305,32 +306,32 @@ namespace slam {
         }
 
         if (!validCores) {
-            if (!logQueue.push("Error: [ThreadAffinity] No valid core IDs provided.\n")) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // if (!logQueue.push("Error: [ThreadAffinity] No valid core IDs provided.\n")) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
             return;
         }
 
         if (sched_setaffinity(0, sizeof(cpu_set_t), &cpuset) != 0) {
-            std::ostringstream oss;
-            oss << "Fatal: [ThreadAffinity] Failed to set affinity: " << strerror(errno) << "\n";
-            if (!logQueue.push(oss.str())) {
-                droppedLogs.fetch_add(1, std::memory_order_relaxed);
-            }
+            // std::ostringstream oss;
+            // oss << "Fatal: [ThreadAffinity] Failed to set affinity: " << strerror(errno) << "\n";
+            // if (!logQueue.push(oss.str())) {
+            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+            // }
             running.store(false); // Optionally terminate
         }
 
-        std::ostringstream oss;
-        oss << "Thread restricted to cores: ";
-        for (int coreID : coreIDs) {
-            if (CPU_ISSET(coreID, &cpuset)) {
-                oss << coreID << " ";
-            }
-        }
-        oss << "\n";
-        if (!logQueue.push(oss.str())) {
-            droppedLogs.fetch_add(1, std::memory_order_relaxed);
-        }
+        // std::ostringstream oss;
+        // oss << "Thread restricted to cores: ";
+        // for (int coreID : coreIDs) {
+        //     if (CPU_ISSET(coreID, &cpuset)) {
+        //         oss << coreID << " ";
+        //     }
+        // }
+        // oss << "\n";
+        // if (!logQueue.push(oss.str())) {
+        //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+        // }
 
     }
 
@@ -346,6 +347,7 @@ namespace slam {
         setThreadAffinity(allowedCores);
 
         if (host.empty() || port == 0) {
+            std::lock_guard<std::mutex> consoleLock(consoleMutex);
             // std::ostringstream oss;
             // oss << "[PointsListener] Invalid host or port: host='" << host << "', port=" << port << '\n';
             // if (!logQueue.push(oss.str())) {
@@ -432,6 +434,7 @@ namespace slam {
 
                         // Push to OccupancyMap ring buffer
                         if (!pointsRingBufferOccMap.push(storedDecodedPoints)) {
+                            std::lock_guard<std::mutex> consoleLock(consoleMutex);
                             // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
                             //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                             // }
@@ -445,6 +448,7 @@ namespace slam {
 
                         // Push to OccupancyMap ring buffer
                         if (!ringBufferPose.push(storedDecodedPoints)) {
+                            std::lock_guard<std::mutex> consoleLock(consoleMutex);
                             // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
                             //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                             // }

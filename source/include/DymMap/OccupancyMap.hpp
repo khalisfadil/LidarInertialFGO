@@ -7,6 +7,7 @@
 #include <limits>
 #include <algorithm>
 #include <cmath>
+#include <mutex>  // Include for std::mutex
 #include <tbb/parallel_for.h>
 #include <tbb/blocked_range.h>
 #include <tbb/concurrent_unordered_map.h>
@@ -20,7 +21,6 @@
 #include "Utils/voxel.hpp"
 #include "Utils/colorMode.hpp"
 #include "Utils/constants.hpp"
-
 #include "Utils/mapconfig.hpp"
 
 namespace slam {
@@ -28,21 +28,19 @@ namespace slam {
 
         class OccupancyMap {
         public:
-            // Constructor declaration with default arguments
             OccupancyMap(double resolution = 0.1, double mapMaxDistance = 500.0,
-                        Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero(),
-                        unsigned int maxPointsPerVoxel = 20,
-                        ColorMode colorMode = ColorMode::Occupancy);
+                         Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero(),
+                         unsigned int maxPointsPerVoxel = 20,
+                         ColorMode colorMode = ColorMode::Occupancy);
 
-            // Public methods
             void occupancyMap(const OccupancyMapDataFrame& frame);
-            std::vector<Voxel3D> getOccupiedVoxel() const;
+            std::vector<Voxel3D> getOccupiedVoxel();  // Removed const
 
         private:
+            std::mutex mapMutex_;  // No need for mutable
 
             alignas(64) MapConfig mapConfig_;
 
-            // Private methods
             void occupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp);
             void clearUnwantedVoxel(Eigen::Vector3d vehiclePosition);
             std::vector<CellKey> performRaycast(const CellKey& start, const CellKey& end) const;
@@ -51,14 +49,12 @@ namespace slam {
             Eigen::Vector3i computeIntensityColor(double avgIntensity) const;
             Eigen::Vector3i computeNIRColor(double avgNIR) const;
 
-            // Member variables (order matters for initialization)
             const double resolution_;
             const double mapMaxDistance_;
             const Eigen::Vector3d mapOrigin_;
             const unsigned int maxPointsPerVoxel_;
             const ColorMode colorMode_;
 
-            // Concurrent data structures
             using GridType = tbb::concurrent_unordered_map<CellKey, Voxel3D, CellKeyHash>;
             GridType occupancyMap_;
             tbb::concurrent_unordered_set<CellKey, CellKeyHash> tracked_cell;
