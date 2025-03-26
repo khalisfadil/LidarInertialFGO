@@ -592,11 +592,11 @@ namespace slam {
                 occupancyMapInstance->occupancyMap(occMapFrame);
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
                 
-                // if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
-                //     // if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
-                //     //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                //     // }
-                // }
+                if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
+                    // if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
+                    //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    // }
+                }
 
                 // // Create and populate report
                 // ReportDataFrame reportOccupancyMap;
