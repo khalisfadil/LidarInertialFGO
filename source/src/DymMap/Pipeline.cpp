@@ -836,11 +836,11 @@ namespace slam {
                         // Keep latest data
                     }
 
-                    if (!extClsVoxelsPersistent.empty()) {
+                    if (!localVoxelProcessExtClsPersistent.empty()) {
                         std::unordered_set<slam::CellKey, slam::CellKeyHash> persistentKeys;
-                        persistentKeys.reserve(extClsVoxelsPersistent.size());
+                        persistentKeys.reserve(localVoxelProcessExtClsPersistent.size());
                         
-                        for (const auto& voxel : extClsVoxelsPersistent) {
+                        for (const auto& voxel : localVoxelProcessExtClsPersistent) {
                             persistentKeys.insert(voxel.key);
                         }
 
