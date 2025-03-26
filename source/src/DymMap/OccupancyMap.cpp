@@ -97,40 +97,54 @@ namespace slam {
 
         void OccupancyMap::clearUnwantedVoxel(Eigen::Vector3d vehiclePosition) {
             using RaycastCache = tbb::concurrent_unordered_map<std::pair<CellKey, CellKey>, 
-                                                              std::vector<CellKey>, PairHash, PairEqual>;
+                                                            std::vector<CellKey>, PairHash, PairEqual>;
             RaycastCache raycastCache;
             raycastCache.reserve(tracked_cell.size());
 
             tbb::concurrent_unordered_set<CellKey, CellKeyHash> cellsToRemove;
-            cellsToRemove.reserve(occupancyMap_.size() / 10);
+            cellsToRemove.reserve(occupancyMap_.size() / 2);
 
-            tbb::parallel_invoke(
-                [&]() {
-                    tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(), 
-                        [&](const auto& mapEntry) {
-                            const Eigen::Vector3d voxelPos = mapEntry.second.computeGridToWorld(mapOrigin_, resolution_);
-                            if ((voxelPos - vehiclePosition).squaredNorm() > mapMaxDistance_ * mapMaxDistance_) {
-                                cellsToRemove.insert(mapEntry.first);
-                            }
-                        });
-                },
-                [&]() {
-                    CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
-                    tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
-                        [&](const CellKey& targetCell) {
-                            auto result = raycastCache.insert(
-                                {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
-                                 performRaycast(sourceCell, targetCell)}
-                            );
-                            cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
-                        });
-                }
-            );
+            auto distanceCheck = [&]() {
+                tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(), 
+                    [&](const auto& mapEntry) {
+                        const Eigen::Vector3d voxelPos = mapEntry.second.computeGridToWorld(mapOrigin_, resolution_);
+                        if ((voxelPos - vehiclePosition).squaredNorm() > mapMaxDistance_ * mapMaxDistance_) {
+                            cellsToRemove.insert(mapEntry.first);
+                        }
+                    });
+            };
 
-            tbb::parallel_for_each(cellsToRemove.begin(), cellsToRemove.end(),
-                [&](const CellKey& key) {
-                    occupancyMap_.unsafe_erase(key);
+            CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
+            auto raycasting = [&]() {
+                tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
+                    [&](const CellKey& targetCell) {
+                        auto result = raycastCache.insert(
+                            {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
+                            performRaycast(sourceCell, targetCell)}
+                        );
+                        cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
+                    });
+            };
+
+            if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
+                tbb::parallel_invoke(distanceCheck, raycasting);
+            } else {
+                distanceCheck();
+                raycasting();
+            }
+
+            // Rebuild new map
+            tbb::concurrent_unordered_map<CellKey, Voxel3D, CellKeyHash> newOccupancyMap;
+            newOccupancyMap.reserve(occupancyMap_.size() - cellsToRemove.size());
+            tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
+                [&](const auto& mapEntry) {
+                    if (cellsToRemove.find(mapEntry.first) == cellsToRemove.end()) {
+                        newOccupancyMap.insert(mapEntry);
+                    }
                 });
+
+            // Swap safely
+            occupancyMap_.swap(newOccupancyMap);
         }
 
         // -----------------------------------------------------------------------------
@@ -138,50 +152,61 @@ namespace slam {
         // -----------------------------------------------------------------------------
 
         std::vector<CellKey> OccupancyMap::performRaycast(const CellKey& start, const CellKey& end) const {
-            if (start == end) return {};
-            Eigen::Vector3i startVec(start.x, start.y, start.z);
-            Eigen::Vector3i endVec(end.x, end.y, end.z);
-            Eigen::Vector3i diff = endVec - startVec;
-            if (diff.squaredNorm() <= 1) return {};
-
-            Eigen::Vector3i current = startVec;
-            Eigen::Vector3i delta = diff.cwiseAbs();
-            Eigen::Vector3i step = diff.cwiseSign();
-
-            std::vector<CellKey> voxelIndices;
-            voxelIndices.reserve(delta.maxCoeff());
-
-            voxelIndices.emplace_back(current.x(), current.y(), current.z());
-
-            int primaryAxis = (delta.x() >= delta.y() && delta.x() >= delta.z()) ? 0 :
-                             (delta.y() >= delta.z()) ? 1 : 2;
-            int secondaryAxis = (primaryAxis + 1) % 3;
-            int tertiaryAxis = (primaryAxis + 2) % 3;
-
-            int error1 = 2 * delta[secondaryAxis] - delta[primaryAxis];
-            int error2 = 2 * delta[tertiaryAxis] - delta[primaryAxis];
-
-            Eigen::Vector3i next = current;
-            while (true) {
-                if (delta[primaryAxis] > 0) next[primaryAxis] = current[primaryAxis] + step[primaryAxis];
-                if (error1 > 0) {
-                    next[secondaryAxis] = current[secondaryAxis] + step[secondaryAxis];
-                    error1 -= 2 * delta[primaryAxis];
-                }
-                if (error2 > 0) {
-                    next[tertiaryAxis] = current[tertiaryAxis] + step[tertiaryAxis];
-                    error2 -= 2 * delta[primaryAxis];
-                }
-                error1 += 2 * delta[secondaryAxis];
-                error2 += 2 * delta[tertiaryAxis];
-
-                if (next == endVec) break;
-
-                current = next;
-                voxelIndices.emplace_back(current.x(), current.y(), current.z());
+            // If start and end points are the same, return the starting voxel only
+            if (start == end) {
+                return {start};
             }
 
-            return voxelIndices;
+            // Convert CellKey to Eigen::Vector3i for computation
+            Eigen::Vector3i startVoxel(start.x, start.y, start.z);
+            Eigen::Vector3i endVoxel(end.x, end.y, end.z);
+
+            // Initialize voxel collection using a concurrent container
+            tbb::concurrent_vector<CellKey> voxelIndices;
+
+            // Initialize Bresenham's algorithm parameters
+            Eigen::Vector3i delta = (endVoxel - startVoxel).cwiseAbs();
+            Eigen::Vector3i step = (endVoxel - startVoxel).cwiseSign();
+            Eigen::Vector3i currentVoxel = startVoxel;
+
+            voxelIndices.push_back(start); // Include the starting voxel as CellKey
+
+            // Determine the dominant axis
+            int maxAxis = delta.maxCoeff();
+            int primaryAxis = (delta.x() >= delta.y() && delta.x() >= delta.z()) ? 0 : (delta.y() >= delta.z() ? 1 : 2);
+
+            // Initialize error terms for Bresenham's algorithm
+            int error1 = 2 * delta[(primaryAxis + 1) % 3] - delta[primaryAxis];
+            int error2 = 2 * delta[(primaryAxis + 2) % 3] - delta[primaryAxis];
+
+            // Traverse the line using Bresenham's algorithm, stopping before reaching endVoxel
+            for (int i = 0; i < delta[primaryAxis]; ++i) {
+                currentVoxel[primaryAxis] += step[primaryAxis];
+
+                if (error1 > 0) {
+                    currentVoxel[(primaryAxis + 1) % 3] += step[(primaryAxis + 1) % 3];
+                    error1 -= 2 * delta[primaryAxis];
+                }
+
+                if (error2 > 0) {
+                    currentVoxel[(primaryAxis + 2) % 3] += step[(primaryAxis + 2) % 3];
+                    error2 -= 2 * delta[primaryAxis];
+                }
+
+                error1 += 2 * delta[(primaryAxis + 1) % 3];
+                error2 += 2 * delta[(primaryAxis + 2) % 3];
+
+                // Stop if the next voxel would be the endVoxel
+                if (currentVoxel == endVoxel) {
+                    break;
+                }
+
+                // Add the current voxel to the result as CellKey
+                voxelIndices.push_back(CellKey(currentVoxel.x(), currentVoxel.y(), currentVoxel.z()));
+            }
+
+            // Return results as a standard vector of CellKey
+            return std::vector<CellKey>(voxelIndices.begin(), voxelIndices.end());
         }
 
         // -----------------------------------------------------------------------------

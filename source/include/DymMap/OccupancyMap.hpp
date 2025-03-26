@@ -19,6 +19,7 @@
 #include "Utils/cellKey.hpp"
 #include "Utils/voxel.hpp"
 #include "Utils/colorMode.hpp"
+#include "Utils/constants.hpp"
 
 #include "Utils/mapconfig.hpp"
 
@@ -38,21 +39,6 @@ namespace slam {
             std::vector<Voxel3D> getOccupiedVoxel() const;
 
         private:
-            // Helper structs for concurrent containers
-            struct PairHash {
-                size_t operator()(const std::pair<CellKey, CellKey>& p) const {
-                    CellKeyHash hasher;
-                    size_t h1 = hasher(p.first);
-                    size_t h2 = hasher(p.second);
-                    return h1 ^ (h2 << 1);
-                }
-            };
-
-            struct PairEqual {
-                bool operator()(const std::pair<CellKey, CellKey>& a, const std::pair<CellKey, CellKey>& b) const {
-                    return a.first == b.first && a.second == b.second;
-                }
-            };
 
             alignas(64) MapConfig mapConfig_;
 
