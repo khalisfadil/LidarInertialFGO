@@ -86,27 +86,27 @@ namespace slam {
             tbb::concurrent_unordered_set<CellKey, CellKeyHash> cellsToRemove;
             cellsToRemove.reserve(occupancyMap_.size() / 2);
 
-            auto distanceCheck = [&]() {
-                tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(), 
-                    [&](const auto& mapEntry) {
-                        const Eigen::Vector3d voxelPos = mapEntry.second.computeGridToWorld(mapOrigin_, resolution_);
-                        if ((voxelPos - vehiclePosition).squaredNorm() > mapMaxDistance_ * mapMaxDistance_) {
-                            cellsToRemove.insert(mapEntry.first);
-                        }
-                    });
-            };
-
-            // CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
-            // auto raycasting = [&]() {
-            //     tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
-            //         [&](const CellKey& targetCell) {
-            //             auto result = raycastCache.insert(
-            //                 {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
-            //                  performRaycast(sourceCell, targetCell)}
-            //             );
-            //             cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
+            // auto distanceCheck = [&]() {
+            //     tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(), 
+            //         [&](const auto& mapEntry) {
+            //             const Eigen::Vector3d voxelPos = mapEntry.second.computeGridToWorld(mapOrigin_, resolution_);
+            //             if ((voxelPos - vehiclePosition).squaredNorm() > mapMaxDistance_ * mapMaxDistance_) {
+            //                 cellsToRemove.insert(mapEntry.first);
+            //             }
             //         });
             // };
+
+            CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
+            auto raycasting = [&]() {
+                tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
+                    [&](const CellKey& targetCell) {
+                        auto result = raycastCache.insert(
+                            {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
+                             performRaycast(sourceCell, targetCell)}
+                        );
+                        cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
+                    });
+            };
 
             // if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
             //     tbb::parallel_invoke(distanceCheck, raycasting);
@@ -115,8 +115,8 @@ namespace slam {
             //     raycasting();
             // }
 
-            distanceCheck();
-            // raycasting();
+            //distanceCheck();
+            raycasting();
 
             tbb::concurrent_unordered_map<CellKey, Voxel3D, CellKeyHash> newOccupancyMap;
             newOccupancyMap.reserve(occupancyMap_.size() - cellsToRemove.size());
