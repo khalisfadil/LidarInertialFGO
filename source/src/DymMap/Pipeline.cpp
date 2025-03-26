@@ -620,6 +620,11 @@ namespace slam {
             auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
             if (elapsedTime < targetCycleDuration) {
                 std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
+                {
+                    std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                    std::cout << "[OccupancyMapPipeline] Processing Time: " 
+                            << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
+                }
             } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
                 {
                     std::lock_guard<std::mutex> consoleLock(consoleMutex);  

@@ -20,7 +20,7 @@ namespace slam {
             if (frame.pointcloud.empty()) return;
             const auto& points = frame.pointcloud;
             occupancyMapBase(points, frame.frameID, frame.timestamp);
-            clearUnwantedVoxel(frame.vehiclePosition);
+            // clearUnwantedVoxel(frame.vehiclePosition);
         }
 
         void OccupancyMap::occupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp) {
