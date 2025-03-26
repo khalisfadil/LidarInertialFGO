@@ -827,7 +827,10 @@ namespace slam {
 
             // Process Occupancy Map Voxels
             size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
-            // std::cerr << "Items to process in voxel occupancy map in updateVisualization: " << itemsToProcessVoxelOccMap << std::endl;
+            {
+                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                std::cerr << "updateVisualization itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << std::endl;
+            }
             if (itemsToProcessVoxelOccMap > 0) {
                 
                 while (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
