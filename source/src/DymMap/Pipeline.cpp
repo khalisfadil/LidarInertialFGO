@@ -369,10 +369,10 @@ namespace slam {
                         
                         storedDecodedPoints = decodedPoints;
 
-                        // {
-                        //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                        //     std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
-                        // }
+                        {
+                            std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                            std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
+                        }
                         
                         if (decodedPoints.numInput == 0) return;
 
@@ -564,10 +564,10 @@ namespace slam {
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
 
-            // {
-            //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-            //     std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
-            // }
+            {
+                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
+            }
 
             if (itemsToProcess > 0) {
                 
@@ -589,8 +589,8 @@ namespace slam {
                     occMapFrame.pointcloud[i].Att = localPointOccMap.att[i];
                 }
                 
-                // occupancyMapInstance->occupancyMap(occMapFrame);
-                // occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
+                occupancyMapInstance->occupancyMap(occMapFrame);
+                occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
                 
                 // if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
                 //     // if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
@@ -621,6 +621,12 @@ namespace slam {
             if (elapsedTime < targetCycleDuration) {
                 std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
             } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
+                {
+                    std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                    std::cout << "Warning: [OccupancyMapPipeline] Processing took longer than 100 ms. Time: " 
+                      << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
+                      << " ms. Skipping sleep.\n";
+                }
                 // std::ostringstream oss;
                 // oss << "Warning: [OccupancyMapPipeline] Processing exceeded target by " << (elapsedTime - targetCycleDuration).count() << " ms\n";
                 // if (!logQueue.push(oss.str())) {
