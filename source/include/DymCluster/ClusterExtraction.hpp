@@ -73,13 +73,13 @@ namespace slam {
 
             void extractClusters(const ClusterExtractorDataFrame& frame);
 
-            const std::vector<slam::Cluster3D>& getClusters() const { return clusters_; }
+            const tbb::concurrent_vector<slam::Cluster3D>& getClusters() const { return clusters_; }  // Updated return type
 
-            std::vector<Voxel3D> getOccupiedVoxel() const;
+            std::vector<Voxel3D> getOccupiedVoxel(bool tracked) const;
 
         private:
             void extractBaseClusters(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp);
-            void clusterOccupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp);
+            void clusterOccupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp, bool tracked);
             double calculateCost(const slam::Cluster3D& clusterA, const slam::Cluster3D& clusterB) const;
             double cauchyCost(double error_norm, double k = 2.0);
             void optimizeCentroid(const std::map<double, Eigen::Vector3d>& prev_states,
@@ -95,6 +95,7 @@ namespace slam {
 
             using GridType = tbb::concurrent_unordered_map<CellKey, Voxel3D, CellKeyHash>;
             GridType occupancyMap_;
+            GridType persistentMap_;
 
             double resolution_;
             const Eigen::Vector3d mapOrigin_;
@@ -105,11 +106,10 @@ namespace slam {
             const unsigned int maxPointsPerVoxel_;
             const ColorMode colorMode_;
 
-            std::vector<slam::Cluster3D> clusters_;
+            tbb::concurrent_vector<slam::Cluster3D> clusters_;  // Updated from std::vector
             std::deque<std::vector<slam::Cluster3D>> prevClusters_;
             double max_distance_threshold_ = 2.0;
             std::vector<slam::Point3D> dynamic_points_;
-            
         };
     }  // namespace cluster
 }  // namespace slam

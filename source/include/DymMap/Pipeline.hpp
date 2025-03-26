@@ -33,7 +33,9 @@ public:
     static boost::lockfree::spsc_queue<CallbackPoints::Points, boost::lockfree::capacity<128>> pointsRingBufferExtCls;
 
     static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferOccMap;
-    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferExtCls;
+    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferExtClsPersistent;
+    static boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> voxelsRingBufferExtClsNonPersistent;
+    
     static boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128>> logQueue;
     static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<128>> reportOccupancyMapQueue;
     static boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<128>> reportExtractClusterQueue;
@@ -57,7 +59,7 @@ public:
 
     void setThreadAffinity(const std::vector<int>& coreIDs);
     void runOccupancyMapPipeline(const std::vector<int>& allowedCores);
-    // void runClusterExtractionPipeline(const std::vector<int>& allowedCores);
+    void runClusterExtractionPipeline(const std::vector<int>& allowedCores);
     void runVizualizationPipeline(const std::vector<int>& allowedCores);
     bool updateVisualization(open3d::visualization::Visualizer* vis);
     void processLogQueue(const std::vector<int>& allowedCores);
@@ -72,11 +74,6 @@ private:
     CallbackPoints callbackPointsProcessor;
     CallbackPoints::Points storedDecodedPoints;
 
-    CallbackPoints::Points localPointOccMap;
-    OccupancyMapDataFrame occMapFrame;
-    std::vector<Voxel3D> occMapVoxels;
-
-    std::vector<Voxel3D> localVoxelProcessOccMap;
     CallbackPoints::Points localPointsVehPose;
 
     uint32_t frameID_ = 0;

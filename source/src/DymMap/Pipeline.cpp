@@ -23,8 +23,9 @@ namespace slam {
     boost::lockfree::spsc_queue<CallbackPoints::Points, boost::lockfree::capacity<128>> Pipeline::pointsRingBufferOccMap;
     boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferOccMap;
     boost::lockfree::spsc_queue<CallbackPoints::Points, boost::lockfree::capacity<128>> Pipeline::pointsRingBufferExtCls;
-    boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferExtCls;
-    
+    boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferExtClsNonPersistent;
+    boost::lockfree::spsc_queue<std::vector<Voxel3D>, boost::lockfree::capacity<128>> Pipeline::voxelsRingBufferExtClsPersistent;
+
     boost::lockfree::spsc_queue<std::string, boost::lockfree::capacity<128>> Pipeline::logQueue;
     boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<128>> Pipeline::reportOccupancyMapQueue;
     boost::lockfree::spsc_queue<ReportDataFrame, boost::lockfree::capacity<128>> Pipeline::reportExtractClusterQueue;
@@ -366,89 +367,29 @@ namespace slam {
                     callbackPointsProcessor.process(data, decodedPoints);
 
                     if (decodedPoints.frameID != 0) {
-                        
-                        storedDecodedPoints = decodedPoints;
 
                         {
                             std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                            std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
+                            std::cerr << "storedDecodedPoints.numInput: " << decodedPoints.numInput << std::endl;
                         }
                         
                         if (decodedPoints.numInput == 0) return;
 
-                        // // Temporary storage for transformed data
-                        // OccupancyMapDataFrame occMapFrame;
-                        // ClusterExtractorDataFrame extClsFrame;
-                        // VehiclePoseDataFrame vehPose;
-
-                        // // Parallel transformation into the new structures
-                        // tbb::parallel_invoke(
-                        //     [this, &decodedPoints, &occMapFrame, parallelThreshold]() noexcept {
-                        //         occMapFrame.frameID = decodedPoints.frameID;
-                        //         occMapFrame.timestamp = decodedPoints.t;
-                        //         occMapFrame.vehiclePosition = decodedPoints.NED;
-                        //         occMapFrame.pointcloud.resize(decodedPoints.numInput);
-
-                        //         if (decodedPoints.numInput >= parallelThreshold) {
-                        //             tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
-                        //                 [&occMapFrame, &decodedPoints](const tbb::blocked_range<uint32_t>& range) {
-                        //                     for (uint32_t i = range.begin(); i != range.end(); ++i) {
-                        //                         occMapFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                        //                         occMapFrame.pointcloud[i].Att = decodedPoints.att[i];
-                        //                     }
-                        //                 });
-                        //         } else {
-                        //             for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
-                        //                 occMapFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                        //                 occMapFrame.pointcloud[i].Att = decodedPoints.att[i];
-                        //             }
-                        //         }
-                        //     },
-                        //     [this, &decodedPoints, &extClsFrame, parallelThreshold]() noexcept {
-                        //         extClsFrame.frameID = decodedPoints.frameID;
-                        //         extClsFrame.timestamp = decodedPoints.t;
-                        //         extClsFrame.pointcloud.resize(decodedPoints.numInput);
-
-                        //         if (decodedPoints.numInput >= parallelThreshold) {
-                        //             tbb::parallel_for(tbb::blocked_range<uint32_t>(0, decodedPoints.numInput),
-                        //                 [&extClsFrame, &decodedPoints](const tbb::blocked_range<uint32_t>& range) {
-                        //                     for (uint32_t i = range.begin(); i != range.end(); ++i) {
-                        //                         extClsFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                        //                         extClsFrame.pointcloud[i].Att = decodedPoints.att[i];
-                        //                     }
-                        //                 });
-                        //         } else {
-                        //             for (uint32_t i = 0; i < decodedPoints.numInput; ++i) {
-                        //                 extClsFrame.pointcloud[i].Pt = decodedPoints.pt[i];
-                        //                 extClsFrame.pointcloud[i].Att = decodedPoints.att[i];
-                        //             }
-                        //         }
-                        //     },
-                        //     [this, &decodedPoints, &vehPose]() noexcept {
-                        //         vehPose.frameID = decodedPoints.frameID;
-                        //         vehPose.timestamp = decodedPoints.t;
-                        //         vehPose.NED = decodedPoints.NED;
-                        //         vehPose.RPY = decodedPoints.RPY;
-                        //     }
-                        // );
-
                         // Push to OccupancyMap ring buffer
-                        if (!pointsRingBufferOccMap.push(storedDecodedPoints)) {
-                            std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                        if (!pointsRingBufferOccMap.push(decodedPoints)) {
                             // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
                             //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                             // }
                         }
 
-                        // if (!pointsRingBufferExtCls.push(storedDecodedPoints)) {
-                        //     if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
-                        //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                        //     }
-                        // }
+                        if (!pointsRingBufferExtCls.push(decodedPoints)) {
+                            // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
+                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                            // }
+                        }
 
                         // Push to OccupancyMap ring buffer
-                        if (!ringBufferPose.push(storedDecodedPoints)) {
-                            std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                        if (!ringBufferPose.push(decodedPoints)) {
                             // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
                             //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                             // }
@@ -569,6 +510,7 @@ namespace slam {
                 std::cerr << "[runOccupancyMapPipeline] itemsToProcess: " << itemsToProcess << std::endl;
             }
 
+            CallbackPoints::Points localPointOccMap;
             if (itemsToProcess > 0) {
                 
                 for (size_t i = 0; i < itemsToProcess; ++i) {
@@ -579,6 +521,7 @@ namespace slam {
 
                 processPoints(localPointOccMap);
 
+                OccupancyMapDataFrame occMapFrame;
                 occMapFrame.frameID = localPointOccMap.frameID;
                 occMapFrame.timestamp = localPointOccMap.t;
                 occMapFrame.vehiclePosition = localPointOccMap.NED;
@@ -590,6 +533,8 @@ namespace slam {
                 }
                 
                 occupancyMapInstance->occupancyMap(occMapFrame);
+
+                std::vector<Voxel3D> occMapVoxels;
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
                 
                 {
@@ -651,70 +596,108 @@ namespace slam {
     // Section: runClusterExtractionPipeline
     // -----------------------------------------------------------------------------
 
-    // void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
-    //         setThreadAffinity(allowedCores);
+    void Pipeline::runClusterExtractionPipeline(const std::vector<int>& allowedCores) {                       
+            setThreadAffinity(allowedCores);
 
-    //         constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
+            constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
 
-    //         // Pre-allocate voxel buffer to reduce allocation overhead
-    //         std::vector<Voxel3D> ExtClsVoxels;
+            while (running.load(std::memory_order_acquire)) {
 
-    //         while (running.load(std::memory_order_acquire)) {
-    //             auto cycleStartTime = std::chrono::steady_clock::now();
-    //             ClusterExtractorDataFrame localExtractorDataFrame;
+                auto cycleStartTime = std::chrono::steady_clock::now();
 
-    //             size_t itemsToProcess = pointsRingBufferExtCls.read_available();
-    //             if (itemsToProcess > 0) {
-    //                 for (size_t i = 0; i < itemsToProcess; ++i) {
-    //                     if (pointsRingBufferExtCls.pop(localExtractorDataFrame)) {
-    //                         // Process each frame (assuming this is intended)
-    //                         // If you want to accumulate points, modify this logic
-    //                     }
-    //                 }
-    //                 // Extract clusters from the last popped frame
-    //                 clusterExtractionInstance->extractClusters(localExtractorDataFrame);
-    //                 ExtClsVoxels = clusterExtractionInstance->getOccupiedVoxel();
+                size_t itemsToProcess = pointsRingBufferExtCls.read_available();
 
-    //                 // Push voxels to the ring buffer
-    //                 if (!voxelsRingBufferExtCls.push(std::move(ExtClsVoxels))) {
-    //                     if (!logQueue.push("[ClusterExtractionPipeline] Voxel buffer full; data dropped!\n")) {
-    //                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
-    //                     }
-    //                 }
+                {
+                    std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                    std::cerr << "[runClusterExtractionPipeline] itemsToProcess: " << itemsToProcess << std::endl;
+                }
 
-    //                 // Create and populate report
-    //                 ReportDataFrame reportClusterExtractor;
-    //                 reportClusterExtractor.frameID = localExtractorDataFrame.frameID;
-    //                 reportClusterExtractor.timestamp = localExtractorDataFrame.timestamp;
-    //                 reportClusterExtractor.numpoint = localExtractorDataFrame.pointcloud.size();
-    //                 reportClusterExtractor.occmapsize = ExtClsVoxels.size();
-    //                 reportClusterExtractor.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
-    //                     std::chrono::steady_clock::now() - cycleStartTime).count();
+                CallbackPoints::Points localPointExtCls;
+                if (itemsToProcess > 0) {
+                    for (size_t i = 0; i < itemsToProcess; ++i) {
+                        if (pointsRingBufferExtCls.pop(localPointExtCls)) {
+                            // Process each frame (assuming this is intended)
+                            // If you want to accumulate points, modify this logic
+                        }
+                    }
 
-    //                 // Push report to the queue
-    //                 if (!reportExtractClusterQueue.push(reportClusterExtractor)) {
-    //                     if (!logQueue.push("[ClusterExtractionPipeline] Report queue full; data dropped!\n")) {
-    //                         droppedLogs.fetch_add(1, std::memory_order_relaxed);
-    //                     }
-    //                     droppedExtractClusterReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
-    //                 }
-    //             }
+                    processPoints(localPointExtCls);
 
-    //             auto cycleEndTime = std::chrono::steady_clock::now();
-    //             auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
+                    ClusterExtractorDataFrame extClsFrame;
+                    extClsFrame.frameID = localPointExtCls.frameID;
+                    extClsFrame.timestamp = localPointExtCls.t;
+                    extClsFrame.pointcloud.resize(localPointExtCls.numInput);
 
-    //             if (elapsedTime < targetCycleDuration) {
-    //                 std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
-    //             } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
-    //                 std::ostringstream oss;
-    //                 oss << "Warning: [ClusterExtractionPipeline] Processing exceeded target by " 
-    //                     << (elapsedTime - targetCycleDuration).count() << " ms\n";
-    //                 if (!logQueue.push(oss.str())) {
-    //                     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-    //                 }
-    //             }
-    //         }
-    //     }
+                    for (uint32_t i = 0; i < localPointExtCls.numInput; ++i) {
+                        extClsFrame.pointcloud[i].Pt = localPointExtCls.pt[i];
+                        extClsFrame.pointcloud[i].Att = localPointExtCls.att[i];
+                    }
+
+                    // Extract clusters from the last popped frame
+                    clusterExtractionInstance->extractClusters(extClsFrame);
+
+                    std::vector<Voxel3D> extClsVoxelsPersistent;
+                    std::vector<Voxel3D> extClsVoxelsNonPersistent;
+                    tbb::parallel_invoke(
+                        [&]() { extClsVoxelsPersistent = clusterExtractionInstance->getOccupiedVoxel(true); },
+                        [&]() { extClsVoxelsNonPersistent = clusterExtractionInstance->getOccupiedVoxel(false); }
+                    );
+                    
+                    // Push voxels to the ring buffer
+                    if (!voxelsRingBufferExtClsPersistent.push(std::move(extClsVoxelsPersistent))) {
+                        // if (!logQueue.push("[ClusterExtractionPipeline] Voxel buffer full; data dropped!\n")) {
+                        //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        // }
+                    }
+
+                    if (!voxelsRingBufferExtClsNonPersistent.push(std::move(extClsVoxelsNonPersistent))) {
+                        // if (!logQueue.push("[ClusterExtractionPipeline] Voxel buffer full; data dropped!\n")) {
+                        //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        // }
+                    }
+
+                    // // Create and populate report
+                    // ReportDataFrame reportClusterExtractor;
+                    // reportClusterExtractor.frameID = localExtractorDataFrame.frameID;
+                    // reportClusterExtractor.timestamp = localExtractorDataFrame.timestamp;
+                    // reportClusterExtractor.numpoint = localExtractorDataFrame.pointcloud.size();
+                    // reportClusterExtractor.occmapsize = ExtClsVoxels.size();
+                    // reportClusterExtractor.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
+                    //     std::chrono::steady_clock::now() - cycleStartTime).count();
+
+                    // // Push report to the queue
+                    // if (!reportExtractClusterQueue.push(reportClusterExtractor)) {
+                    //     if (!logQueue.push("[ClusterExtractionPipeline] Report queue full; data dropped!\n")) {
+                    //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    //     }
+                    //     droppedExtractClusterReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
+                    // }
+                }
+
+                auto cycleEndTime = std::chrono::steady_clock::now();
+                auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
+
+                if (elapsedTime < targetCycleDuration) {
+                    std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
+                    std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                    std::cout << "[ClusterExtractionPipeline] Processing Time: " 
+                            << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
+                } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
+                    {
+                        std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                        std::cout << "Warning: [ClusterExtractionPipeline] Processing took longer than 100 ms. Time: " 
+                        << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
+                        << " ms. Skipping sleep.\n";
+                    }
+                    // std::ostringstream oss;
+                    // oss << "Warning: [ClusterExtractionPipeline] Processing exceeded target by " 
+                    //     << (elapsedTime - targetCycleDuration).count() << " ms\n";
+                    // if (!logQueue.push(oss.str())) {
+                    //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    // }
+                }
+            }
+        }
 
         // -----------------------------------------------------------------------------
         // Section: runVizualizationPipeline
@@ -739,22 +722,22 @@ namespace slam {
                         open3d::geometry::Voxel(Eigen::Vector3i(0, 0, 0), Eigen::Vector3d(1, 0, 0)) // Red voxel at origin
                     );
                 }
-                // if (!voxel_grid_extCls_ptr) {
-                //     voxel_grid_extCls_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
-                //     voxel_grid_extCls_ptr->origin_ = mapConfig_.mapOrigin;
-                //     voxel_grid_extCls_ptr->voxel_size_ = mapConfig_.resolution;
-                //     voxel_grid_extCls_ptr->voxels_.emplace(
-                //         Eigen::Vector3i(1, 1, 1), 
-                //         open3d::geometry::Voxel(Eigen::Vector3i(1, 1, 1), Eigen::Vector3d(0, 1, 0)) // Green voxel offset
-                //     );
-                // }
+                if (!voxel_grid_extCls_ptr) {
+                    voxel_grid_extCls_ptr = std::make_shared<open3d::geometry::VoxelGrid>();
+                    voxel_grid_extCls_ptr->origin_ = mapConfig_.mapOrigin;
+                    voxel_grid_extCls_ptr->voxel_size_ = mapConfig_.resolution;
+                    voxel_grid_extCls_ptr->voxels_.emplace(
+                        Eigen::Vector3i(1, 1, 1), 
+                        open3d::geometry::Voxel(Eigen::Vector3i(1, 1, 1), Eigen::Vector3d(0, 1, 0)) // Green voxel offset
+                    );
+                }
                 if (!vehicle_mesh_ptr) {
                     vehicle_mesh_ptr = createVehicleMesh({0, 0, 0}, {0, 0, 0}); // Default vehicle at origin
                 }
 
                 // Add initial geometries
                 vis.AddGeometry(voxel_grid_occMap_ptr);
-                // vis.AddGeometry(voxel_grid_extCls_ptr);
+                vis.AddGeometry(voxel_grid_extCls_ptr);
                 vis.AddGeometry(vehicle_mesh_ptr);
 
                 // Add coordinate frame for reference
@@ -766,7 +749,7 @@ namespace slam {
                 view.SetLookat({0.0, 0.0, 0.0}); // Center on origin
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(10.0); // Wide zoom
+                view.SetZoom(15.0); // Wide zoom
 
                 // Register animation callback
                 vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
@@ -832,15 +815,47 @@ namespace slam {
 
             // Process Occupancy Map Voxels
             size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
+            size_t itemsToProcessVoxelExtClsPersistent = voxelsRingBufferExtClsPersistent.read_available();
             {
                 std::lock_guard<std::mutex> consoleLock(consoleMutex);  
                 std::cerr << "[updateVisualization] itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << std::endl;
+                std::cerr << "[updateVisualization] itemsToProcessVoxelExtClsPersistent: " << itemsToProcessVoxelExtClsPersistent << std::endl;
             }
+
+            std::vector<Voxel3D> localVoxelProcessOccMap;
+            std::vector<Voxel3D> localVoxelProcessExtClsPersistent;
             if (itemsToProcessVoxelOccMap > 0) {
                 
                 while (voxelsRingBufferOccMap.pop(localVoxelProcessOccMap)) {
                     // Keep latest data
                 }
+
+                // Process persistent voxels and filter using CellKey
+                if (itemsToProcessVoxelExtClsPersistent > 0) {
+                    while (voxelsRingBufferExtClsPersistent.pop(localVoxelProcessExtClsPersistent)) {
+                        // Keep latest data
+                    }
+
+                    if (!localVoxelProcessExtClsPersistent.empty()) {
+                        // Create set of CellKeys for O(1) lookup
+                        std::unordered_set<slam::CellKey, slam::CellKeyHash> persistentKeys;
+                        persistentKeys.reserve(localVoxelProcessExtClsPersistent.size());
+                        
+                        for (const auto& voxel : localVoxelProcessExtClsPersistent) {
+                            persistentKeys.insert(voxel.key);  // Assuming cellkey is the member name
+                        }
+
+                        // Filter OccMap based on CellKey
+                        localVoxelProcessOccMap.erase(
+                            std::remove_if(localVoxelProcessOccMap.begin(), localVoxelProcessOccMap.end(),
+                                [&persistentKeys](const Voxel3D& voxel) {
+                                    return persistentKeys.contains(voxel.key);
+                                }),
+                            localVoxelProcessOccMap.end()
+                        );
+                    }
+                }
+
                 if (!localVoxelProcessOccMap.empty()) {
                     updateVoxelGrid(voxel_grid_occMap_ptr, localVoxelProcessOccMap, mapConfig_.mapOrigin, mapConfig_.resolution);
                     if (vis->UpdateGeometry(voxel_grid_occMap_ptr)) {
@@ -849,20 +864,26 @@ namespace slam {
                 }
             }
 
-            // // Process Cluster Extraction Voxels
-            // size_t itemsToProcessVoxelExtCls = voxelsRingBufferExtCls.read_available();
-            // if (itemsToProcessVoxelExtCls > 0) {
-            //     std::vector<Voxel3D> localVoxelProcessExtCls;
-            //     while (voxelsRingBufferExtCls.pop(localVoxelProcessExtCls)) {
-            //         // Keep latest data
-            //     }
-            //     if (!localVoxelProcessExtCls.empty()) {
-            //         updateVoxelGrid(voxel_grid_extCls_ptr, localVoxelProcessExtCls, mapConfig_.mapOrigin, mapConfig_.resolution);
-            //         if (vis->UpdateGeometry(voxel_grid_extCls_ptr)) {
-            //             updated = true;
-            //         }
-            //     }
-            // }
+            // Process Cluster Extraction Voxels
+            
+            size_t itemsToProcessVoxelExtClsNonPersistent = voxelsRingBufferExtClsNonPersistent.read_available();
+            {
+                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                std::cerr << "[updateVisualization] itemsToProcessVoxelExtClsNonPersistent: " << itemsToProcessVoxelExtClsNonPersistent << std::endl;
+            }
+            std::vector<Voxel3D> localVoxelProcessExtClsNonPersistent;
+            if (itemsToProcessVoxelExtClsNonPersistent > 0) {
+
+                while (voxelsRingBufferExtClsNonPersistent.pop(localVoxelProcessExtClsNonPersistent)) {
+                    // Keep latest data
+                }
+                if (!localVoxelProcessExtClsNonPersistent.empty()) {
+                    updateVoxelGrid(voxel_grid_extCls_ptr, localVoxelProcessExtClsNonPersistent, mapConfig_.mapOrigin, mapConfig_.resolution);
+                    if (vis->UpdateGeometry(voxel_grid_extCls_ptr)) {
+                        updated = true;
+                    }
+                }
+            }
 
             // Process Vehicle Pose
             size_t itemsToProcessVehPose = ringBufferPose.read_available();

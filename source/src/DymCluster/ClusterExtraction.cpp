@@ -173,7 +173,7 @@ namespace slam {
             if (prevClusters_.empty() && frame.frameID == 0) {
                 extractBaseClusters(points, frame.frameID, frame.timestamp);
                 if (!clusters_.empty()) {
-                    prevClusters_.push_back(clusters_);
+                    prevClusters_.push_back(std::vector<slam::Cluster3D>(clusters_.begin(), clusters_.end()));  // Convert to std::vector
                     if (prevClusters_.size() > max_frames_) prevClusters_.pop_front();
                 }
                 return;
@@ -193,7 +193,7 @@ namespace slam {
                 for (auto& cluster : clusters_) {
                     cluster.clusterID = NewStateID();
                 }
-                prevClusters_.push_back(clusters_);
+                prevClusters_.push_back(std::vector<slam::Cluster3D>(clusters_.begin(), clusters_.end()));  // Convert to std::vector
                 if (prevClusters_.size() > max_frames_) prevClusters_.pop_front();
                 return;
             }
@@ -321,14 +321,14 @@ namespace slam {
             // Extract dynamic points with pre-check
             dynamic_points_.clear();
             tbb::concurrent_vector<slam::Point3D> concurrent_dynamic_points;
-            bool has_dynamic = false;
+            std::atomic<bool> has_dynamic{false};  // Use atomic for thread safety
 
             tbb::parallel_for(tbb::blocked_range<size_t>(0, curr_size),
                 [&](const tbb::blocked_range<size_t>& range) {
                     for (size_t i = range.begin(); i != range.end(); ++i) {
                         const auto& cluster = clusters_[i];
                         if (cluster.isDynamic) {
-                            has_dynamic = true;
+                            has_dynamic.store(true, std::memory_order_relaxed);  // Thread-safe update
                             for (size_t idx : cluster.idx) {
                                 concurrent_dynamic_points.push_back(points[idx]);
                             }
@@ -337,14 +337,19 @@ namespace slam {
                 });
 
             // Only proceed with assignment and occupancy map if we have dynamic points
-            if (has_dynamic) {
+            if (has_dynamic.load(std::memory_order_relaxed)) {  // Thread-safe read
                 dynamic_points_.assign(concurrent_dynamic_points.begin(), concurrent_dynamic_points.end());
-                clusterOccupancyMapBase(dynamic_points_, frame.frameID, frame.timestamp);
+                
+                // Parallel invocation to update both persistent and non-persistent maps concurrently
+                tbb::parallel_invoke(
+                    [&]() { clusterOccupancyMapBase(dynamic_points_, frame.frameID, frame.timestamp, true); },  // Persistent map (history)
+                    [&]() { clusterOccupancyMapBase(dynamic_points_, frame.frameID, frame.timestamp, false); }  // Non-persistent map (latest)
+                );
             }
 
             // Update sliding window
             if (!clusters_.empty()) {
-                prevClusters_.push_back(clusters_);
+                prevClusters_.push_back(std::vector<slam::Cluster3D>(clusters_.begin(), clusters_.end()));  // Convert to std::vector
                 if (prevClusters_.size() > max_frames_) prevClusters_.pop_front();
             }
         }
@@ -407,53 +412,52 @@ namespace slam {
                 });
 
             clusters_.clear();
-            clusters_.reserve(cluster_map.size());
-            for (const auto& [root, indices] : cluster_map) {
-                if (indices.size() >= min_cluster_size_ && indices.size() <= max_cluster_size_) {
-                    // Skip if indices are empty (shouldn’t happen but safe check)
-                    if (indices.empty()) continue;
+            clusters_.reserve(cluster_map.size());  // Optional pre-allocation
 
-                    slam::Cluster3D cluster;
-                    cluster.idx = std::vector<size_t>(indices.begin(), indices.end());
-                    cluster.clusterID = std::numeric_limits<unsigned int>::max();
-                    cluster.frameID = frame_id;
-                    cluster.timestamp = timestamp;
+            tbb::parallel_for_each(cluster_map.begin(), cluster_map.end(),
+                [&](const auto& pair) {
+                    const auto& [root, indices] = pair;
+                    if (indices.size() >= min_cluster_size_ && indices.size() <= max_cluster_size_ && !indices.empty()) {
+                        slam::Cluster3D cluster;
+                        cluster.idx = std::vector<size_t>(indices.begin(), indices.end());
+                        cluster.clusterID = std::numeric_limits<unsigned int>::max();
+                        cluster.frameID = frame_id;
+                        cluster.timestamp = timestamp;
 
-                    cluster.centroid.setZero();
-                    cluster.averageAtt.setZero();
-                    bool valid = true;
-                    for (size_t idx : cluster.idx) {
-                        if (idx >= points.size()) {
-                            valid = false;
-                            break;
+                        cluster.centroid.setZero();
+                        cluster.averageAtt.setZero();
+                        bool valid = true;
+                        for (size_t idx : cluster.idx) {
+                            if (idx >= points.size()) {
+                                valid = false;
+                                break;
+                            }
+                            cluster.centroid += points[idx].Pt;
+                            cluster.averageAtt += points[idx].Att;
                         }
-                        cluster.centroid += points[idx].Pt;
-                        cluster.averageAtt += points[idx].Att;
-                    }
-                    if (!valid) continue; // Skip invalid cluster
+                        if (!valid) return;
 
-                    double cluster_size = static_cast<double>(cluster.idx.size());
-                    cluster.centroid /= cluster_size;
-                    cluster.averageAtt /= cluster_size;
+                        double cluster_size = static_cast<double>(cluster.idx.size());
+                        cluster.centroid /= cluster_size;
+                        cluster.averageAtt /= cluster_size;
 
-                    // Check first index for bounds initialization
-                    if (cluster.idx[0] >= points.size()) continue;
-                    cluster.minBound = points[cluster.idx[0]].Pt;
-                    cluster.maxBound = points[cluster.idx[0]].Pt;
+                        if (cluster.idx[0] >= points.size()) return;
+                        cluster.minBound = points[cluster.idx[0]].Pt;
+                        cluster.maxBound = points[cluster.idx[0]].Pt;
 
-                    for (size_t idx : cluster.idx) {
-                        if (idx >= points.size()) {
-                            valid = false;
-                            break;
+                        for (size_t idx : cluster.idx) {
+                            if (idx >= points.size()) {
+                                valid = false;
+                                break;
+                            }
+                            cluster.minBound = cluster.minBound.cwiseMin(points[idx].Pt);
+                            cluster.maxBound = cluster.maxBound.cwiseMax(points[idx].Pt);
                         }
-                        cluster.minBound = cluster.minBound.cwiseMin(points[idx].Pt);
-                        cluster.maxBound = cluster.maxBound.cwiseMax(points[idx].Pt);
-                    }
-                    if (!valid) continue; // Skip invalid cluster
+                        if (!valid) return;
 
-                    clusters_.push_back(std::move(cluster));
-                }
-            }
+                        clusters_.push_back(std::move(cluster));  // Thread-safe push_back
+                    }
+                });
         }
 
         // -----------------------------------------------------------------------------
@@ -491,22 +495,23 @@ namespace slam {
         // Section: assignVoxelColorsRed
         // -----------------------------------------------------------------------------
 
-        void ClusterExtraction::clusterOccupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp) {
-            
+        void ClusterExtraction::clusterOccupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp, bool tracked) {
             if (points.empty()) return;
 
             occupancyMap_.clear();
+
+            // Choose the working map: persistentMap_ for tracked (history), tempMap for non-tracked (one-time)
+            GridType& workingMap = tracked ? persistentMap_ : occupancyMap_;
 
             std::vector<CellKey> point_to_cell(points.size());
 
             tbb::parallel_for(tbb::blocked_range<size_t>(0, points.size()),
                 [&](const tbb::blocked_range<size_t>& range) {
-
                     for (size_t i = range.begin(); i != range.end(); ++i) {
                         CellKey key = CellKey::fromPoint(points[i].Pt, mapOrigin_, resolution_);
                         point_to_cell[i] = key;
 
-                        auto result = occupancyMap_.insert({key, Voxel3D{}});
+                        auto result = workingMap.insert({key, Voxel3D{}});
                         Voxel3D& voxel = result.first->second;
 
                         if (voxel.counter < maxPointsPerVoxel_) {
@@ -536,15 +541,18 @@ namespace slam {
                                     voxel.color = computeOccupancyColor(newCount);
                                     break;
                             }
-
-                            
                         } else {
                             voxel.frameID = frame_id;
                             voxel.timestamp = timestamp;
                         }
                     }
-                    
                 });
+
+            // Note: tempMap is discarded when tracked is false; persistentMap_ accumulates history when tracked is true
+            // Optionally update occupancyMap_ with tempMap results for non-tracked case if desired
+            // if (!tracked) {
+            //     occupancyMap_ = std::move(tempMap);  // Uncomment if you want non-tracked results in occupancyMap_
+            // }
         }
 
         // -----------------------------------------------------------------------------
@@ -601,13 +609,18 @@ namespace slam {
         // Section: calculateNIRColor
         // -----------------------------------------------------------------------------
 
-        std::vector<Voxel3D> ClusterExtraction::getOccupiedVoxel() const {
+        std::vector<Voxel3D> ClusterExtraction::getOccupiedVoxel(bool tracked) const {
             // Use a tbb::concurrent_vector for thread-safe parallel collection
             tbb::concurrent_vector<Voxel3D> occupiedVoxels;
-            occupiedVoxels.reserve(occupancyMap_.size()); // Reserve space to reduce reallocations
+            
+            // Choose the working map based on tracked parameter
+            const GridType& workingMap = tracked ? persistentMap_ : occupancyMap_;
+            
+            // Reserve space to reduce reallocations
+            occupiedVoxels.reserve(workingMap.size());
 
             // Parallel iteration over the concurrent map
-            tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
+            tbb::parallel_for_each(workingMap.begin(), workingMap.end(),
                 [&](const auto& mapEntry) {
                     const Voxel3D& voxel = mapEntry.second;
                     if (voxel.counter > 0) {

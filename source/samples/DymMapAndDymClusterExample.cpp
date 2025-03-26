@@ -46,17 +46,17 @@ int main() {
             }
         );
 
-        // // Start Cluster Extraction Pipeline
-        // threads.emplace_back(
-        //     [&]() {
-        //         pipeline.runClusterExtractionPipeline(std::vector<int>{4, 5, 6, 7});
-        //     }
-        // );
+        // Start Cluster Extraction Pipeline
+        threads.emplace_back(
+            [&]() {
+                pipeline.runClusterExtractionPipeline(std::vector<int>{8, 9, 10, 11});
+            }
+        );
 
         // Start Visualization Pipeline
         threads.emplace_back(
             [&]() {
-                pipeline.runVizualizationPipeline(std::vector<int>{8, 9, 10, 11});
+                pipeline.runVizualizationPipeline(std::vector<int>{12, 13, 14, 15});
             }
         );
 
