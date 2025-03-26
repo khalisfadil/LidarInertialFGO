@@ -84,7 +84,7 @@ namespace slam {
             raycastCache.reserve(tracked_cell.size());
 
             tbb::concurrent_unordered_set<CellKey, CellKeyHash> cellsToRemove;
-            // cellsToRemove.reserve(occupancyMap_.size() / 2);
+            cellsToRemove.reserve(occupancyMap_.size() / 2);
 
             // auto distanceCheck = [&]() {
             //     tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(), 
