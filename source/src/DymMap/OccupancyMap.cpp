@@ -2,26 +2,37 @@
 
 namespace slam {
     namespace occmap {
+        
+        // -----------------------------------------------------------------------------
+        // Section: OccupancyMap
+        // -----------------------------------------------------------------------------
 
         OccupancyMap::OccupancyMap(double resolution, 
-                                   double mapMaxDistance,
-                                   Eigen::Vector3d mapOrigin, 
-                                   unsigned int maxPointsPerVoxel, 
-                                   ColorMode colorMode)
+                                    double mapMaxDistance,
+                                    Eigen::Vector3d mapOrigin, 
+                                    unsigned int maxPointsPerVoxel, 
+                                    ColorMode colorMode)
             : resolution_(resolution), 
-              mapMaxDistance_(mapMaxDistance), 
-              mapOrigin_(mapOrigin), 
-              maxPointsPerVoxel_(maxPointsPerVoxel), 
-              colorMode_(colorMode) {
+            mapMaxDistance_(mapMaxDistance), 
+            mapOrigin_(mapOrigin), 
+            maxPointsPerVoxel_(maxPointsPerVoxel), 
+            colorMode_(colorMode) {
         }
 
+        // -----------------------------------------------------------------------------
+        // Section: occupancyMap
+        // -----------------------------------------------------------------------------
+
         void OccupancyMap::occupancyMap(const OccupancyMapDataFrame& frame) {
-            std::lock_guard<std::mutex> lock(mapMutex_);
             if (frame.pointcloud.empty()) return;
             const auto& points = frame.pointcloud;
             occupancyMapBase(points, frame.frameID, frame.timestamp);
             clearUnwantedVoxel(frame.vehiclePosition);
         }
+
+        // -----------------------------------------------------------------------------
+        // Section: occupancyMapBase
+        // -----------------------------------------------------------------------------
 
         void OccupancyMap::occupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp) {
             tracked_cell.clear();
@@ -50,6 +61,7 @@ namespace slam {
                             voxel.timestamp = timestamp;
                             voxel.key = key;
 
+                            // Switch based on color mode
                             switch (colorMode_) {
                                 case ColorMode::Occupancy:
                                     voxel.color = computeOccupancyColor(newCount);
@@ -63,10 +75,12 @@ namespace slam {
                                 case ColorMode::NIR:
                                     voxel.color = computeNIRColor(voxel.averagePointAtt.z());
                                     break;
-                                default:
+                                default:  // Shouldn’t happen, but default to Occupancy
                                     voxel.color = computeOccupancyColor(newCount);
                                     break;
                             }
+
+                            
                         } else {
                             voxel.frameID = frame_id;
                             voxel.timestamp = timestamp;
@@ -77,71 +91,85 @@ namespace slam {
                 });
         }
 
+        // -----------------------------------------------------------------------------
+        // Section: clearUnwantedVoxel
+        // -----------------------------------------------------------------------------
+
         void OccupancyMap::clearUnwantedVoxel(const Eigen::Vector3d& vehiclePosition) {
-            // Define a thread-safe cache for raycasting results
-            using RaycastCache = tbb::concurrent_unordered_map<
-                std::pair<slam::CellKey, slam::CellKey>,
-                std::vector<slam::CellKey>,
-                slam::PairHash,
-                slam::PairEqual
-            >;
+            using RaycastCache = tbb::concurrent_unordered_map<std::pair<CellKey, CellKey>, 
+                                                            std::vector<CellKey>, PairHash, PairEqual>;
             RaycastCache raycastCache;
-            raycastCache.rehash(tracked_cell.size()); // Pre-allocate for efficiency
+            raycastCache.reserve(tracked_cell.size());
 
-            // Thread-safe set for cells to remove
-            tbb::concurrent_unordered_set<slam::CellKey, slam::CellKeyHash> cellsToRemove;
-            cellsToRemove.rehash(occupancyMap_.size() / 2);
+            tbb::concurrent_unordered_set<CellKey, CellKeyHash> cellsToRemove;
+            cellsToRemove.reserve(occupancyMap_.size() / 10);
 
-            // Convert vehicle position to grid coordinates (source of rays)
-            slam::CellKey sourceCell = slam::CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
-
-            // Task 1: Raycasting to clear voxels between vehicle and tracked cells
-            auto raycastingTask = [&]() {
-                tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
-                    [&](const slam::CellKey& targetCell) {
-                        if (targetCell == sourceCell) {
-                            return; // Skip self-raycasting
-                        }
-
-                        // Create the ray key
-                        std::pair<slam::CellKey, slam::CellKey> rayKey = {sourceCell, targetCell};
-
-                        // Try to insert into cache; check if it was already present
-                        auto insertResult = raycastCache.insert({rayKey, std::vector<slam::CellKey>{}});
-                        if (insertResult.second) {
-                            // If inserted (i.e., not already present), compute raycast
-                            insertResult.first->second = performRaycast(sourceCell, targetCell);
-                        }
-
-                        // Add intersected voxels to removal set
-                        cellsToRemove.insert(insertResult.first->second.begin(), insertResult.first->second.end());
-                    });
-            };
-
-            // Task 2: Distance-based filtering (optional)
-            auto distanceCheckTask = [&]() {
-                tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
+            // Lambda for distance check task
+            auto distanceCheck = [&]() {
+                tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(), 
                     [&](const auto& mapEntry) {
                         const Eigen::Vector3d voxelPos = mapEntry.second.computeGridToWorld(mapOrigin_, resolution_);
-                        double squaredDistance = (voxelPos - vehiclePosition).squaredNorm();
-                        if (squaredDistance > mapMaxDistance_ * mapMaxDistance_) {
+                        if ((voxelPos - vehiclePosition).squaredNorm() > mapMaxDistance_ * mapMaxDistance_) {
                             cellsToRemove.insert(mapEntry.first);
                         }
                     });
             };
 
-            // Execute tasks
+            // Lambda for raycasting task
+            CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
+            auto raycasting = [&]() {
+                tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
+                    [&](const CellKey& targetCell) {
+                        auto result = raycastCache.insert(
+                            {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
+                            performRaycast(sourceCell, targetCell)}
+                        );
+                        cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
+                    });
+            };
+
+            auto neighborCheck = [&]() {
+                
+                tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
+                    [&](const auto& mapEntry) {
+                        const CellKey& key = mapEntry.first;
+                        int neighborCount = 0;
+
+                        // Check all 26 neighboring positions
+                        for (int dx = -1; dx <= 1; ++dx) {
+                            for (int dy = -1; dy <= 1; ++dy) {
+                                for (int dz = -1; dz <= 1; ++dz) {
+                                    if (dx == 0 && dy == 0 && dz == 0) continue; // Skip the cell itself
+                                    CellKey neighborKey(key.x + dx, key.y + dy, key.z + dz);
+                                    if (occupancyMap_.find(neighborKey) != occupancyMap_.end()) {
+                                        ++neighborCount;
+                                        // Optional: Early exit if threshold is met
+                                        if (neighborCount >= MIN_NEIGHBORS_THRESHOLD) {
+                                            return; // Exit lambda early if enough neighbors are found
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                        // If fewer neighbors than threshold, mark for removal
+                        if (neighborCount < MIN_NEIGHBORS_THRESHOLD) {
+                            cellsToRemove.insert(key);
+                        }
+                    });
+            };
+
+            // Decide execution model based on occupancyMap_ size
             if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
-                tbb::parallel_invoke(raycastingTask, distanceCheckTask);
+                // Parallel execution for large maps
+                tbb::parallel_invoke(distanceCheck, raycasting, neighborCheck);
             } else {
-                raycastingTask();
-                distanceCheckTask();
+                // Sequential execution for smaller maps
+                distanceCheck();
+                raycasting();
+                neighborCheck();
             }
 
-            // raycastingTask();
-            // distanceCheckTask();
-
-            // Create a new occupancy map excluding cells marked for removal
             tbb::concurrent_unordered_map<slam::CellKey, slam::Voxel3D, slam::CellKeyHash> newOccupancyMap;
             size_t newSize = (occupancyMap_.size() > cellsToRemove.size()) ? (occupancyMap_.size() - cellsToRemove.size()) : 0;
             newOccupancyMap.rehash(newSize);
@@ -155,57 +183,71 @@ namespace slam {
             occupancyMap_.swap(newOccupancyMap);
         }
 
+        // -----------------------------------------------------------------------------
+        // Section: performRaycast
+        // -----------------------------------------------------------------------------
+
         std::vector<CellKey> OccupancyMap::performRaycast(const CellKey& start, const CellKey& end) const {
-            if (start == end) {
-                return {start};
-            }
+            if (start == end) return {};
+            Eigen::Vector3i startVec(start.x, start.y, start.z);
+            Eigen::Vector3i endVec(end.x, end.y, end.z);
+            Eigen::Vector3i diff = endVec - startVec;
+            if (diff.squaredNorm() <= 1) return {};
 
-            Eigen::Vector3i startVoxel(start.x, start.y, start.z);
-            Eigen::Vector3i endVoxel(end.x, end.y, end.z);
+            Eigen::Vector3i current = startVec;
+            Eigen::Vector3i delta = diff.cwiseAbs();
+            Eigen::Vector3i step = diff.cwiseSign();
 
-            tbb::concurrent_vector<CellKey> voxelIndices;
-            Eigen::Vector3i delta = (endVoxel - startVoxel).cwiseAbs();
-            Eigen::Vector3i step = (endVoxel - startVoxel).cwiseSign();
-            Eigen::Vector3i currentVoxel = startVoxel;
+            std::vector<CellKey> voxelIndices;
+            voxelIndices.reserve(delta.maxCoeff());
 
-            voxelIndices.push_back(start);
+            voxelIndices.emplace_back(current.x(), current.y(), current.z());
 
-            int primaryAxis = (delta.x() >= delta.y() && delta.x() >= delta.z()) ? 0 : (delta.y() >= delta.z() ? 1 : 2);
-            int error1 = 2 * delta[(primaryAxis + 1) % 3] - delta[primaryAxis];
-            int error2 = 2 * delta[(primaryAxis + 2) % 3] - delta[primaryAxis];
+            int primaryAxis = (delta.x() >= delta.y() && delta.x() >= delta.z()) ? 0 :
+                             (delta.y() >= delta.z()) ? 1 : 2;
+            int secondaryAxis = (primaryAxis + 1) % 3;
+            int tertiaryAxis = (primaryAxis + 2) % 3;
 
-            for (int i = 0; i < delta[primaryAxis]; ++i) {
-                currentVoxel[primaryAxis] += step[primaryAxis];
+            int error1 = 2 * delta[secondaryAxis] - delta[primaryAxis];
+            int error2 = 2 * delta[tertiaryAxis] - delta[primaryAxis];
 
+            Eigen::Vector3i next = current;
+            while (true) {
+                if (delta[primaryAxis] > 0) next[primaryAxis] = current[primaryAxis] + step[primaryAxis];
                 if (error1 > 0) {
-                    currentVoxel[(primaryAxis + 1) % 3] += step[(primaryAxis + 1) % 3];
+                    next[secondaryAxis] = current[secondaryAxis] + step[secondaryAxis];
                     error1 -= 2 * delta[primaryAxis];
                 }
-
                 if (error2 > 0) {
-                    currentVoxel[(primaryAxis + 2) % 3] += step[(primaryAxis + 2) % 3];
+                    next[tertiaryAxis] = current[tertiaryAxis] + step[tertiaryAxis];
                     error2 -= 2 * delta[primaryAxis];
                 }
+                error1 += 2 * delta[secondaryAxis];
+                error2 += 2 * delta[tertiaryAxis];
 
-                error1 += 2 * delta[(primaryAxis + 1) % 3];
-                error2 += 2 * delta[(primaryAxis + 2) % 3];
+                if (next == endVec) break;
 
-                if (currentVoxel == endVoxel) {
-                    break;
-                }
-
-                voxelIndices.push_back(CellKey(currentVoxel.x(), currentVoxel.y(), currentVoxel.z()));
+                current = next;
+                voxelIndices.emplace_back(current.x(), current.y(), current.z());
             }
 
-            return std::vector<CellKey>(voxelIndices.begin(), voxelIndices.end());
+            return voxelIndices;
         }
+
+        // -----------------------------------------------------------------------------
+        // Section: assignVoxelColorsRed
+        // -----------------------------------------------------------------------------
 
         Eigen::Vector3i OccupancyMap::computeOccupancyColor(unsigned int counter) const {
             int value = (255 * std::min(counter, maxPointsPerVoxel_)) / maxPointsPerVoxel_;
             return Eigen::Vector3i(value, value, value);
         }
 
-        Eigen::Vector3i OccupancyMap::computeReflectivityColor(double avgReflectivity) const {
+        // -----------------------------------------------------------------------------
+        // Section: assignVoxelColorsRed
+        // -----------------------------------------------------------------------------
+
+        Eigen::Vector3i OccupancyMap::computeReflectivityColor(double avgReflectivity) const{
             int reflectivityColorValue;
             if (avgReflectivity <= 100.0) {
                 reflectivityColorValue = static_cast<int>(avgReflectivity * 2.55);
@@ -221,31 +263,47 @@ namespace slam {
                 }
             }
             return Eigen::Vector3i(std::clamp(reflectivityColorValue, 0, 255), 
-                                   std::clamp(reflectivityColorValue, 0, 255), 
-                                   std::clamp(reflectivityColorValue, 0, 255));
+                                std::clamp(reflectivityColorValue, 0, 255), 
+                                std::clamp(reflectivityColorValue, 0, 255));
         }
 
-        Eigen::Vector3i OccupancyMap::computeIntensityColor(double avgIntensity) const {
+        // -----------------------------------------------------------------------------
+        // Section: calculateIntensityColor
+        // -----------------------------------------------------------------------------
+
+        Eigen::Vector3i OccupancyMap::computeIntensityColor(double avgIntensity) const{
             int intensityColorValue = static_cast<int>(std::clamp(avgIntensity, 0.0, 255.0));
             return Eigen::Vector3i(intensityColorValue, intensityColorValue, intensityColorValue);
         }
 
-        Eigen::Vector3i OccupancyMap::computeNIRColor(double avgNIR) const {
+        // -----------------------------------------------------------------------------
+        // Section: calculateNIRColor
+        // -----------------------------------------------------------------------------
+
+        Eigen::Vector3i OccupancyMap::computeNIRColor(double avgNIR) const{
             int NIRColorValue = static_cast<int>(std::clamp(avgNIR, 0.0, 255.0));
             return Eigen::Vector3i(NIRColorValue, NIRColorValue, NIRColorValue);
         }
 
-        std::vector<Voxel3D> OccupancyMap::getOccupiedVoxel() {  // Removed const
-            std::lock_guard<std::mutex> lock(mapMutex_);
+        // -----------------------------------------------------------------------------
+        // Section: calculateNIRColor
+        // -----------------------------------------------------------------------------
+
+        std::vector<Voxel3D> OccupancyMap::getOccupiedVoxel() const {
+            // Use a tbb::concurrent_vector for thread-safe parallel collection
             tbb::concurrent_vector<Voxel3D> occupiedVoxels;
-            occupiedVoxels.reserve(occupancyMap_.size());
+            occupiedVoxels.reserve(occupancyMap_.size()); // Reserve space to reduce reallocations
+
+            // Parallel iteration over the concurrent map
             tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
                 [&](const auto& mapEntry) {
                     const Voxel3D& voxel = mapEntry.second;
                     if (voxel.counter > 0) {
-                        occupiedVoxels.push_back(voxel);
+                        occupiedVoxels.push_back(voxel); // Thread-safe push_back
                     }
                 });
+
+            // Convert to std::vector and return
             return std::vector<Voxel3D>(occupiedVoxels.begin(), occupiedVoxels.end());
         }
     }  // namespace occmap

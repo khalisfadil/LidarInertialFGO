@@ -34,7 +34,7 @@ namespace slam {
                          ColorMode colorMode = ColorMode::Occupancy);
 
             void occupancyMap(const OccupancyMapDataFrame& frame);
-            std::vector<Voxel3D> getOccupiedVoxel();  // Removed const
+            std::vector<Voxel3D> getOccupiedVoxel() const;  
 
         private:
             std::mutex mapMutex_;  // No need for mutable

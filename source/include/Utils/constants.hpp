@@ -6,4 +6,6 @@ namespace slam {
 
     constexpr size_t PARALLEL_THRESHOLD = 100000;
 
+    constexpr int MIN_NEIGHBORS_THRESHOLD = 3;
+
 } // namespace slam
