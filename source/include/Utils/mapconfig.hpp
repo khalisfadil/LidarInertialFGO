@@ -11,11 +11,11 @@ namespace slam {
         double mapMaxDistance = 300.0;   ///< The maximum distance that can be reached in the map.
         Eigen::Vector3d mapOrigin = Eigen::Vector3d::Zero();
         unsigned int maxPointsPerVoxel = 20;
-        ColorMode colorMode = ColorMode::Intensity;
+        ColorMode colorMode = ColorMode::Occupancy;
 
         double tolerance = 0.1;
         size_t min_size = 3;
-        size_t max_size = 25;
+        size_t max_size = 30;
         size_t max_frames = 5;
 
     };
