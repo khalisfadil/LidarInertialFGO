@@ -94,6 +94,8 @@ private:
                                 double resolution);
 
     void processPoints(CallbackPoints::Points& decodedPoints);
+
+    std::mutex consoleMutex;
 };
 
 } // namespace slam

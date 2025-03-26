@@ -366,7 +366,12 @@ namespace slam {
                     if (decodedPoints.frameID != 0) {
                         
                         storedDecodedPoints = decodedPoints;
-                        std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
+                        
+                        {
+                            std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                            std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
+                        }
+                        
                         if (decodedPoints.numInput == 0) return;
 
                         // // Temporary storage for transformed data
@@ -554,7 +559,12 @@ namespace slam {
             auto cycleStartTime = std::chrono::steady_clock::now();
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
-            std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
+
+            {
+                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
+            }
+
             if (itemsToProcess > 0) {
                 
                 for (size_t i = 0; i < itemsToProcess; ++i) {
