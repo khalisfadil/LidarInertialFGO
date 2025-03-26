@@ -366,11 +366,11 @@ namespace slam {
                     if (decodedPoints.frameID != 0) {
                         
                         storedDecodedPoints = decodedPoints;
-                        
-                        {
-                            std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                            std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
-                        }
+
+                        // {
+                        //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                        //     std::cerr << "storedDecodedPoints.numInput: " << storedDecodedPoints.numInput << std::endl;
+                        // }
                         
                         if (decodedPoints.numInput == 0) return;
 
@@ -560,10 +560,10 @@ namespace slam {
 
             size_t itemsToProcess = pointsRingBufferOccMap.read_available();
 
-            {
-                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
-            }
+            // {
+            //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+            //     std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
+            // }
 
             if (itemsToProcess > 0) {
                 

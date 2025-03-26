@@ -172,7 +172,7 @@ namespace slam {
             voxelIndices.push_back(start); // Include the starting voxel as CellKey
 
             // Determine the dominant axis
-            int maxAxis = delta.maxCoeff();
+            // int maxAxis = delta.maxCoeff();
             int primaryAxis = (delta.x() >= delta.y() && delta.x() >= delta.z()) ? 0 : (delta.y() >= delta.z() ? 1 : 2);
 
             // Initialize error terms for Bresenham's algorithm
