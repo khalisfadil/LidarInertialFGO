@@ -757,9 +757,9 @@ namespace slam {
                 // vis.AddGeometry(voxel_grid_extCls_ptr);
                 vis.AddGeometry(vehicle_mesh_ptr);
 
-                // // Add coordinate frame for reference
-                // auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
-                // vis.AddGeometry(coord_frame);
+                // Add coordinate frame for reference
+                auto coord_frame = open3d::geometry::TriangleMesh::CreateCoordinateFrame(10.0);
+                vis.AddGeometry(coord_frame);
 
                 // Set initial camera parameters
                 auto& view = vis.GetViewControl();
@@ -828,7 +828,7 @@ namespace slam {
             static Eigen::Vector3d currentLookat = {0, 0, 0};
             static auto lastUpdateTime = std::chrono::steady_clock::now();
             constexpr double smoothingFactor = 0.1;
-            constexpr std::chrono::milliseconds targetFrameDuration(100); // ~60 FPS
+            constexpr std::chrono::milliseconds targetFrameDuration(32); // ~60 FPS
 
             // Process Occupancy Map Voxels
             size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
@@ -884,6 +884,10 @@ namespace slam {
                     view.SetLookat(currentLookat);
                     view.SetFront({0, 0, -1});
                     view.SetUp({0, 1, 0});
+                    {
+                        std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                        std::cerr << "[updateVehicleMesh] targetLookat: " << targetLookat.transpose() << std::endl;
+                    }
                 }
             }
 
