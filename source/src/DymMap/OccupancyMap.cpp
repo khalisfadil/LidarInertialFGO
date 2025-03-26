@@ -16,7 +16,7 @@ namespace slam {
         }
 
         void OccupancyMap::occupancyMap(const OccupancyMapDataFrame& frame) {
-            // std::lock_guard<std::mutex> lock(mapMutex_);
+            std::lock_guard<std::mutex> lock(mapMutex_);
             if (frame.pointcloud.empty()) return;
             const auto& points = frame.pointcloud;
             occupancyMapBase(points, frame.frameID, frame.timestamp);
@@ -141,19 +141,19 @@ namespace slam {
             raycastingTask();
             distanceCheckTask();
 
-            // // Create a new occupancy map excluding cells marked for removal
-            // tbb::concurrent_unordered_map<slam::CellKey, slam::Voxel3D, slam::CellKeyHash> newOccupancyMap;
-            // newOccupancyMap.rehash(occupancyMap_.size() - cellsToRemove.size());
+            // Create a new occupancy map excluding cells marked for removal
+            tbb::concurrent_unordered_map<slam::CellKey, slam::Voxel3D, slam::CellKeyHash> newOccupancyMap;
+            newOccupancyMap.rehash(occupancyMap_.size() - cellsToRemove.size());
 
-            // tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
-            //     [&](const auto& mapEntry) {
-            //         if (cellsToRemove.find(mapEntry.first) == cellsToRemove.end()) {
-            //             newOccupancyMap.insert(mapEntry);
-            //         }
-            //     });
+            tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
+                [&](const auto& mapEntry) {
+                    if (cellsToRemove.find(mapEntry.first) == cellsToRemove.end()) {
+                        newOccupancyMap.insert(mapEntry);
+                    }
+                });
 
-            // // Swap to update the main occupancy map
-            // occupancyMap_.swap(newOccupancyMap);
+            // Swap to update the main occupancy map
+            occupancyMap_.swap(newOccupancyMap);
         }
 
         std::vector<CellKey> OccupancyMap::performRaycast(const CellKey& start, const CellKey& end) const {
