@@ -189,18 +189,18 @@ namespace slam {
                 std::lock_guard<std::mutex> consoleLock(consoleMutex);  
                 std::cerr << "[extractClusters] curr_size: " << curr_size << std::endl;
             }
-            // const size_t total_prev_size = std::accumulate(prevClusters_.begin(), prevClusters_.end(), size_t{0},
-            //     [](size_t sum, const auto& frame_clusters) { return sum + frame_clusters.size(); });
+            const size_t total_prev_size = std::accumulate(prevClusters_.begin(), prevClusters_.end(), size_t{0},
+                [](size_t sum, const auto& frame_clusters) { return sum + frame_clusters.size(); });
 
-            // // Fast path for no previous clusters
-            // if (total_prev_size == 0) {
-            //     for (auto& cluster : clusters_) {
-            //         cluster.clusterID = NewStateID();
-            //     }
-            //     prevClusters_.push_back(std::vector<slam::Cluster3D>(clusters_.begin(), clusters_.end()));  // Convert to std::vector
-            //     if (prevClusters_.size() > max_frames_) prevClusters_.pop_front();
-            //     return;
-            // }
+            // Fast path for no previous clusters
+            if (total_prev_size == 0) {
+                for (auto& cluster : clusters_) {
+                    cluster.clusterID = NewStateID();
+                }
+                prevClusters_.push_back(std::vector<slam::Cluster3D>(clusters_.begin(), clusters_.end()));  // Convert to std::vector
+                if (prevClusters_.size() > max_frames_) prevClusters_.pop_front();
+                return;
+            }
 
             // // Prepare cost matrix and mapping
             // const size_t max_size = std::max(curr_size, total_prev_size);
