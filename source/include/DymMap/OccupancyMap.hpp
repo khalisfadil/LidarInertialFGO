@@ -42,7 +42,7 @@ namespace slam {
             alignas(64) MapConfig mapConfig_;
 
             void occupancyMapBase(const std::vector<Point3D>& points, unsigned int frame_id, double timestamp);
-            void clearUnwantedVoxel(Eigen::Vector3d vehiclePosition);
+            void clearUnwantedVoxel(const Eigen::Vector3d& vehiclePosition);
             std::vector<CellKey> performRaycast(const CellKey& start, const CellKey& end) const;
             Eigen::Vector3i computeOccupancyColor(unsigned int counter) const;
             Eigen::Vector3i computeReflectivityColor(double avgReflectivity) const;

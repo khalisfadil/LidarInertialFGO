@@ -77,52 +77,71 @@ namespace slam {
                 });
         }
 
-        void OccupancyMap::clearUnwantedVoxel(Eigen::Vector3d vehiclePosition) {
-            using RaycastCache = tbb::concurrent_unordered_map<std::pair<CellKey, CellKey>, 
-                                                              std::vector<CellKey>, PairHash, PairEqual>;
+        void OccupancyMap::clearUnwantedVoxel(const Eigen::Vector3d& vehiclePosition) {
+            // Define a thread-safe cache for raycasting results
+            using RaycastCache = tbb::concurrent_unordered_map<
+                std::pair<slam::CellKey, slam::CellKey>,
+                std::vector<slam::CellKey>,
+                slam::PairHash,
+                slam::PairEqual
+            >;
             RaycastCache raycastCache;
-            raycastCache.reserve(tracked_cell.size());
+            raycastCache.rehash(tracked_cell.size()); // Pre-allocate for efficiency
 
-            tbb::concurrent_unordered_set<CellKey, CellKeyHash> cellsToRemove;
-            cellsToRemove.reserve(occupancyMap_.size() / 2);
+            // Thread-safe set for cells to remove
+            tbb::concurrent_unordered_set<slam::CellKey, slam::CellKeyHash> cellsToRemove;
+            cellsToRemove.rehash(occupancyMap_.size() / 2);
 
-            // auto distanceCheck = [&]() {
-            //     tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(), 
-            //         [&](const auto& mapEntry) {
-            //             const Eigen::Vector3d voxelPos = mapEntry.second.computeGridToWorld(mapOrigin_, resolution_);
-            //             if ((voxelPos - vehiclePosition).squaredNorm() > mapMaxDistance_ * mapMaxDistance_) {
-            //                 cellsToRemove.insert(mapEntry.first);
-            //             }
-            //         });
-            // };
+            // Convert vehicle position to grid coordinates (source of rays)
+            slam::CellKey sourceCell = slam::CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
 
-            CellKey sourceCell = CellKey::fromPoint(vehiclePosition, mapOrigin_, resolution_);
-            auto raycasting = [&]() {
+            // Task 1: Raycasting to clear voxels between vehicle and tracked cells
+            auto raycastingTask = [&]() {
                 tbb::parallel_for_each(tracked_cell.begin(), tracked_cell.end(),
-                    [&](const CellKey& targetCell) {
+                    [&](const slam::CellKey& targetCell) {
                         if (targetCell == sourceCell) {
-                            return; // Skip raycasting to itself
+                            return; // Skip self-raycasting
                         }
-                        auto result = raycastCache.insert(
-                            {std::pair<CellKey, CellKey>{sourceCell, targetCell}, 
-                            performRaycast(sourceCell, targetCell)}
-                        );
-                        cellsToRemove.insert(result.first->second.begin(), result.first->second.end());
+
+                        // Create the ray key
+                        std::pair<slam::CellKey, slam::CellKey> rayKey = {sourceCell, targetCell};
+
+                        // Try to insert into cache; check if it was already present
+                        auto insertResult = raycastCache.insert({rayKey, std::vector<slam::CellKey>{}});
+                        if (insertResult.second) {
+                            // If inserted (i.e., not already present), compute raycast
+                            insertResult.first->second = performRaycast(sourceCell, targetCell);
+                        }
+
+                        // Add intersected voxels to removal set
+                        cellsToRemove.insert(insertResult.first->second.begin(), insertResult.first->second.end());
                     });
             };
 
-            // if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
-            //     tbb::parallel_invoke(distanceCheck, raycasting);
-            // } else {
-            //     distanceCheck();
-            //     raycasting();
-            // }
+            // Task 2: Distance-based filtering (optional)
+            auto distanceCheckTask = [&]() {
+                tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
+                    [&](const auto& mapEntry) {
+                        const Eigen::Vector3d voxelPos = mapEntry.second.computeGridToWorld(mapOrigin_, resolution_);
+                        double squaredDistance = (voxelPos - vehiclePosition).squaredNorm();
+                        if (squaredDistance > mapMaxDistance_ * mapMaxDistance_) {
+                            cellsToRemove.insert(mapEntry.first);
+                        }
+                    });
+            };
 
-            //distanceCheck();
-            raycasting();
+            // Execute tasks
+            if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
+                tbb::parallel_invoke(raycastingTask, distanceCheckTask);
+            } else {
+                raycastingTask();
+                distanceCheckTask();
+            }
 
-            tbb::concurrent_unordered_map<CellKey, Voxel3D, CellKeyHash> newOccupancyMap;
-            newOccupancyMap.reserve(occupancyMap_.size() - cellsToRemove.size());
+            // Create a new occupancy map excluding cells marked for removal
+            tbb::concurrent_unordered_map<slam::CellKey, slam::Voxel3D, slam::CellKeyHash> newOccupancyMap;
+            newOccupancyMap.rehash(occupancyMap_.size() - cellsToRemove.size());
+
             tbb::parallel_for_each(occupancyMap_.begin(), occupancyMap_.end(),
                 [&](const auto& mapEntry) {
                     if (cellsToRemove.find(mapEntry.first) == cellsToRemove.end()) {
@@ -130,6 +149,7 @@ namespace slam {
                     }
                 });
 
+            // Swap to update the main occupancy map
             occupancyMap_.swap(newOccupancyMap);
         }
 
