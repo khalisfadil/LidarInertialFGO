@@ -586,7 +586,7 @@ namespace slam {
                 }
                 
                 occupancyMapInstance->occupancyMap(occMapFrame);
-                occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
+                // occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
                 
                 // if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
                 //     // if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
