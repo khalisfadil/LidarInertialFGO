@@ -566,7 +566,7 @@ namespace slam {
 
             {
                 std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                std::cerr << "pointsRingBufferOccMap itemsToProcess: " << itemsToProcess << std::endl;
+                std::cerr << "[runOccupancyMapPipeline] itemsToProcess: " << itemsToProcess << std::endl;
             }
 
             if (itemsToProcess > 0) {
@@ -592,6 +592,11 @@ namespace slam {
                 occupancyMapInstance->occupancyMap(occMapFrame);
                 occMapVoxels = occupancyMapInstance->getOccupiedVoxel();
                 
+                {
+                    std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                    std::cerr << "[runOccupancyMapPipeline] occMapVoxels : " << occMapVoxels.size() << std::endl;
+                }
+
                 if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
                     // if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
                     //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
@@ -829,7 +834,7 @@ namespace slam {
             size_t itemsToProcessVoxelOccMap = voxelsRingBufferOccMap.read_available();
             {
                 std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                std::cerr << "updateVisualization itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << std::endl;
+                std::cerr << "[updateVisualization] itemsToProcessVoxelOccMap: " << itemsToProcessVoxelOccMap << std::endl;
             }
             if (itemsToProcessVoxelOccMap > 0) {
                 
@@ -861,6 +866,10 @@ namespace slam {
 
             // Process Vehicle Pose
             size_t itemsToProcessVehPose = ringBufferPose.read_available();
+            {
+                std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                std::cerr << "[updateVisualization] itemsToProcessVehPose: " << itemsToProcessVehPose << std::endl;
+            }
             if (itemsToProcessVehPose > 0) {
                 
                 while (ringBufferPose.pop(localPointsVehPose)) {
