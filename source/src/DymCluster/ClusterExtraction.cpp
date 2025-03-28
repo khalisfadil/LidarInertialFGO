@@ -202,154 +202,154 @@ namespace slam {
                 return;
             }
 
-            // // Prepare cost matrix and mapping
-            // const size_t max_size = std::max(curr_size, total_prev_size);
-            // std::vector<std::vector<double>> cost_matrix(max_size, std::vector<double>(max_size, std::numeric_limits<double>::max()));
-            // std::vector<std::pair<size_t, size_t>> prev_cluster_mapping;
-            // prev_cluster_mapping.reserve(total_prev_size);
+            // Prepare cost matrix and mapping
+            const size_t max_size = std::max(curr_size, total_prev_size);
+            std::vector<std::vector<double>> cost_matrix(max_size, std::vector<double>(max_size, std::numeric_limits<double>::max()));
+            std::vector<std::pair<size_t, size_t>> prev_cluster_mapping;
+            prev_cluster_mapping.reserve(total_prev_size);
 
-            // for (size_t f = 0; f < prevClusters_.size(); ++f) {
-            //     const auto& frame_clusters = prevClusters_[f];
-            //     for (size_t c = 0; c < frame_clusters.size(); ++c) {
-            //         prev_cluster_mapping.emplace_back(f, c);
-            //     }
-            // }
+            for (size_t f = 0; f < prevClusters_.size(); ++f) {
+                const auto& frame_clusters = prevClusters_[f];
+                for (size_t c = 0; c < frame_clusters.size(); ++c) {
+                    prev_cluster_mapping.emplace_back(f, c);
+                }
+            }
 
-            // // Compute cost matrix in parallel
-            // constexpr double frame_age_penalty_factor = 0.1;
-            // tbb::parallel_for(tbb::blocked_range<size_t>(0, curr_size),
-            //     [&](const tbb::blocked_range<size_t>& range) {
-            //         for (size_t i = range.begin(); i != range.end(); ++i) {
-            //             const auto& curr_cluster = clusters_[i];
-            //             const Eigen::Vector3d& curr_centroid = curr_cluster.centroid;
-            //             for (size_t j = 0; j < total_prev_size; ++j) {
-            //                 auto [frame_idx, cluster_idx] = prev_cluster_mapping[j];
-            //                 const auto& prev_cluster = prevClusters_[frame_idx][cluster_idx];
-            //                 double distance = (curr_centroid - prev_cluster.centroid).norm();
-            //                 if (distance <= max_distance_threshold_) {
-            //                     double base_cost = calculateCost(curr_cluster, prev_cluster);
-            //                     double frame_age_penalty = frame_age_penalty_factor * (prevClusters_.size() - 1 - frame_idx);
-            //                     cost_matrix[i][j] = base_cost + frame_age_penalty;
-            //                 }
-            //             }
-            //         }
-            //     });
+            // Compute cost matrix in parallel
+            constexpr double frame_age_penalty_factor = 0.1;
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, curr_size),
+                [&](const tbb::blocked_range<size_t>& range) {
+                    for (size_t i = range.begin(); i != range.end(); ++i) {
+                        const auto& curr_cluster = clusters_[i];
+                        const Eigen::Vector3d& curr_centroid = curr_cluster.centroid;
+                        for (size_t j = 0; j < total_prev_size; ++j) {
+                            auto [frame_idx, cluster_idx] = prev_cluster_mapping[j];
+                            const auto& prev_cluster = prevClusters_[frame_idx][cluster_idx];
+                            double distance = (curr_centroid - prev_cluster.centroid).norm();
+                            if (distance <= max_distance_threshold_) {
+                                double base_cost = calculateCost(curr_cluster, prev_cluster);
+                                double frame_age_penalty = frame_age_penalty_factor * (prevClusters_.size() - 1 - frame_idx);
+                                cost_matrix[i][j] = base_cost + frame_age_penalty;
+                            }
+                        }
+                    }
+                });
 
-            // // Cluster association
-            // std::vector<unsigned int> assignment;
-            // slam::Hungarian::solve(cost_matrix, assignment);
+            // Cluster association
+            std::vector<unsigned int> assignment;
+            slam::Hungarian::solve(cost_matrix, assignment);
 
-            // std::vector<bool> matched_prev(total_prev_size, false);
-            // std::vector<bool> matched_curr(curr_size, false);
+            std::vector<bool> matched_prev(total_prev_size, false);
+            std::vector<bool> matched_curr(curr_size, false);
 
-            // // Assign matched IDs
-            // const size_t assign_size = std::min(curr_size, assignment.size());
-            // for (size_t i = 0; i < assign_size; ++i) {
-            //     if (assignment[i] < total_prev_size) {
-            //         size_t prev_idx = assignment[i];
-            //         if (!matched_prev[prev_idx] && !matched_curr[i]) {
-            //             matched_prev[prev_idx] = true;
-            //             matched_curr[i] = true;
-            //             auto [frame_idx, cluster_idx] = prev_cluster_mapping[prev_idx];
-            //             clusters_[i].clusterID = prevClusters_[frame_idx][cluster_idx].clusterID;
-            //         }
-            //     }
-            // }
+            // Assign matched IDs
+            const size_t assign_size = std::min(curr_size, assignment.size());
+            for (size_t i = 0; i < assign_size; ++i) {
+                if (assignment[i] < total_prev_size) {
+                    size_t prev_idx = assignment[i];
+                    if (!matched_prev[prev_idx] && !matched_curr[i]) {
+                        matched_prev[prev_idx] = true;
+                        matched_curr[i] = true;
+                        auto [frame_idx, cluster_idx] = prev_cluster_mapping[prev_idx];
+                        clusters_[i].clusterID = prevClusters_[frame_idx][cluster_idx].clusterID;
+                    }
+                }
+            }
 
-            // // Assign new IDs to unmatched clusters
-            // for (size_t i = 0; i < curr_size; ++i) {
-            //     if (!matched_curr[i]) {
-            //         clusters_[i].clusterID = NewStateID();
-            //     }
-            // }
+            // Assign new IDs to unmatched clusters
+            for (size_t i = 0; i < curr_size; ++i) {
+                if (!matched_curr[i]) {
+                    clusters_[i].clusterID = NewStateID();
+                }
+            }
 
-            // // Optimize centroids and classify clusters
-            // constexpr double base_static_variance = 0.01;
-            // constexpr double base_dynamic_variance = 0.1;
-            // constexpr double cost_threshold = 5.0;
-            // constexpr double min_dt = 1e-6;
+            // Optimize centroids and classify clusters
+            constexpr double base_static_variance = 0.01;
+            constexpr double base_dynamic_variance = 0.1;
+            constexpr double cost_threshold = 5.0;
+            constexpr double min_dt = 1e-6;
 
-            // tbb::parallel_for(tbb::blocked_range<size_t>(0, curr_size),
-            //     [&](const tbb::blocked_range<size_t>& range) {
-            //         for (size_t i = range.begin(); i != range.end(); ++i) {
-            //             auto& curr_cluster = clusters_[i];
-            //             const unsigned int id = curr_cluster.clusterID;
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, curr_size),
+                [&](const tbb::blocked_range<size_t>& range) {
+                    for (size_t i = range.begin(); i != range.end(); ++i) {
+                        auto& curr_cluster = clusters_[i];
+                        const unsigned int id = curr_cluster.clusterID;
 
-            //             std::map<double, Eigen::Vector3d> prev_states;
-            //             for (const auto& prev_frame : prevClusters_) {
-            //                 for (const auto& prev_cluster : prev_frame) {
-            //                     if (prev_cluster.clusterID == id) {
-            //                         prev_states[prev_cluster.timestamp] = prev_cluster.centroid;
-            //                     }
-            //                 }
-            //             }
+                        std::map<double, Eigen::Vector3d> prev_states;
+                        for (const auto& prev_frame : prevClusters_) {
+                            for (const auto& prev_cluster : prev_frame) {
+                                if (prev_cluster.clusterID == id) {
+                                    prev_states[prev_cluster.timestamp] = prev_cluster.centroid;
+                                }
+                            }
+                        }
 
-            //             if (!prev_states.empty()) {
-            //                 auto last_state = prev_states.rbegin();
-            //                 double dt = std::max(curr_cluster.timestamp - last_state->first, min_dt);
-            //                 curr_cluster.velocity = (curr_cluster.centroid - last_state->second) / dt;
+                        if (!prev_states.empty()) {
+                            auto last_state = prev_states.rbegin();
+                            double dt = std::max(curr_cluster.timestamp - last_state->first, min_dt);
+                            curr_cluster.velocity = (curr_cluster.centroid - last_state->second) / dt;
 
-            //                 if (prev_states.size() > 1) {
-            //                     const double size_factor = 1.0 / std::sqrt(static_cast<double>(curr_cluster.idx.size()));
-            //                     const Eigen::Matrix3d static_noise = Eigen::Matrix3d::Identity() * (base_static_variance * size_factor);
-            //                     const Eigen::Matrix3d dynamic_noise = Eigen::Matrix3d::Identity() * (base_dynamic_variance * size_factor);
+                            if (prev_states.size() > 1) {
+                                const double size_factor = 1.0 / std::sqrt(static_cast<double>(curr_cluster.idx.size()));
+                                const Eigen::Matrix3d static_noise = Eigen::Matrix3d::Identity() * (base_static_variance * size_factor);
+                                const Eigen::Matrix3d dynamic_noise = Eigen::Matrix3d::Identity() * (base_dynamic_variance * size_factor);
 
-            //                     const Eigen::LLT<Eigen::Matrix3d> static_llt(static_noise.inverse());
-            //                     const Eigen::LLT<Eigen::Matrix3d> dynamic_llt(dynamic_noise.inverse());
-            //                     const Eigen::Matrix3d static_L = static_llt.matrixL().transpose();
-            //                     const Eigen::Matrix3d dynamic_L = dynamic_llt.matrixL().transpose();
+                                const Eigen::LLT<Eigen::Matrix3d> static_llt(static_noise.inverse());
+                                const Eigen::LLT<Eigen::Matrix3d> dynamic_llt(dynamic_noise.inverse());
+                                const Eigen::Matrix3d static_L = static_llt.matrixL().transpose();
+                                const Eigen::Matrix3d dynamic_L = dynamic_llt.matrixL().transpose();
 
-            //                     Eigen::Vector3d static_centroid = curr_cluster.centroid;
-            //                     Eigen::Vector3d dynamic_centroid = curr_cluster.centroid;
-            //                     double static_cost = 0.0, dynamic_cost = 0.0;
+                                Eigen::Vector3d static_centroid = curr_cluster.centroid;
+                                Eigen::Vector3d dynamic_centroid = curr_cluster.centroid;
+                                double static_cost = 0.0, dynamic_cost = 0.0;
 
-            //                     tbb::parallel_invoke(
-            //                         [&]() { optimizeCentroid(prev_states, static_centroid, static_L, curr_cluster.timestamp, static_cost); },
-            //                         [&]() { optimizeCentroid(prev_states, dynamic_centroid, dynamic_L, curr_cluster.timestamp, dynamic_cost); }
-            //                     );
+                                tbb::parallel_invoke(
+                                    [&]() { optimizeCentroid(prev_states, static_centroid, static_L, curr_cluster.timestamp, static_cost); },
+                                    [&]() { optimizeCentroid(prev_states, dynamic_centroid, dynamic_L, curr_cluster.timestamp, dynamic_cost); }
+                                );
 
-            //                     if (static_cost < cost_threshold && dynamic_cost < cost_threshold) {
-            //                         curr_cluster.isDynamic = (dynamic_cost < static_cost);
-            //                         curr_cluster.centroid = (dynamic_cost < static_cost) ? dynamic_centroid : static_centroid;
-            //                     } else {
-            //                         curr_cluster.isDynamic = false;
-            //                         curr_cluster.centroid = static_centroid;
-            //                     }
-            //                 }
-            //             } else {
-            //                 curr_cluster.isDynamic = false;
-            //             }
-            //         }
-            //     });
+                                if (static_cost < cost_threshold && dynamic_cost < cost_threshold) {
+                                    curr_cluster.isDynamic = (dynamic_cost < static_cost);
+                                    curr_cluster.centroid = (dynamic_cost < static_cost) ? dynamic_centroid : static_centroid;
+                                } else {
+                                    curr_cluster.isDynamic = false;
+                                    curr_cluster.centroid = static_centroid;
+                                }
+                            }
+                        } else {
+                            curr_cluster.isDynamic = false;
+                        }
+                    }
+                });
 
-            // // Extract dynamic points with pre-check
-            // dynamic_points_.clear();
-            // tbb::concurrent_vector<slam::Point3D> concurrent_dynamic_points;
-            // std::atomic<bool> has_dynamic{false};  // Use atomic for thread safety
+            // Extract dynamic points with pre-check
+            dynamic_points_.clear();
+            tbb::concurrent_vector<slam::Point3D> concurrent_dynamic_points;
+            std::atomic<bool> has_dynamic{false};  // Use atomic for thread safety
 
-            // tbb::parallel_for(tbb::blocked_range<size_t>(0, curr_size),
-            //     [&](const tbb::blocked_range<size_t>& range) {
-            //         for (size_t i = range.begin(); i != range.end(); ++i) {
-            //             const auto& cluster = clusters_[i];
-            //             if (cluster.isDynamic) {
-            //                 has_dynamic.store(true, std::memory_order_relaxed);  // Thread-safe update
-            //                 for (size_t idx : cluster.idx) {
-            //                     concurrent_dynamic_points.push_back(points[idx]);
-            //                 }
-            //             }
-            //         }
-            //     });
+            tbb::parallel_for(tbb::blocked_range<size_t>(0, curr_size),
+                [&](const tbb::blocked_range<size_t>& range) {
+                    for (size_t i = range.begin(); i != range.end(); ++i) {
+                        const auto& cluster = clusters_[i];
+                        if (cluster.isDynamic) {
+                            has_dynamic.store(true, std::memory_order_relaxed);  // Thread-safe update
+                            for (size_t idx : cluster.idx) {
+                                concurrent_dynamic_points.push_back(points[idx]);
+                            }
+                        }
+                    }
+                });
 
-            // // Only proceed with assignment and occupancy map if we have dynamic points
-            // if (has_dynamic.load(std::memory_order_relaxed)) {  // Thread-safe read
-            //     dynamic_points_.assign(concurrent_dynamic_points.begin(), concurrent_dynamic_points.end());
+            // Only proceed with assignment and occupancy map if we have dynamic points
+            if (has_dynamic.load(std::memory_order_relaxed)) {  // Thread-safe read
+                dynamic_points_.assign(concurrent_dynamic_points.begin(), concurrent_dynamic_points.end());
                 
-            //     // Parallel invocation to update both persistent and non-persistent maps concurrently
-            //     tbb::parallel_invoke(
-            //         [&]() { clusterOccupancyMapBase(dynamic_points_, frame.frameID, frame.timestamp, true); },  // Persistent map (history)
-            //         [&]() { clusterOccupancyMapBase(dynamic_points_, frame.frameID, frame.timestamp, false); }  // Non-persistent map (latest)
-            //     );
-            // }
+                // Parallel invocation to update both persistent and non-persistent maps concurrently
+                tbb::parallel_invoke(
+                    [&]() { clusterOccupancyMapBase(dynamic_points_, frame.frameID, frame.timestamp, true); },  // Persistent map (history)
+                    [&]() { clusterOccupancyMapBase(dynamic_points_, frame.frameID, frame.timestamp, false); }  // Non-persistent map (latest)
+                );
+            }
 
             // Update sliding window
             if (!clusters_.empty()) {

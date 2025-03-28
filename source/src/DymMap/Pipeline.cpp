@@ -382,11 +382,11 @@ namespace slam {
                             // }
                         }
 
-                        if (!pointsRingBufferExtCls.push(decodedPoints)) {
-                            // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
-                            //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                            // }
-                        }
+                        // if (!pointsRingBufferExtCls.push(decodedPoints)) {
+                        //     // if (!logQueue.push("[PointsListener] Ring buffer full for Occ Map; decoded points dropped!\n")) {
+                        //     //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                        //     // }
+                        // }
 
                         // Push to OccupancyMap ring buffer
                         if (!ringBufferPose.push(decodedPoints)) {
@@ -543,27 +543,27 @@ namespace slam {
                 // }
 
                 if (!voxelsRingBufferOccMap.push(occMapVoxels)) {
-                    // if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
-                    //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                    // }
+                    if (!logQueue.push("[OccupancyMapPipeline] Voxel buffer full; data dropped!\n")) {
+                        droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    }
                 }
 
-                // // Create and populate report
-                // ReportDataFrame reportOccupancyMap;
-                // reportOccupancyMap.frameID = localMapDataFrame.frameID;
-                // reportOccupancyMap.timestamp = localMapDataFrame.timestamp;
-                // reportOccupancyMap.numpoint = localMapDataFrame.pointcloud.size();
-                // reportOccupancyMap.occmapsize = occMapVoxels.size();
-                // reportOccupancyMap.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
-                //     std::chrono::steady_clock::now() - cycleStartTime).count();
+                // Create and populate report
+                ReportDataFrame reportOccupancyMap;
+                reportOccupancyMap.frameID = localPointOccMap.frameID;
+                reportOccupancyMap.timestamp = localPointOccMap.t;
+                reportOccupancyMap.numpoint = localPointOccMap.numInput;
+                reportOccupancyMap.occmapsize = occMapVoxels.size();
+                reportOccupancyMap.elapsedTime = std::chrono::duration_cast<std::chrono::duration<double>>( // Convert to seconds as double
+                    std::chrono::steady_clock::now() - cycleStartTime).count();
 
-                // // Push report to the queue
-                // if (!reportOccupancyMapQueue.push(reportOccupancyMap)) {
-                //     if (!logQueue.push("[OccupancyMapPipeline] Report queue full; data dropped!\n")) {
-                //         droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                //     }
-                //     droppedOccupancyMapReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
-                // }
+                // Push report to the queue
+                if (!reportOccupancyMapQueue.push(reportOccupancyMap)) {
+                    if (!logQueue.push("[OccupancyMapPipeline] Report queue full; data dropped!\n")) {
+                        droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                    }
+                    droppedOccupancyMapReports.fetch_add(1, std::memory_order_relaxed); // Use specific counter
+                }
             }
 
             auto cycleEndTime = std::chrono::steady_clock::now();
@@ -575,6 +575,11 @@ namespace slam {
                 //     std::cout << "[OccupancyMapPipeline] Processing Time: " 
                 //             << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
                 // }
+                std::ostringstream oss;
+                oss << "[OccupancyMapPipeline] Processing Time: " << (elapsedTime - targetCycleDuration).count() << " ms\n";
+                if (!logQueue.push(oss.str())) {
+                    droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                }
             } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
                 // {
                 //     std::lock_guard<std::mutex> consoleLock(consoleMutex);  
@@ -582,11 +587,11 @@ namespace slam {
                 //       << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
                 //       << " ms. Skipping sleep.\n";
                 // }
-                // std::ostringstream oss;
-                // oss << "Warning: [OccupancyMapPipeline] Processing exceeded target by " << (elapsedTime - targetCycleDuration).count() << " ms\n";
-                // if (!logQueue.push(oss.str())) {
-                //     droppedLogs.fetch_add(1, std::memory_order_relaxed);
-                // }
+                std::ostringstream oss;
+                oss << "Warning: [OccupancyMapPipeline] Processing exceeded target by " << (elapsedTime - targetCycleDuration).count() << " ms\n";
+                if (!logQueue.push(oss.str())) {
+                    droppedLogs.fetch_add(1, std::memory_order_relaxed);
+                }
             }
             
         }
@@ -678,16 +683,16 @@ namespace slam {
                 auto elapsedTime = std::chrono::duration_cast<std::chrono::milliseconds>(cycleEndTime - cycleStartTime);
 
                 if (elapsedTime < targetCycleDuration) {
-                    std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
-                    std::lock_guard<std::mutex> consoleLock(consoleMutex);
-                    std::cout << "[ClusterExtractionPipeline] Processing Time: " 
-                            << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
+                    // std::this_thread::sleep_for(targetCycleDuration - elapsedTime);
+                    // std::lock_guard<std::mutex> consoleLock(consoleMutex);
+                    // std::cout << "[ClusterExtractionPipeline] Processing Time: " 
+                    //         << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
                 } else if (elapsedTime > targetCycleDuration + std::chrono::milliseconds(10)) {
                     {
-                        std::lock_guard<std::mutex> consoleLock(consoleMutex);  
-                        std::cout << "Warning: [ClusterExtractionPipeline] Processing took longer than 100 ms. Time: " 
-                        << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
-                        << " ms. Skipping sleep.\n";
+                        // std::lock_guard<std::mutex> consoleLock(consoleMutex);  
+                        // std::cout << "Warning: [ClusterExtractionPipeline] Processing took longer than 100 ms. Time: " 
+                        // << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count()
+                        // << " ms. Skipping sleep.\n";
                     }
                     // std::ostringstream oss;
                     // oss << "Warning: [ClusterExtractionPipeline] Processing exceeded target by " 

@@ -60,20 +60,20 @@ int main() {
             }
         );
 
-        // // Start logging thread
-        // threads.emplace_back(
-        //     [&]() {
-        //         pipeline.processLogQueue(std::vector<int>{20});
-        //     }
-        // );
+        // Start logging thread
+        threads.emplace_back(
+            [&]() {
+                pipeline.processLogQueue(std::vector<int>{20});
+            }
+        );
 
-        // // Start Occupancy Map Report Queue Processing
-        // threads.emplace_back(
-        //     [&]() {
-        //         pipeline.processReportQueueOccMap("../source/result/occupancy_report.txt", 
-        //                                           std::vector<int>{21});
-        //     }
-        // );
+        // Start Occupancy Map Report Queue Processing
+        threads.emplace_back(
+            [&]() {
+                pipeline.processReportQueueOccMap("../source/result/occupancy_report.txt", 
+                                                  std::vector<int>{21});
+            }
+        );
 
         // // Start Cluster Extraction Report Queue Processing
         // threads.emplace_back(
