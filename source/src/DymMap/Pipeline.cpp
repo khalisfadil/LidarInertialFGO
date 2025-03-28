@@ -498,7 +498,7 @@ namespace slam {
     void Pipeline::runOccupancyMapPipeline(const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
-        constexpr auto targetCycleDuration = std::chrono::milliseconds(100);
+        constexpr auto targetCycleDuration = std::chrono::milliseconds(200);
 
         while (running.load(std::memory_order_acquire)) {
             auto cycleStartTime = std::chrono::steady_clock::now();
