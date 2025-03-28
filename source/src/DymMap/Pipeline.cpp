@@ -195,7 +195,7 @@ namespace slam {
     void Pipeline::processReportQueueExtCls(const std::string& filename, const std::vector<int>& allowedCores) {
         setThreadAffinity(allowedCores);
 
-        std::ofstream outfile(filename);
+        std::ofstream outfile(filename, std::ios::trunc);
         if (!outfile.is_open()) {
             std::ostringstream oss;
             oss << "[ReportWriter] Error: Failed to open file " << filename << " for writing.\n";
