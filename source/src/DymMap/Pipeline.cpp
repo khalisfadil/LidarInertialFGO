@@ -576,7 +576,7 @@ namespace slam {
                 //             << std::chrono::duration_cast<std::chrono::milliseconds>(elapsedTime).count() << " ms\n";
                 // }
                 std::ostringstream oss;
-                oss << "[OccupancyMapPipeline] Processing Time: " << (elapsedTime - targetCycleDuration).count() << " ms\n";
+                oss << "[OccupancyMapPipeline] Processing Time: " << (targetCycleDuration- elapsedTime).count() << " ms\n";
                 if (!logQueue.push(oss.str())) {
                     droppedLogs.fetch_add(1, std::memory_order_relaxed);
                 }
@@ -754,7 +754,7 @@ namespace slam {
                 view.SetLookat({0.0, 0.0, 0.0}); // Center on origin
                 view.SetFront({0, 0, -1});
                 view.SetUp({0, 1, 0});
-                view.SetZoom(50.0); // Wide zoom
+                view.SetZoom(10.0); // Wide zoom
 
                 // Register animation callback
                 vis.RegisterAnimationCallback([&](open3d::visualization::Visualizer* vis_ptr) {
