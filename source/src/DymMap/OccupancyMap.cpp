@@ -159,16 +159,16 @@ namespace slam {
                     });
             };
 
-            // Decide execution model based on occupancyMap_ size
-            if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
+            // // Decide execution model based on occupancyMap_ size
+            // if (occupancyMap_.size() > PARALLEL_THRESHOLD) {
                 // Parallel execution for large maps
-                tbb::parallel_invoke(distanceCheck, raycasting, neighborCheck);
-            } else {
-                // Sequential execution for smaller maps
-                distanceCheck();
-                raycasting();
-                neighborCheck();
-            }
+            tbb::parallel_invoke(distanceCheck, raycasting, neighborCheck);
+            // } else {
+            //     // Sequential execution for smaller maps
+            //     distanceCheck();
+            //     raycasting();
+            //     neighborCheck();
+            // }
 
             tbb::concurrent_unordered_map<slam::CellKey, slam::Voxel3D, slam::CellKeyHash> newOccupancyMap;
             size_t newSize = (occupancyMap_.size() > cellsToRemove.size()) ? (occupancyMap_.size() - cellsToRemove.size()) : 0;
